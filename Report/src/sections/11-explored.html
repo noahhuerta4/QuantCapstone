@@ -1,0 +1,55 @@
+<section id="explored">
+  <h2><span class="sec-no">11</span> Directions explored and closed</h2>
+  <div class="col">
+    <p>
+      Three substantial lines of investigation did not make it into the strategy. Each was
+      measured rather than assumed, and the measurement is the useful part.
+    </p>
+  </div>
+
+  <figure>
+    <img src="__IMG_liquidity_deciles__" alt="Two stacked bar charts across dollar-volume deciles: information coefficient is roughly flat across all ten, while half-spread falls steadily from about 16 bps in the least liquid decile to 6 bps in the most.">
+    <figcaption>
+      <b>Moving down the liquidity spectrum does not help.</b> Reversal alpha is widely
+      reported to be concentrated in less liquid names, which would make a large-cap universe
+      the wrong place to look. Tested across 1,448 S&amp;P 1500 names, the difference between
+      the least and most liquid deciles is <b>0.0001 with a t-statistic of 0.02</b> —
+      indistinguishable from zero — while spreads rise steeply as liquidity falls. Per basis
+      point of spread paid, the <em>most</em> liquid decile is the best place to trade this
+      signal, and the full backtest agrees: net Sharpe peaks around 100 names and decays at
+      200, 400 and 800.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_pead_weight__" alt="Line chart of net Sharpe against the weight on the earnings-surprise sleeve, rising from 0.78 at zero to about 0.86 between 10 and 15 percent, then falling away past 20 percent.">
+    <figcaption>
+      <b>Choosing the blend weight without curve-fitting.</b> The sweep rises smoothly from
+      0 to 15% with two adjacent cells flat near 0.86, then becomes jagged past 20% — a
+      plateau on one side and noise on the other. The chosen 10% sits mid-plateau and below
+      the peak. The weight was then put into the walk-forward grid rather than pinned, and
+      each fold re-selected it independently: all thirteen picked the same value.
+    </figcaption>
+  </figure>
+
+  <h3>Intraday horizons</h3>
+  <div class="col">
+    <p>
+      Breadth is the binding constraint everywhere in this project, and hourly bars are where
+      breadth lives. On 309,573 hourly bars pulled from Interactive Brokers, hourly reversal
+      shows an IC of <span class="mono">0.0095</span> at t = 2.9 with an autocorrelation of
+      <span class="mono">−0.001</span> — every bar a genuinely fresh bet. That is
+      <strong>26,059 effective bets per year against 1,309</strong> for the daily strategy,
+      twenty times more.
+    </p>
+    <p>
+      The cost of collecting it is larger than the gain. At the measured transfer coefficient
+      the implied gross information ratio is 0.97, and break-even requires trading under
+      12.5% of the book per bar; even at 2% per bar the implied result does not beat what the
+      daily strategy already delivers. The conclusion is that intraday is viable only for an
+      operator who can execute passively — earning the spread with limit orders rather than
+      paying it, which reverses the sign of the dominant cost term. That is a different
+      project, and this remains a diagnostic rather than a backtest.
+    </p>
+  </div>
+</section>

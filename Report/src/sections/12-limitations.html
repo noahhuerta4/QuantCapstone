@@ -1,0 +1,51 @@
+<section id="limitations">
+  <h2><span class="sec-no">12</span> Limitations</h2>
+  <div class="col">
+    <p>
+      Every item here makes the true result <em>worse</em> than the reported one. None is
+      hidden in an appendix because each changes how the numbers should be read.
+    </p>
+  </div>
+
+  <div class="finding caution">
+    <p>
+      <strong>Survivorship bias.</strong> The universe is seeded from <em>current</em>
+      S&amp;P 500 membership, and yfinance serves only currently-listed tickers, so companies
+      that fell far enough to be delisted are absent from the entire history. For a reversal
+      strategy the direction of this bias is unambiguous: the missing names are
+      disproportionately those whose "oversold, buy it" signal never reverted. The reported
+      results should be read as an upper bound. Fixing it properly needs a point-in-time
+      constituent source or a delisting-inclusive history.
+    </p>
+  </div>
+
+  <ul class="col">
+    <li>
+      <strong>Costs not modelled.</strong> Margin financing on the long leg beyond cash,
+      which a book running 1.0× gross genuinely pays. Hard-to-borrow rates above general
+      collateral — and a reversal signal most wants to short recent winners, which skew
+      expensive to borrow, so the uniform rate is a floor. Fill uncertainty: every intended
+      trade is assumed to execute in full at the modelled price.
+    </li>
+    <li>
+      <strong>The spread is calibrated, not measured.</strong> Without quote data or real
+      fills, the half-spread comes from a function fitted to published levels. The impact
+      coefficient is likewise assumed. This is why the break-even multiple of 6.43× carries
+      more weight than the base case.
+    </li>
+    <li>
+      <strong>Ten years is one sample.</strong> 2015–2024 was a specific regime. The minimum
+      track record length needed to call this Sharpe significantly positive is 802 trading
+      days and we have 1,638 — comfortable, but not by an order of magnitude.
+    </li>
+    <li>
+      <strong>The sector map is a current snapshot.</strong> Companies change GICS
+      classification; sector neutrality is imposed using today's labels applied backwards.
+    </li>
+    <li>
+      <strong>Backtested performance is not live performance.</strong> Which is precisely why
+      the cost model and the overfitting controls carry most of the weight here, and why the
+      out-of-sample number with its confidence interval is the only claim being made.
+    </li>
+  </ul>
+</section>

@@ -1,0 +1,40 @@
+{
+  "bars_2015-01-01_2025-01-01_1506_8ec2e3ad.parquet": {
+    "sha256": "c0985c8ea31ec2e0c3952dd639bb02252528a8936dcf48324deaac5cf665123b",
+    "bytes": 129058885,
+    "rows": 2516,
+    "columns": 9036,
+    "density": 0.9122
+  },
+  "bars_2015-01-01_2025-01-01_503_00a38473.parquet": {
+    "sha256": "8107701c1952b8c84ae4bfc73c2fc32d2997a13b8a8fc0d38760f2d46f0c4e61",
+    "bytes": 48316487,
+    "rows": 2516,
+    "columns": 3018,
+    "density": 0.9577
+  },
+  "form4_2015_2025.parquet": {
+    "sha256": "f6607a46fe30512a8907f74818f1af05e65b28fda72fdcefdccd5c325b89b189",
+    "bytes": 3733805
+  },
+  "ib_hourly.parquet": {
+    "sha256": "0bc50d0fdc371fbf4437e1a8daf5ad12bec0acfb8fe5e2c495190f0dc913b3e5",
+    "bytes": 5813346
+  },
+  "sec_fundamentals.parquet": {
+    "sha256": "a6cf43f0acd597db42419c2ee13210e4308a994b98e7081b3cac90b097cee817",
+    "bytes": 1102588
+  },
+  "sec_ticker_cik.parquet": {
+    "sha256": "3deb524ea5a72fff7b6da6aa951101fbba0f4629e3a828a3b0d00ae0c0e7c271",
+    "bytes": 134803
+  },
+  "sp1500_constituents.parquet": {
+    "sha256": "082f5d7ade66f0a640096a7b100928b89468df0e661ce7047e51131d2bd11d09",
+    "bytes": 12709
+  },
+  "sp500_constituents.parquet": {
+    "sha256": "069000cf123ca0ee8dd1ab193baee5ee31bc2329f4422cdb3f9f0aff1510ea11",
+    "bytes": 5089
+  }
+}

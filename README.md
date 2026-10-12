@@ -10,54 +10,108 @@ which term is actually binding: forecasting skill (IC) or costs and constraints 
 
 ## Results
 
-S&P 500, 2015–2024. Headline is the **walk-forward out-of-sample** number, which
-re-selects every tunable parameter on each fold's training window — nothing is pinned
-with hindsight.
+S&P 500, 2015–2024. Headline is the **walk-forward out-of-sample** number: every parameter
+that was ever chosen by looking at results — the reversal lookback `k`, the PEAD blend
+weight, the rebalance interval and the no-trade band — is re-selected on each fold's
+training window from a 135-cell grid, with the holding period embargoed off the end of
+training. Nothing is pinned with hindsight.
 
-### Net out-of-sample Sharpe: 0.90
+### Net out-of-sample Sharpe: 0.91
 
-| | single reversal sleeve | + blend | + PEAD |
+Each column adds one sleeve family and runs through the identical harness — same grid
+axes, same 13 folds, same embargo, same trial ledger — so the increments are comparable
+(`quant-capstone study progression`).
+
+| | reversal only | blend | **blend + PEAD** |
 |---|---|---|---|
-| **OOS net Sharpe** | 0.05 | 0.80 | **0.84** |
-| Full-sample net Sharpe | 0.36 | 0.78 | 0.86 |
-| Full-sample gross Sharpe | 0.64 | 0.96 | 1.04 |
-| Deflated Sharpe | 0.0002 | 0.70 | **0.69** (250 trials) |
-| PBO | 0.79 | 0.36 | **0.39** |
-| Bootstrap 95% CI | [−0.69, 0.83] | [0.16, 1.48] | **[0.17, 1.54]** |
-| P(true Sharpe ≤ 0) | 43% | 0.8% | **0.4%** |
-| Folds positive (of 13) | 46% | 77% | **77%** |
-| Train − test Sharpe | 0.72 | 0.06 | **0.10** |
-| Break-even cost multiplier | 2.3x | 5.4x | **5.9x** |
+| **OOS net Sharpe** | 0.25 | 0.63 | **0.91** |
+| OOS net, fixed defaults | 0.41 | 0.75 | 0.95 |
+| Full-sample net Sharpe | 0.44 | 0.77 | 0.94 |
+| Full-sample gross Sharpe | 0.60 | 0.94 | 1.11 |
+| Deflated Sharpe | 0.28 | 0.41 | **0.67** (443 trials) |
+| PBO | 0.86 | 0.37 | **0.24** |
+| Bootstrap 95% CI | [-0.51, 1.02] | [-0.03, 1.33] | **[0.23, 1.60]** |
+| P(true Sharpe ≤ 0) | 25% | 3% | **0.4%** |
+| Folds positive (of 13) | 46% | 69% | **85%** |
+| Train − test Sharpe | 0.58 | 0.31 | **0.17** |
+| Break-even cost multiplier | 3.7x | 5.4x | **6.4x** |
 
-Train-minus-test of 0.10 (against 0.72 originally) is the number that matters most: the
-backtest is no longer mostly measuring its own hindsight. The walk-forward selects the
-same configuration in 12 of 13 folds, so the parameter choice is stable rather than
-refitted to noise each period.
+"Reversal only" is the plain `k`-day reversal sleeve; "blend" adds volume-shock and
+overnight reversal in its place. The deflated Sharpe is computed against every
+configuration the project has examined (443 configurations, from
+`results/trial_ledger.json`), not just this grid. The numbers recorded at the time each
+sleeve was introduced (OOS 0.05 → 0.80 → 0.84, then 0.90 after Phase 2) came from
+different grids and an earlier, flawed trial count, so they are history rather than
+results — see [Validation fixes](#validation-fixes).
+
+**Per-fold selection does not beat the fixed defaults.** Through the same windows with no
+re-selection, the defaults score 0.95 against 0.91, and selection wins only 3 of 13 folds.
+That is not a reason to prefer the defaults: they were themselves chosen by looking at
+full-sample results — the band was set at 0.006 just below the
+full-sample peak at 0.010 — so the default column carries exactly the hindsight the
+walk-forward removes. It is an optimistic reference, not a rival estimate. What it does
+say is that choosing among 135 cells per fold adds nothing measurable out of sample; at the
+margin the search fits noise, and the 0.17 train-minus-test gap is its price. The headline
+is the selected number because it is the only one that could actually have been traded.
+`results.md` states this automatically whenever it happens.
+
+What the folds chose is stable, which is the reassuring half: `k = 2` in 11 of 13 folds
+(`k = 1` in the other two), a 10-day rebalance and a 10% PEAD weight in all 13, and the
+0.010 band in 11 (the 0.006 default in the other two). The per-fold table is in
+`output/results.md`.
 
 ### Three sleeves, three mechanisms
 
 | sleeve | IC | t | autocorr | turnover | standalone net |
 |---|---|---|---|---|---|
-| volume-shock reversal | 0.0126 | 2.62 | 0.47 | 26x | 0.51 |
-| overnight reversal | 0.0055 | 1.27 | 0.78 | 26x | 0.29 |
-| earnings surprise (PEAD) | 0.0113 | 2.89 | 0.99 | 6.8x | 0.25 |
+| volume-shock reversal | 0.0136 | 2.90 | 0.47 | 26.1x | 0.55 |
+| overnight reversal | 0.0055 | 1.27 | 0.78 | 25.9x | 0.34 |
+| earnings surprise (PEAD) | 0.0113 | 2.89 | 0.99 | 6.3x | 0.29 |
 
+Standalone backtests use the final configuration (`quant-capstone study sleeve_survey`).
 Cross-correlations are 0.30 between the two reversal sleeves and **−0.01** between either
-and PEAD — three genuinely different bets. PEAD carries 10% of the blend (the
-walk-forward's own choice), which is where a fine sweep shows a plateau: 0 → 0.778,
-5% → 0.788, 10% → 0.864, 15% → 0.861, then a cliff to 0.646 at 20%.
+and PEAD — three genuinely different bets. PEAD carries 10% of the blend, which is where a
+fine sweep shows a plateau: 0 → 0.778, 5% → 0.788, 10% → 0.864, 15% → 0.861, then a cliff to
+0.646 at 20% (`study pead`). The walk-forward picks 10% in every fold.
 
 ### What the cost number means
 
-65 bps/yr is **0.65% of fund capital**, or about $75k/yr on the $10m book. Equivalently
-**2.45 bps per dollar traded**, at 26.7x annual turnover. Against a 3.5% gross return it
-consumes 19%, leaving 2.86% net at 3.7% volatility. The break-even multiplier of 5.9x
-means costs would have to reach ~385 bps/yr before the edge dies — we run at about a
-sixth of that.
+63.5 bps/yr is **0.64% of fund capital**, or about $64k/yr on the $10m book.
+Equivalently **2.50 bps per dollar traded**, at 25.4x annual turnover. Against a 4.1% gross
+return it consumes about a sixth, leaving 3.4% net at 3.7% volatility. The break-even
+multiplier of 6.4x means costs would have to reach ~408 bps/yr before the edge dies.
+
+## Validation fixes
+
+A review of the finished Phase 2 project found three ways the headline was weaker than
+the README claimed. All three are fixed, and the result held.
+
+1. **`k` was pinned, not selected.** The README said the reversal lookback was re-chosen
+   per fold; the walk-forward grid did not contain it. `k = 2` came from a full-sample IC
+   sweep and every fold inherited it. It is now in the grid at the spec's pre-registered
+   values {1, 2, 3, 5, 10} — not a range centred on the number already picked — and the
+   folds choose `k = 2` on their own in 11 of 13. Net OOS moved 0.90 → 0.91, together
+   with the embargo fix below.
+2. **The fixed defaults beat selection, unremarked.** The comparison column was always
+   printed and never discussed. It now is, above and in every generated `results.md`.
+3. **The trial count was double-counted.** The quoted 327 was the ledger's 299 *plus* the
+   27-cell headline grid that was already in it, *plus* one more for the defaults, which
+   were run twice because they are also a grid cell. The run cache now counts distinct
+   configurations, and the ledger marks the two earlier grids that the new one contains
+   as superseded rather than deleting them. The count is now 443:
+   308 earlier configurations, including the 45-cell reversal-only ablation above,
+   plus the 135-cell grid.
+
+Two smaller fixes came with them: the embargo now covers the longest holding period
+anywhere in the grid (15 days) instead of the default's (10), and the trial ledger moved
+from the git-ignored `output/` into version-controlled `results/`. `tests/test_docs.py`
+now fails if this README or the write-up quotes a headline number that disagrees with
+`results/headline.json`.
 
 ## Phase 2: three directions, one worked
 
-Net OOS Sharpe moved **0.84 → 0.90**. The gain did not come from where it was
+Net OOS Sharpe moved **0.84 → 0.90** under the harness of the time (0.91 after the
+[validation fixes](#validation-fixes)). The gain did not come from where it was
 expected, and two of the three directions produced clean negative results.
 
 | | direction | intended lever | outcome |
@@ -124,21 +178,15 @@ explained — a band wider than the 1.5% per-name cap means no trade can ever cl
 
 ### Where it lands
 
-| | Phase 1 | Phase 2 |
-|---|---|---|
-| **OOS net Sharpe** | 0.84 | **0.90** |
-| Full-sample net | 0.86 | 0.94 |
-| Deflated Sharpe | 0.69 (250 trials) | **0.68 (327 trials)** |
-| PBO | 0.39 | **0.22** |
-| Bootstrap 95% CI | [0.17, 1.54] | [0.23, 1.59] |
-| Folds positive | 77% | **85%** |
-| Break-even cost | 5.9x | **6.4x** |
-
-Two methodological upgrades came with it. The walk-forward now **embargoes** the holding
-period off the end of each training window, so a position opened in training cannot still
-be open in the test window. And the trial count lives in `output/trial_ledger.json` rather
-than in anyone's memory — 27 recorded sweeps, 327 configurations, every rejected candidate
+Phase 2 took net OOS from 0.84 to 0.90 under the harness of the time; the strategy as it
+stands after the validation fixes is the headline table above. Two methodological
+upgrades came with it. The walk-forward now **embargoes** the holding period off the end
+of each training window, so a position opened in training cannot still be open in the
+test window. And the trial count lives in `results/trial_ledger.json` rather than in
+anyone's memory — every sweep with what it tried and what came of it, rejected candidates
 included, read automatically by the CLI when deflating.
+
+_Reproduce: `quant-capstone study events passive regime band`._
 
 ## The fundamentals route
 
@@ -168,11 +216,14 @@ it arrives, decays over about a quarter, and fiscal calendars are staggered, so 
 cross-section keeps turning over. Standardized unexpected earnings (Bernard & Thomas 1989,
 seasonal random-walk form, faded linearly over 60 days) gives IC 0.0113 at t = 2.89 —
 the best of any fundamental sleeve and close to the best price sleeve — with a positive
-standalone Sharpe and only 6.8x turnover. It lifts OOS net Sharpe from 0.80 to 0.84.
+standalone Sharpe and only 6.3x turnover. In the ablation above it lifts OOS net Sharpe
+from 0.63 to 0.91.
 
 That contrast is the cleanest illustration in the project of what the Fundamental Law is
 for: two signals built from the *same filings*, one useless and one useful, and the
 difference is entirely breadth.
+
+_Reproduce: `quant-capstone study fundamentals pead`._
 
 ## The intraday route
 
@@ -206,7 +257,7 @@ scales with frequency (1.51 bps per dollar traded; borrow stays flat at ~25 bps/
 | 2% | 35x | 78 | 0.76 |
 
 Break-even needs under **12.5% of the book traded per bar**, and even at 2% the implied
-0.76 does not beat the 0.84 the daily strategy already delivers. So the twentyfold breadth
+0.76 does not beat the 0.91 the daily strategy already delivers. So the twentyfold breadth
 gain is real and the cost of collecting it is larger — which is the same trade-off the
 whole project keeps running into, now measured at a second frequency.
 
@@ -216,6 +267,8 @@ no intraday engine here to verify it. The honest conclusion is that intraday is 
 promising *remaining* lead but only for someone who can execute passively — a real
 intraday book earns the spread with limit orders instead of paying it, which changes the
 sign of the dominant cost term. That is a different project.
+
+_Reproduce: `quant-capstone study intraday`._
 
 ## The liquidity question, tested
 
@@ -242,6 +295,8 @@ and liquid.
 Caveat: S&P 1500 small-caps are not truly illiquid — Q1 still trades $19m/day — so this
 tests "moderately less liquid", not the microcap regime AC-G describe.
 
+_Reproduce: `quant-capstone study liquidity breadth`._
+
 ### A negative result on spread estimation
 
 Estimating the bid-ask spread from daily bars **does not work for liquid US equities**,
@@ -266,32 +321,85 @@ The cost model therefore uses a **calibrated function of dollar volume**
 an assumption. It puts the top-100-by-ADV universe at 0.44 bps median — meaning the
 spec's flat 2 bps was ~4.5x *too expensive*, not too cheap. Setting
 `costs.use_estimated_spread=False` recovers the flat rate as a stress case, and the
-strategy still nets 0.63 there. The break-even multiplier of 5.4x is what carries this
-uncertainty.
+Phase 1 blend still nets 0.63 there (`study blends`). The break-even multiplier of 6.4x
+is what carries this uncertainty.
 
 ## Quick start
 
 ```bash
 uv sync                                         # create .venv and install
-uv run pytest                                   # 179 tests, ~12s
+uv run pytest                                   # 262 tests, ~20s, no network
 uv run quant-capstone run --source synthetic    # end-to-end offline, ~1 min
-uv run quant-capstone run                       # real data (downloads + caches S&P 500 bars)
+uv run quant-capstone run                       # the headline study on real data, ~5 min
 ```
 
 The first real-data run downloads ~10 years of daily bars into `data_cache/` (about
-50 MB, a few minutes); later runs read the cache. Output lands in `output/`:
-`results.md` plus the figures it references.
+50 MB, a few minutes); later runs read the cache. Output lands in `output/`: `results.md`
+plus the figures it references. A full real-data run also writes `results/headline.json`
+and records its grid in the trial ledger.
 
 ```bash
-uv run quant-capstone data        # download and print a data-quality report
-uv run quant-capstone backtest    # one backtest, gross/net table only
-uv run quant-capstone crosscheck  # verify the engine against independent calculations
+uv run quant-capstone study all       # regenerate every side study and the write-up figures
+uv run quant-capstone study --check   # regenerate the study tables, diff against results/studies
+uv run quant-capstone study pead      # or any single study by name
+uv run quant-capstone book            # assemble Report/Market-Neutral-Reversal-Book.html
+uv run quant-capstone data            # data-quality report (--write-manifest to re-pin inputs)
+uv run quant-capstone backtest        # one backtest, gross/net table only
+uv run quant-capstone crosscheck      # verify the engine against independent calculations
 ```
 
-Flags available on every command: `--source {yfinance,synthetic}`, `--start`, `--end`,
-`--universe-size`, `--k`, `--vol-target`, `--rebalance-every`, `--no-trade-band`,
-`--timing {next_open,same_close}`, `--outdir`. `run` also takes `--prior-trials`,
-`--quick` and `--no-plots`.
+Flags available on `run`, `backtest`, `data` and `crosscheck`: `--source
+{yfinance,synthetic}`, `--start`, `--end`, `--universe-size`, `--k`, `--vol-target`,
+`--rebalance-every`, `--no-trade-band`, `--timing {next_open,same_close}`, `--outdir`.
+`run` also takes `--prior-trials`, `--quick` and `--no-plots`.
+
+## Reproducing every number
+
+Every figure in this README and in the write-up regenerates from the repository.
+
+**The headline** comes from `quant-capstone run`; its numbers are written to
+`results/headline.json`, which `tests/test_docs.py` checks this README and the write-up
+against.
+
+**The side studies** — everything that is not the headline — are modules in
+`src/quant_capstone/studies/`, one per study. Each pins the configuration it was
+originally run under (`studies/eras.py`): the defaults moved as the project learned, so a
+study that silently picked up today's `Config()` would stop reproducing what it found.
+Their tables are committed in `results/studies/`; `study --check` regenerates them all into
+a scratch directory and diffs the two.
+
+| study | README section | era |
+|---|---|---|
+| `progression` | Results table | final |
+| `sleeve_survey`, `sleeves`, `blends`, `pead` | Three sleeves; sleeve choice | flat-spread / blend / PEAD |
+| `transfer` | Raising the transfer coefficient | blend |
+| `fundamentals` | The fundamentals route | blend |
+| `intraday` | The intraday route | (IB hourly bars) |
+| `liquidity`, `breadth`, `retune`, `turnover` | The liquidity question | flat-spread |
+| `events`, `passive`, `regime`, `band` | Phase 2 A, B, C | PEAD |
+| `leverage`, `figures` | Write-up §6 and every figure | final |
+
+Regenerating them against the cached data reproduced the archived tables from the
+original exploratory scripts **exactly**, with four explained exceptions: the two
+walk-forward fold tables (training windows now end five days earlier because of the
+embargo fix — wherever the same configuration is selected the test Sharpes agree to the
+last digit); the $10m leverage curves (now stored in dollars rather than growth of
+$10,000); and `turnover`, the very first exploratory sweep, which ran before the cache and
+universe-rebuild fixes and now lands within 0.035 Sharpe of what was recorded. Nothing in
+this README quotes that last one.
+
+**The data** cannot be pinned by code: yfinance revises adjusted prices and throttles
+into silently empty panels, the IB hourly bars need a live TWS session, and `data_cache/`
+is 180 MB and git-ignored. `results/data_manifest.json` records the SHA-256, size, shape
+and density of every cached input; `study` checks it before running and warns when the
+inputs differ, so a number that moves after a re-download is caught as a data change
+before anyone starts debugging the model. To reproduce on another machine, copy
+`data_cache/` across rather than re-downloading.
+
+**The write-up** is built from `Report/src` (a stylesheet and one HTML fragment per
+section) with the figures in `Report/figures`; `quant-capstone book` inlines them into a
+single self-contained HTML file. The two project briefs are `quant_capstone_spec.md` and
+`phase2_brief.md`.
 
 ## Layout
 
@@ -300,17 +408,21 @@ src/quant_capstone/
   config.py       all tunable defaults, and why four differ from the spec's
   linalg.py       projection primitive shared by neutralization and orthogonalization
   factors.py      market proxy, rolling betas, sector loadings
-  data/           yfinance | synthetic sources, SEC point-in-time fundamentals, PIT universe
-  signals/        7 price + 6 fundamental alpha sleeves, blending, standardization
+  data/           yfinance | synthetic sources, SEC fundamentals, Form 4, PIT universe, manifest
+  signals/        7 price, 6 fundamental and 6 event sleeves, blending, standardization
   risk/           covariance (Ledoit-Wolf / PCA), neutralization, sizing, constraints
-  costs/          commissions, reg fees, borrow, slippage/impact — each toggleable
+  costs/          commissions, reg fees, borrow, financing, slippage/impact — each toggleable
+  execution/      passive-fill economics (Phase 2, direction B)
   backtest/       vectorized engine, independent cross-checks, optional vectorbt
   law/            IC, effective breadth, transfer coefficient, implied vs realized IR
-  validation/     walk-forward, sensitivity, DSR/PBO, block bootstrap, cost sensitivity
-  reporting/      metrics, chart style, plots, results write-up
+  validation/     walk-forward, sensitivity, DSR/PBO, bootstrap, cost sensitivity, trial ledger
+  reporting/      metrics, chart style, plots, results.md, headline.json, the write-up builder
+  studies/        one module per side study, the eras they ran under, runner and diff
   strategy.py     config -> data -> signal -> portfolio -> backtest
   study.py        the full study: baseline + law + every Section 10 control
-tests/            179 tests; signal, neutralization and cost accounting get priority
+results/          committed: headline.json, trial_ledger.json, data_manifest.json, studies/
+Report/           the write-up: src/ (sections, stylesheet), figures/, the built HTML
+tests/            262 tests; signal, neutralization and cost accounting get priority
 ```
 
 ## The conventions that keep it honest
@@ -324,8 +436,9 @@ construction, and there only for comparison.
 is the headline finding, and only the OOS column counts toward the objective.
 
 **Costs.** Commission (per-share with a per-order minimum and a 1%-of-value cap), SEC
-Section 31 and FINRA TAF on sales, borrow on the short leg, and slippage (half-spread
-plus a `c·σ·√(shares/ADV)` impact term). Each has its own toggle, and `cost_multiplier`
+Section 31 and FINRA TAF on sales, borrow on the short leg, margin financing on any long
+exposure above NAV (zero for the unlevered book), and slippage (half-spread plus a
+`c·σ·√(shares/ADV)` impact term). Each has its own toggle, and `cost_multiplier`
 scales all of them for the break-even sweep.
 
 **Causality.** The pipeline is causal — trailing windows only, everywhere. That is what
@@ -334,11 +447,12 @@ fold instead of re-running it. `tests/test_no_lookahead.py` proves the property 
 truncating the panel and asserting every earlier weight is unchanged; if that test
 breaks, the walk-forward silently becomes in-sample.
 
-**Everything selectable goes in the walk-forward grid.** `k` and `rebalance_every` are
-both swept per fold rather than fixed in the config. Pinning a parameter that was chosen
-by looking at full-sample results makes every fold inherit that hindsight and quietly
-turns the "out-of-sample" number back into an in-sample one — which is exactly the
-difference between the 0.338 and 0.047 rows above.
+**Everything selectable goes in the walk-forward grid.** `k`, the PEAD weight,
+`rebalance_every` and `no_trade_band` are all swept per fold rather than fixed in the
+config. Pinning a parameter that was chosen by looking at full-sample results makes every
+fold inherit that hindsight and quietly turns the "out-of-sample" number back into an
+in-sample one. This project broke the rule twice — first for the holding period, then for
+`k` — see [Validation fixes](#validation-fixes).
 
 **Survivorship.** yfinance serves only currently-listed names and we seed from today's
 S&P 500, so delisted losers are missing. This biases a reversal backtest *optimistic* —
@@ -348,7 +462,8 @@ reverted. Treat the numbers as an upper bound.
 ## Three things worth knowing before you read a result
 
 **Raising the transfer coefficient makes things worse.** The Fundamental Law writes
-`IR = TC·IC·√BR`, which reads as "raise TC". Measured, the opposite holds:
+`IR = TC·IC·√BR`, which reads as "raise TC". Measured on the Phase 1 blend, the opposite
+holds (`study transfer`):
 
 | variant | TC | gross | net |
 |---|---|---|---|
@@ -374,7 +489,7 @@ commission minimums weigh more on the smaller book.
 looks like 25,193 bets a year, which would make IR = 2 need an IC of only 0.013. It is
 really about 1,300 once cross-sectional dependence (24.6 independent directions, not 100
 names) and signal persistence are accounted for — a 19x reduction that raises the required
-IC fourfold, to 0.106 against the 0.011 we have.
+IC fourfold, to 0.104 against the 0.011 we have.
 
 ## Not built
 
@@ -383,6 +498,6 @@ The natural insertion point is a new `signals/` producer plus a `risk/` sizing m
 cost model, backtest engine, law diagnostics and validation harness are all
 strategy-agnostic and would be reused unchanged.
 
-Also not modelled, and named in the report's limitations section: margin financing on the
-long leg, hard-to-borrow rates above general collateral, and fill uncertainty. Each would
-make the net number worse.
+Also not modelled, and named in the write-up's limitations section: hard-to-borrow rates
+above general collateral, a single financing rate across a decade in which benchmark
+rates went from zero to 5%, and fill uncertainty. Each would make the net number worse.

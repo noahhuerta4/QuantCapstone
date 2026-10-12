@@ -14,7 +14,7 @@ from .deflated_sharpe import (
 )
 from .grid import RunCache, grid_configs, label
 from .pbo import probability_of_backtest_overfitting
-from .trial_ledger import TrialLedger, seed_phase1
+from .trial_ledger import WALKFORWARD_KEY, TrialLedger, seed_phase1
 from .sensitivity import DEFAULT_GRID, plateau_score, surface, sweep
 from .walkforward import Fold, WalkForwardResult, in_sample_vs_out_of_sample, make_folds, walk_forward
 
@@ -27,5 +27,5 @@ __all__ = [
     "sweep_cost_multiplier", "break_even_multiplier", "sweep_component",
     "component_toggle_table", "capacity_sweep",
     "RunCache", "grid_configs", "label",
-    "TrialLedger", "seed_phase1",
+    "TrialLedger", "seed_phase1", "WALKFORWARD_KEY",
 ]

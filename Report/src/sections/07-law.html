@@ -1,0 +1,91 @@
+<section id="law">
+  <h2><span class="sec-no">07</span> Diagnosing the result</h2>
+  <div class="col">
+    <p>
+      The Fundamental Law of Active Management decomposes an information ratio into three
+      measurable terms: <span class="mono">IR = TC × IC × √BR</span>, where <b>IC</b> is
+      forecasting skill, <b>BR</b> is the number of independent bets per year, and <b>TC</b>
+      is the fraction of the ideal position that actually survives constraints and costs.
+      Used as an instrument rather than decoration, it says where a result comes from and
+      what would change it.
+    </p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Term</th><th class="n">Measured</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">IC (information coefficient)</td><td class="n">0.0113</td>
+            <td class="def">Daily rank correlation between forecast and the return actually traded; t = 2.55</td></tr>
+        <tr><td class="sym">IC hit rate</td><td class="n">50.8%</td>
+            <td class="def">Share of days the forecast points the right way — barely above a coin flip, and enough</td></tr>
+        <tr><td class="sym">Naive breadth</td><td class="n">25,193</td>
+            <td class="def">100 names × 252 days, if every name-day were an independent bet</td></tr>
+        <tr><td class="sym">Independent directions</td><td class="n">24.6</td>
+            <td class="def">Of 100 names, after accounting for how correlated their residual returns are</td></tr>
+        <tr><td class="sym">Signal autocorrelation</td><td class="n">0.652</td>
+            <td class="def">Holding a similar tilt for days is not a fresh bet each day</td></tr>
+        <tr><td class="sym">Effective breadth</td><td class="n">1,309</td>
+            <td class="def">19× fewer independent bets per year than the naive count implies</td></tr>
+        <tr><td class="sym">TC from constraints</td><td class="n">0.631</td>
+            <td class="def">Correlation between ideal and delivered weights</td></tr>
+        <tr><td class="sym">TC from costs</td><td class="n">0.829</td>
+            <td class="def">Net Sharpe ÷ gross Sharpe — the fraction of edge surviving trading</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="__IMG_breadth_waterfall__" alt="Log-scale bar chart showing independent bets per year falling from 25,193 naive, to 6,211 after cross-sectional dependence, to 1,309 after signal persistence.">
+    <figcaption>
+      <b>Effective breadth.</b> The seductive arithmetic says 100 names rebalanced daily is
+      25,193 bets a year, which would make a respectable information ratio achievable on
+      almost no skill. Two corrections demolish it: stocks are not independent of each other
+      (100 names carry about 24.6 independent directions), and holding the same tilt for
+      days is not a new bet each day. What survives is 1,309 — a nineteenfold reduction that
+      roughly quadruples the forecasting skill required.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_sleeve_scatter__" alt="Scatter of information coefficient against one minus autocorrelation on a log x-axis. Sleeves used in the blend sit to the right with high turnover; rejected fundamental ratios cluster at the far left with near-zero turnover.">
+    <figcaption>
+      <b>Why some sleeves make the blend and others do not.</b> The x-axis is how fast a
+      signal turns over, which is what converts forecasting skill into information ratio.
+      Momentum and residual momentum have the <em>highest</em> IC of anything built here and
+      are still rejected: at an autocorrelation of 0.995 they deliver under one independent
+      bet a year, so the skill has nowhere to go. Earnings surprise sits in between — a
+      fundamental signal with an event clock — which is exactly why it earns a place.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_sleeve_correlations__" alt="Correlation matrix of fourteen alpha sleeves showing three tight blocks — reversal variants, momentum variants, volatility variants — with near-zero correlation between blocks.">
+    <figcaption>
+      <b>Sleeve correlations.</b> Fourteen candidate signals collapse into three families.
+      Within a family the variants correlate above 0.93 and are redundant; across families
+      the correlations sit near zero, and that is the diversification worth having. The
+      blend takes one fast reversal sleeve, one overnight sleeve at 0.30 correlation to it,
+      and earnings surprise at −0.01 to both.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_ic_decay__" alt="Line chart of mean information coefficient against forecast horizon, falling from 0.011 at one day to near zero by ten days.">
+    <figcaption>
+      <b>Signal decay.</b> Forecasting power falls away within about three days, which is
+      what sets the holding period: hold too long and the position is stale, rebalance too
+      often and turnover costs exceed the edge. Ten days is where those two curves cross
+      once costs are charged.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_information_coefficient__" alt="Cumulative information coefficient rising steadily over the sample with intermittent flat stretches.">
+    <figcaption>
+      <b>Cumulative IC.</b> A steadily rising line means the forecast works consistently
+      rather than in a few lucky episodes. The flat stretches are real and correspond to the
+      underwater periods in the rolling Sharpe.
+    </figcaption>
+  </figure>
+</section>

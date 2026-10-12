@@ -1,0 +1,116 @@
+<section id="variables">
+  <h2><span class="sec-no">04</span> Variables and units</h2>
+  <div class="col">
+    <p>
+      Every tunable quantity in the system, with the unit it is measured in and the value
+      used. Units are stated explicitly because most of the errors that inflate a backtest
+      are unit errors in disguise — a spread quoted in percent instead of basis points, a
+      rate applied per calendar day instead of per trading day.
+    </p>
+  </div>
+
+  <h4>Signal parameters</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Variable</th><th>Unit</th><th class="n">Value</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">k</td><td>trading days</td><td class="n">2</td>
+            <td class="def">Lookback over which the return being reverted is measured</td></tr>
+        <tr><td class="sym">overnight_k</td><td>trading days</td><td class="n">5</td>
+            <td class="def">Number of overnight gaps summed for the overnight sleeve</td></tr>
+        <tr><td class="sym">volume_baseline</td><td>trading days</td><td class="n">63</td>
+            <td class="def">Window defining "normal" volume, against which a shock is measured</td></tr>
+        <tr><td class="sym">decay_days</td><td>trading days</td><td class="n">60</td>
+            <td class="def">Period over which an earnings surprise fades linearly to zero</td></tr>
+        <tr><td class="sym">pead_weight</td><td>fraction of blend</td><td class="n">0.10</td>
+            <td class="def">Weight on the earnings-surprise sleeve; the rest split evenly</td></tr>
+        <tr><td class="sym">winsor_mad</td><td>median abs deviations</td><td class="n">3.0</td>
+            <td class="def">Clip level applied to each daily cross-section before standardizing</td></tr>
+        <tr><td class="sym">beta_lookback</td><td>trading days</td><td class="n">126</td>
+            <td class="def">Window for each stock's rolling beta against the universe</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Risk and portfolio construction</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Variable</th><th>Unit</th><th class="n">Value</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">vol_target</td><td>annualized, fraction of NAV</td><td class="n">0.10</td>
+            <td class="def">Ex-ante volatility the book is scaled toward before caps bind</td></tr>
+        <tr><td class="sym">max_weight</td><td>fraction of NAV</td><td class="n">0.015</td>
+            <td class="def">Largest absolute position in any single name</td></tr>
+        <tr><td class="sym">max_gross</td><td>multiple of NAV</td><td class="n">3.0</td>
+            <td class="def">Cap on the sum of absolute weights (long plus short)</td></tr>
+        <tr><td class="sym">max_adv_participation</td><td>fraction of daily volume</td><td class="n">0.01</td>
+            <td class="def">Position may not exceed 1% of the name's average dollar volume</td></tr>
+        <tr><td class="sym">cov_lookback</td><td>trading days</td><td class="n">252</td>
+            <td class="def">Window for the covariance estimate</td></tr>
+        <tr><td class="sym">cov_refresh</td><td>trading days</td><td class="n">21</td>
+            <td class="def">How often the covariance matrix is re-estimated</td></tr>
+        <tr><td class="sym">constraint_iters</td><td>count</td><td class="n">8</td>
+            <td class="def">Alternations between projection and clipping before the final scale</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Execution</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Variable</th><th>Unit</th><th class="n">Value</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">timing</td><td>convention</td><td class="n">next_open</td>
+            <td class="def">Signal at the <i>t</i> close, traded at the <i>t</i>+1 open</td></tr>
+        <tr><td class="sym">rebalance_every</td><td>trading days</td><td class="n">10</td>
+            <td class="def">Book is re-traded every tenth day; positions drift in between</td></tr>
+        <tr><td class="sym">no_trade_band</td><td>fraction of NAV</td><td class="n">0.006</td>
+            <td class="def">A name is left alone unless its target moves more than this</td></tr>
+        <tr><td class="sym">min_trade_dollars</td><td>USD</td><td class="n">200</td>
+            <td class="def">Floor below which a trade cannot clear the commission minimum</td></tr>
+        <tr><td class="sym">initial_nav</td><td>USD</td><td class="n">10,000,000</td>
+            <td class="def">Starting capital; NAV compounds thereafter</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Cost model</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Variable</th><th>Unit</th><th class="n">Value</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">per_share_tiered</td><td>USD per share</td><td class="n">0.0035</td>
+            <td class="def">Commission rate on shares traded</td></tr>
+        <tr><td class="sym">min_per_order_tiered</td><td>USD per order</td><td class="n">0.35</td>
+            <td class="def">Per-order floor; one order per name per rebalance</td></tr>
+        <tr><td class="sym">max_pct_trade_value</td><td>fraction of notional</td><td class="n">0.01</td>
+            <td class="def">Commission cap, which overrides the per-order floor</td></tr>
+        <tr><td class="sym">sec_fee_rate</td><td>fraction of sale proceeds</td><td class="n">0.0000278</td>
+            <td class="def">SEC Section 31 fee, charged on sales only</td></tr>
+        <tr><td class="sym">finra_taf_per_share</td><td>USD per share sold</td><td class="n">0.000166</td>
+            <td class="def">FINRA trading activity fee, capped at $8.30 per trade</td></tr>
+        <tr><td class="sym">borrow_rate</td><td>annualized, fraction</td><td class="n">0.005</td>
+            <td class="def">Fee to borrow the <i>shares</i> needed to short, accrued daily on
+            short market value</td></tr>
+        <tr><td class="sym">financing_rate</td><td>annualized, fraction</td><td class="n">0.030</td>
+            <td class="def">Margin interest on borrowed <i>cash</i>, charged on
+            max(long exposure − capital, 0). Zero at this book's 0.50× long exposure</td></tr>
+        <tr><td class="sym">half_spread</td><td>basis points</td><td class="n">~0.44</td>
+            <td class="def">Per-name, from a calibrated function of dollar volume</td></tr>
+        <tr><td class="sym">impact_coef</td><td>dimensionless</td><td class="n">0.10</td>
+            <td class="def">Coefficient <i>c</i> in impact = <i>c</i> · σ · √(shares ÷ ADV)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="finding caution">
+    <p>
+      <strong>One unit choice worth flagging.</strong> Borrow is an annual rate but the
+      engine only steps on trading days, so it is divided by 252 rather than 360. Charging
+      a calendar-day rate on trading days only would under-bill the short leg by about 30%.
+      Similarly the per-order commission minimum is denominated in dollars, not basis
+      points, which is why NAV has to be tracked in levels rather than the backtest running
+      purely in return space.
+    </p>
+  </div>
+</section>

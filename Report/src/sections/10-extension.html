@@ -1,0 +1,104 @@
+<section id="extension">
+  <h2><span class="sec-no">10</span> Extension: three directions, two dead ends</h2>
+  <div class="col">
+    <p>
+      A second round of work targeted the term the Fundamental Law identified as binding —
+      the number of independent bets. Three directions were tried in order of how much
+      <em>new information</em> each brought, rather than how promising each looked, because
+      the Deflated Sharpe charges for search but not for evidence. Net out-of-sample Sharpe
+      moved from 0.84 to 0.90, and the gain came from none of the three.
+    </p>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Direction A · rejected</span>
+    <h3>Insider filings and further earnings cuts</h3>
+    <dl>
+      <dt>Idea</dt>
+      <dd>If an earnings surprise earns its place because it has an <b>event clock</b>, find
+      more event clocks. Six candidates: four built on SEC Form 4 insider filings (217,517
+      open-market trades, median filing lag of exactly 2 days, as the statute requires) and
+      two further cuts of the existing XBRL panel.</dd>
+      <dt>Result</dt>
+      <dd>All six failed the inclusion gate. Insider net buying has <b>significantly negative</b>
+      forecasting power in this universe — IC −0.0133 at t = −3.50.</dd>
+      <dt>Judgement</dt>
+      <dd>The sign was <b>not</b> flipped. It survived two artefact checks (only 1.7% of
+      scored days are zero-filled; restricting to names that actually filed within 60 days
+      gives −0.0145, t = −3.66), but the literature's prior is positive and there is no
+      mechanism for a negative one. Reversing a sign because one sample says so is the exact
+      curve-fit this project exists to detect. Revenue surprise had the best IC ever measured
+      here (0.0175, t = 3.05) and was still rejected: at 0.46 correlation with the existing
+      earnings sleeve it is a redundant variant, not a new bet.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Direction B · rejected at the gate</span>
+    <h3>Passive execution, killed by one line of arithmetic</h3>
+    <dl>
+      <dt>Idea</dt>
+      <dd>Hourly reversal carries roughly twenty times the effective breadth of the daily
+      signal. It was unaffordable because crossing the spread on that much turnover costs
+      more than the edge. But a resting limit order <em>earns</em> the half-spread rather
+      than paying it — so the dominant cost might change sign rather than merely shrink.</dd>
+      <dt>Result</dt>
+      <dd>A parametric fill-quality map killed it before any microstructure work:
+      <span class="mono">commission + fees = 0.700 bps per dollar traded</span> against a
+      <span class="mono">maximum spread capture of 0.440 bps</span>. Even with flawless
+      passive fills and zero adverse selection, each dollar traded still costs 0.26 bps.</dd>
+      <dt>Judgement</dt>
+      <dd>Turnover never becomes free, so the twentyfold breadth cannot be bought. The thesis
+      rested on a cost structure this project had already disproved — once the spread was
+      calibrated at 0.44 bps rather than assumed at 2, <b>commission, not spread, became the
+      dominant per-dollar cost</b>, and earning the spread cannot flip a sign commission
+      controls. Two hours of arithmetic replaced a multi-week simulation.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Direction C · rejected, but it found the lever</span>
+    <h3>Regime conditioning, and the control that exposed it</h3>
+    <dl>
+      <dt>Idea</dt>
+      <dd>Blend IC across quartiles of cross-sectional dispersion is monotone (−0.003,
+      +0.008, +0.018, +0.024) and the mechanism fits — reversal is paid for providing
+      liquidity, and both reversal sleeves strengthen with dispersion while the earnings
+      sleeve shows no pattern at all. So scale risk with the regime.</dd>
+      <dt>Result</dt>
+      <dd>It improved the number for the wrong reason. A <b>constant</b> multiplier at the
+      same average size beat the regime-varying one (0.907 against 0.878), and the diagnostic
+      found no alpha timing whatsoever — the return gap between scaled-up and scaled-down
+      days was −0.000004. The entire gain was reduced turnover wearing a regime costume.</dd>
+      <dt>Judgement</dt>
+      <dd>Chasing the real mechanism found the actual lever: the <b>no-trade band</b>, which
+      needed re-tuning once the sleeve set had changed. It is a genuine interior optimum, and
+      the cliff is mechanically explained — a band wider than the 1.5% per-name cap means no
+      trade can ever clear it.</dd>
+    </dl>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>No-trade band</th><th class="n">0.000</th><th class="n">0.003</th>
+        <th class="n">0.006</th><th class="n">0.010</th><th class="n">0.013</th><th class="n">0.016+</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">net Sharpe</td><td class="n">0.845</td><td class="n">0.864</td>
+            <td class="n">0.938</td><td class="n">0.975</td><td class="n">0.857</td>
+            <td class="n">nothing trades</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="finding">
+    <p>
+      <strong>Two methodology upgrades came with this round.</strong> The walk-forward now
+      <b>embargoes</b> the ten-day holding period off the end of each training window, so a
+      position opened in training cannot still be open in the test window — without it, train
+      and test share outcomes and the generalisation gap is flattered. And the trial count now
+      lives in a ledger on disk, <span class="mono">results/trial_ledger.json</span>, under
+      version control: every sweep with what it tried and what came of it, rejected candidates
+      included, read automatically whenever a Sharpe is deflated.
+    </p>
+  </div>
+</section>

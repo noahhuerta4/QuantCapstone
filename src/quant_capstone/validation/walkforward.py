@@ -125,13 +125,21 @@ def walk_forward(
     # leaves no entry named ``label({})`` and the fallback below silently used
     # whichever cell happened to come first -- reporting an arbitrary grid
     # corner under a heading that claims to be the default.
-    names = cache.evaluate(base, {}) + cache.evaluate(base, grid)
+    # Grid cells first, so when the defaults are also a cell (the usual case) a
+    # fold that picks them is reported under the cell's label, not as ``base``.
+    names = cache.evaluate(base, grid) + cache.evaluate(base, {})
     names = list(dict.fromkeys(names))
     returns = cache.returns(names, net=net)
 
     vc = base.validation
     # Embargo the holding period so open positions cannot straddle the boundary.
-    embargo = max(vc.embargo_days, base.execution.rebalance_every)
+    # It must cover the *longest* hold any candidate uses, not just the
+    # default's: a fold that selects rebalance_every=15 holds for fifteen days.
+    embargo = max(
+        vc.embargo_days,
+        base.execution.rebalance_every,
+        *(int(n) for n in grid.get("execution__rebalance_every", ())),
+    )
     folds = make_folds(returns.index, vc.train_days, vc.test_days, vc.expanding, embargo)
     if not folds:
         raise ValueError(

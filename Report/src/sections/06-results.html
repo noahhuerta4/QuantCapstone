@@ -1,0 +1,78 @@
+<section id="results">
+  <h2><span class="sec-no">06</span> Results</h2>
+
+  <figure>
+    <img src="__IMG_portfolio_evolution__" alt="Account value from a $1,000,000 start growing to $1,406,529 over ten years, with a drawdown panel beneath showing a worst decline of 5.1%.">
+    <figcaption>
+      <b>Portfolio value from a $1,000,000 start.</b> Ten years, net of every modelled cost,
+      from a genuine backtest at that capital — the per-order commission minimum, ADV
+      participation and square-root impact are all computed on real dollar sizes. The account
+      ends at <b>$1,406,529</b>, a 3.5% annual return at 3.7% volatility.
+    </figcaption>
+  </figure>
+
+  <div class="finding">
+    <p>
+      <strong>The drawdown panel is the honest half of the chart.</strong> The worst decline
+      is only 5.1%, but it took <b>438 trading days</b> — most of two years — to recover, and
+      the book spends long stretches underwater. A rising line hides that; an investor living
+      through 2022 would not have experienced it as a steady climb.
+    </p>
+  </div>
+
+  <div class="finding">
+    <p>
+      <strong>Capital size is a real constraint, in both directions.</strong> A small account
+      cannot run this strategy at all: at $10,000 with a hundred names the positions would be
+      about $100 each, no trade would clear the $200 minimum size, and the book would never
+      trade. The fixed per-order commission is what bites on the way down — net Sharpe is 0.95
+      at $1m and 0.89 at $100,000, where commission has risen from 14 to 38 bps a year.
+    </p>
+    <p>
+      Above the sweet spot the binding constraint changes from fixed costs to market impact.
+      $1m scores <em>better</em> than $10m (0.954 against 0.938) because it consumes a tenth
+      as much of each name's daily volume — 0.004% against 0.036% — so it pays less impact.
+      The strategy has a capacity range, not a monotone preference for size.
+    </p>
+  </div>
+
+  <figure>
+    <img src="__IMG_rolling_sharpe__" alt="Rolling 126-day net Sharpe ratio over the sample, oscillating between roughly minus two and plus four, positive in about two thirds of windows.">
+    <figcaption>
+      <b>Rolling six-month net Sharpe.</b> The honest picture of regime dependence: the
+      strategy is positive in roughly two thirds of rolling windows and spends real stretches
+      underwater. A single full-sample number hides this entirely, which is why it is
+      reported.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_cost_attribution__" alt="Horizontal bar chart of annual cost by component: borrow 25 bps, slippage 21 bps, commission 14 bps, regulatory fees 4 bps, financing zero.">
+    <figcaption>
+      <b>Where the return goes.</b> Borrow is the largest single component at 25 bps/yr and
+      the only one that does <em>not</em> scale with turnover — it is rent on the short leg
+      for as long as the position is open. Slippage and commission together are 35 bps and do
+      scale, which is what makes the rebalance interval the dominant design choice. Financing
+      is zero here: at 0.50× long exposure the book borrows no cash.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_exposures__" alt="Long, short and net exposure over time. Long sits near plus 50% of NAV, short near minus 50%, and net stays pinned at zero.">
+    <figcaption>
+      <b>Exposure over time.</b> Long and short legs each run near 50% of NAV and the net
+      line sits on zero throughout — the dollar-neutrality constraint holding in the
+      delivered book, not just in the target weights.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_trades_per_day__" alt="Trades per day over the sample, showing spikes to about 53 orders on rebalance days every ten days and zero in between.">
+    <figcaption>
+      <b>Trade count.</b> Trading is batched into every tenth day, so the book fires about
+      53 orders on a rebalance day and none in between. The calendar average of 4.8 and the
+      trading-day average of 53 are both true and describe different things; an execution
+      desk cares about the second.
+    </figcaption>
+  </figure>
+</section>

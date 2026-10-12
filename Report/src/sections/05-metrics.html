@@ -1,0 +1,92 @@
+<section id="metrics">
+  <h2><span class="sec-no">05</span> Performance metrics</h2>
+  <div class="col">
+    <p>
+      Every metric is reported gross and net. Risk-free rate is taken as zero throughout:
+      for a dollar-neutral book the long leg is funded by the short proceeds, so the return
+      series is already an excess return. That does mean these Sharpes are not directly
+      comparable with a long-only strategy's.
+    </p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Unit</th><th class="n">Gross</th><th class="n">Net</th><th>Definition</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="sym">Sharpe ratio</td><td>annualized</td><td class="n">1.111</td><td class="n">0.938</td>
+            <td class="def">Mean daily return ÷ standard deviation, × √252</td></tr>
+        <tr><td class="sym">Sortino ratio</td><td>annualized</td><td class="n">1.136</td><td class="n">0.957</td>
+            <td class="def">As Sharpe, but dividing by downside deviation about zero</td></tr>
+        <tr><td class="sym">Calmar ratio</td><td>ratio</td><td class="n">0.854</td><td class="n">0.669</td>
+            <td class="def">Annualized return ÷ absolute maximum drawdown</td></tr>
+        <tr><td class="sym">Annualized return</td><td>% of NAV</td><td class="n">4.07%</td><td class="n">3.41%</td>
+            <td class="def">Geometric: total growth raised to 252 ÷ days, minus one</td></tr>
+        <tr><td class="sym">Annualized volatility</td><td>% of NAV</td><td class="n">3.65%</td><td class="n">3.65%</td>
+            <td class="def">Standard deviation of daily returns × √252</td></tr>
+        <tr><td class="sym">Maximum drawdown</td><td>% of peak</td><td class="n">−4.77%</td><td class="n">−5.10%</td>
+            <td class="def">Largest peak-to-trough decline in the equity curve</td></tr>
+        <tr><td class="sym">Drawdown duration</td><td>trading days</td><td class="n">417</td><td class="n">440</td>
+            <td class="def">Peak to full recovery — the number that decides if a book survives</td></tr>
+        <tr><td class="sym">Hit rate</td><td>fraction of days</td><td class="n">52.3%</td><td class="n">51.6%</td>
+            <td class="def">Share of non-flat days with a positive return</td></tr>
+        <tr><td class="sym">Win/loss ratio</td><td>ratio</td><td class="n">1.120</td><td class="n">1.117</td>
+            <td class="def">Mean winning day ÷ absolute mean losing day</td></tr>
+        <tr><td class="sym">VaR (95%, historical)</td><td>% of NAV, daily</td><td class="n">0.33%</td><td class="n">0.33%</td>
+            <td class="def">Fifth-percentile daily loss, as a positive number</td></tr>
+        <tr><td class="sym">CVaR (95%)</td><td>% of NAV, daily</td><td class="n">0.48%</td><td class="n">0.48%</td>
+            <td class="def">Mean loss conditional on being in the worst 5% of days</td></tr>
+        <tr><td class="sym">Skew</td><td>dimensionless</td><td class="n">0.562</td><td class="n">0.555</td>
+            <td class="def">Third moment; positive means the tail is to the upside</td></tr>
+        <tr><td class="sym">Excess kurtosis</td><td>dimensionless</td><td class="n">7.14</td><td class="n">7.20</td>
+            <td class="def">Fat tails — well above the 0 of a normal distribution</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Activity and exposure</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Measure</th><th>Unit</th><th class="n">Value</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">Annualized turnover</td><td>multiples of NAV, one-way</td><td class="n">25.4×</td>
+            <td class="def">Book turns over about twice a month</td></tr>
+        <tr><td class="sym">Trades per day</td><td>count, calendar average</td><td class="n">4.77</td>
+            <td class="def">Batched: 53 orders on the 9% of days that trade</td></tr>
+        <tr><td class="sym">Gross exposure</td><td>multiple of NAV</td><td class="n">1.00×</td>
+            <td class="def">Roughly 50% long and 50% short</td></tr>
+        <tr><td class="sym">Net exposure</td><td>fraction of NAV</td><td class="n">−0.007</td>
+            <td class="def">Dollar neutrality holding in practice</td></tr>
+        <tr><td class="sym">Realized beta</td><td>dimensionless</td><td class="n">0.009</td>
+            <td class="def">Against the equal-weight universe return</td></tr>
+        <tr><td class="sym">Ex-ante volatility</td><td>annualized</td><td class="n">3.34%</td>
+            <td class="def">Below target because the per-name cap binds first</td></tr>
+        <tr><td class="sym">ADV participation</td><td>fraction of daily volume</td><td class="n">0.04%</td>
+            <td class="def">Far inside the 1% liquidity limit at this size</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Cost attribution</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Component</th><th class="n">bps of NAV / yr</th><th class="n">Share</th><th>Scales with</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">Borrow</td><td class="n">25.16</td><td class="n">39.6%</td>
+            <td class="def">Short market value × days held — not turnover</td></tr>
+        <tr><td class="sym">Slippage</td><td class="n">20.50</td><td class="n">32.3%</td>
+            <td class="def">Half-spread plus square-root market impact, per trade</td></tr>
+        <tr><td class="sym">Commission</td><td class="n">14.00</td><td class="n">22.0%</td>
+            <td class="def">Shares traded, with a per-order floor</td></tr>
+        <tr><td class="sym">Regulatory fees</td><td class="n">3.86</td><td class="n">6.1%</td>
+            <td class="def">Sale proceeds and shares sold</td></tr>
+        <tr><td class="sym">Financing</td><td class="n">0.00</td><td class="n">0.0%</td>
+            <td class="def">Margin interest on borrowed cash. Zero here — at 0.50× long
+            exposure the long leg needs no debt</td></tr>
+        <tr class="total"><td>Total</td><td class="n">63.52</td><td class="n">100%</td>
+            <td class="def">0.64% of capital per year, or 2.50 bps per dollar traded</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>

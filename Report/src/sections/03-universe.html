@@ -1,0 +1,60 @@
+<section id="universe">
+  <h2><span class="sec-no">03</span> Universe and data</h2>
+  <div class="col">
+    <p>
+      The tradable universe is the <strong>100 most liquid US large-cap common stocks</strong>,
+      selected each month by trailing 63-day average dollar volume from current S&amp;P 500
+      membership. Membership is held fixed between monthly refreshes: re-ranking daily would
+      churn the book at the universe boundary for no forecasting reason.
+    </p>
+    <p>
+      Selection uses only information available before the day being selected for. Average
+      dollar volume is lagged one bar, eligibility screens use lagged prices, and names must
+      have at least 252 bars of history and trade above $5.
+    </p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Source</th><th>What it provides</th><th class="n">Coverage</th><th>Point-in-time handling</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="sym">yfinance</td><td class="def">Daily OHLCV, split/dividend adjusted</td>
+          <td class="n">496 tickers · 2,516 days</td>
+          <td class="def">Signals use data through the day's close; execution lagged one bar</td>
+        </tr>
+        <tr>
+          <td class="sym">SEC XBRL</td><td class="def">Quarterly and annual financial statement facts</td>
+          <td class="n">503 tickers · 138,678 facts</td>
+          <td class="def">Each fact carries its filing date; visible only on and after that date</td>
+        </tr>
+        <tr>
+          <td class="sym">Wikipedia</td><td class="def">S&amp;P 500 membership and GICS sectors</td>
+          <td class="n">503 tickers</td>
+          <td class="def">Current snapshot — see limitations</td>
+        </tr>
+        <tr>
+          <td class="sym">IBKR (ibapi)</td><td class="def">Hourly bars, for an intraday feasibility study</td>
+          <td class="n">59 tickers · 309,573 bars</td>
+          <td class="def">Research only; not used by the production strategy</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="finding">
+    <p>
+      <strong>The filing date is what makes fundamentals honest.</strong> A company's
+      December-quarter figures have a period end of 31 December but are not public until the
+      report is filed in February. Ranking stocks on them in January would be trading on
+      information nobody had. The common workaround is to lag all accounting data by six
+      months, which is safe but discards months of genuinely available information. Because
+      the SEC stamps every fact with its filing date, a value here becomes visible on the
+      exact day it was filed and not before. Restatements handle themselves: a company that
+      refiles 2019 numbers in 2021 produces a second fact with a later filing date, so a
+      2019 query still returns what the market actually had in 2019.
+    </p>
+  </div>
+</section>

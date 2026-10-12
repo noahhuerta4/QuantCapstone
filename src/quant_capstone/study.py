@@ -55,7 +55,16 @@ class Study:
     bootstrap_draws: np.ndarray
     deflated: pd.Series
     pbo: pd.Series
+    grid_trials: int = 0
+    """Configurations evaluated by this study's own grid."""
+    prior_trials: int = 0
+    """Configurations examined before this study, from the trial ledger."""
     plots: list[Path] = field(default_factory=list)
+
+    @property
+    def n_trials(self) -> int:
+        """The count the Deflated Sharpe is computed against."""
+        return self.grid_trials + self.prior_trials
 
     @property
     def oos_net_sharpe(self) -> float:
@@ -148,6 +157,8 @@ def run_study(
         bootstrap_draws=draws,
         deflated=deflated,
         pbo=pbo,
+        grid_trials=cache.n_trials,
+        prior_trials=prior_trials,
     )
 
     if make_plots:

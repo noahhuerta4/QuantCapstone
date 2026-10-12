@@ -50,30 +50,44 @@ def label(params: dict[str, Any]) -> str:
 
 @dataclass
 class RunCache:
-    """Runs each configuration at most once and keeps the results."""
+    """Runs each distinct configuration at most once and keeps the results.
+
+    Two labels can name the same configuration -- the walk-forward's ``base``
+    entry is usually also a cell of the grid. They share one run, and
+    ``n_trials`` counts configurations, not labels: running the defaults twice
+    is not a second look at the data.
+    """
 
     dataset: Dataset
     runs: dict[str, StrategyRun] = field(default_factory=dict)
     params: dict[str, dict[str, Any]] = field(default_factory=dict)
+    _by_config: dict[Config, str] = field(default_factory=dict, repr=False)
 
     def evaluate(self, base: Config, grid: dict[str, Iterable[Any]]) -> list[str]:
         names = []
         for params, cfg in grid_configs(base, grid):
             name = label(params)
             names.append(name)
-            if name not in self.runs:
+            if name in self.runs:
+                continue
+            if cfg in self._by_config:
+                self.runs[name] = self.runs[self._by_config[cfg]]
+            else:
                 log.info("running configuration %s", name)
                 self.runs[name] = run_strategy(cfg, self.dataset)
-                self.params[name] = params
+                self._by_config[cfg] = name
+            self.params[name] = params
         return names
 
     @property
     def n_trials(self) -> int:
-        """Configurations tried — feeds the Deflated Sharpe Ratio honestly."""
-        return len(self.runs)
+        """Distinct configurations tried -- feeds the Deflated Sharpe Ratio honestly."""
+        return len(self._by_config)
 
     def returns(self, names: list[str] | None = None, net: bool = True) -> pd.DataFrame:
-        names = names or list(self.runs)
+        # By default one column per distinct configuration, so an aliased label
+        # does not enter PBO or the trial-Sharpe variance twice.
+        names = names or list(self._by_config.values())
         series = {
             n: (self.runs[n].result.net_return if net else self.runs[n].result.gross_return)
             for n in names

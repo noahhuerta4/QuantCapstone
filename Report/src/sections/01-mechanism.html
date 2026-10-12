@@ -1,0 +1,58 @@
+<section id="mechanism">
+  <h2><span class="sec-no">01</span> What the strategy does</h2>
+  <div class="col">
+    <p>
+      The book is a <strong>cross-sectional</strong> bet. It never takes a view on whether
+      the market goes up or down. Every trading day it scores each stock in its universe
+      relative to the others, buys the names with the highest scores and shorts the names
+      with the lowest, in sizes that make the long and short legs cancel out. What remains
+      is a bet purely on the <em>ordering</em> of stocks against each other.
+    </p>
+    <p>
+      Three independent forecasts drive that ordering, and each rests on a different
+      economic mechanism:
+    </p>
+    <ul>
+      <li>
+        <strong>Volume-shock reversal.</strong> When a stock moves sharply on unusually
+        heavy volume, the move is often somebody demanding liquidity in a hurry rather
+        than new information arriving. Dealers who absorb that order are compensated when
+        the price drifts back. The sleeve buys recent losers and sells recent winners,
+        scaled by how unusual the volume behind the move was, so it tilts toward the
+        liquidity-driven half of the moves rather than the informed half.
+      </li>
+      <li>
+        <strong>Overnight reversal.</strong> The overnight session is thin and
+        order-driven, and prices that gap on it tend to give part of the gap back during
+        the following day. This is a genuinely different bet from total-return reversal —
+        the two correlate at only 0.30.
+      </li>
+      <li>
+        <strong>Earnings surprise.</strong> When a company reports earnings far from what
+        its own history implied, the price keeps drifting in the direction of the surprise
+        for weeks afterwards rather than adjusting at once. The sleeve measures each
+        quarter's earnings against the same quarter a year earlier, scaled by how variable
+        those surprises usually are for that company, and fades the score to zero over the
+        following 60 trading days.
+      </li>
+    </ul>
+    <p>
+      The three scores are standardized and blended, then handed to a risk pipeline that
+      decides position sizes, enforces neutrality and applies hard limits. The resulting
+      target weights are traded at the next day's open and held for ten trading days.
+    </p>
+  </div>
+
+  <div class="finding">
+    <p>
+      <strong>Why blend rather than pick the best?</strong> A single sleeve is capped by how
+      many genuinely independent bets it can make. Combining forecasts that are nearly
+      uncorrelated raises the information ratio roughly with the square root of the number
+      of independent views. Blending volume-shock reversal with overnight reversal lifted
+      gross Sharpe from 0.68 to 0.91 — the largest single gain in the project — and adding
+      earnings surprise takes out-of-sample net Sharpe from 0.63 to 0.91. Both
+      out-of-sample numbers come from the same validation harness, so the increment is the
+      sleeve and not a change of method.
+    </p>
+  </div>
+</section>

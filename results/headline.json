@@ -1,0 +1,53 @@
+{
+  "oos_net_sharpe": 0.9124,
+  "oos_net_default": 0.9511,
+  "full_net_sharpe": 0.9375,
+  "full_gross_sharpe": 1.1111,
+  "deflated_sharpe": 0.6711,
+  "psr_vs_zero": 0.9906,
+  "min_track_record_days": 802,
+  "n_trials": 443,
+  "grid_trials": 135,
+  "prior_trials": 308,
+  "pbo": 0.2439,
+  "bootstrap_ci": [
+    0.23,
+    1.6
+  ],
+  "prob_sharpe_below_zero": 0.0045,
+  "n_folds": 13,
+  "folds_positive": 11,
+  "folds_selection_beat_default": 3,
+  "train_minus_test": 0.1749,
+  "break_even_cost_multiplier": 6.43,
+  "annual_cost_bps": 63.5,
+  "selected_per_fold": {
+    "no_trade_band=0.01, rebalance_every=10, k=2, pead_weight=0.1": 9,
+    "no_trade_band=0.01, rebalance_every=10, k=1, pead_weight=0.1": 2,
+    "no_trade_band=0.006, rebalance_every=10, k=2, pead_weight=0.1": 2
+  },
+  "grid": {
+    "signal__k": [
+      1,
+      2,
+      3,
+      5,
+      10
+    ],
+    "signal__pead_weight": [
+      0.0,
+      0.1,
+      0.2
+    ],
+    "execution__rebalance_every": [
+      5,
+      10,
+      15
+    ],
+    "execution__no_trade_band": [
+      0.003,
+      0.006,
+      0.01
+    ]
+  }
+}

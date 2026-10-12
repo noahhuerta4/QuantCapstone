@@ -1,0 +1,237 @@
+{
+  "total": 443,
+  "entries": [
+    {
+      "key": "p1_turnover_sweep_a",
+      "n_trials": 18,
+      "description": "First turnover tuning: band x rebalance x universe",
+      "outcome": "exploratory",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_turnover_sweep_b",
+      "n_trials": 24,
+      "description": "Turnover tuning re-run after the universe-rebuild fix",
+      "outcome": "exploratory",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_ic_by_lookback",
+      "n_trials": 10,
+      "description": "IC for raw and residual reversal at k in {1,2,3,5,10}",
+      "outcome": "adopted k=2",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_joint_k_rebalance",
+      "n_trials": 60,
+      "description": "k x rebalance_every x no_trade_band joint search",
+      "outcome": "adopted",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_interior_optimum",
+      "n_trials": 20,
+      "description": "Confirming rebalance=10 is interior, not a grid edge",
+      "outcome": "adopted",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_cov_estimator",
+      "n_trials": 8,
+      "description": "ledoit_wolf / diagonal / pca / sample",
+      "outcome": "rejected: kept ledoit_wolf",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_cov_scope",
+      "n_trials": 4,
+      "description": "Covariance over universe vs whole panel",
+      "outcome": "adopted universe",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_sleeve_survey",
+      "n_trials": 7,
+      "description": "Seven price-based alpha sleeves measured standalone",
+      "outcome": "adopted 2",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_blend_combinations",
+      "n_trials": 6,
+      "description": "Which sleeves to blend",
+      "outcome": "adopted vsr+overnight",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_retune_after_spread",
+      "n_trials": 18,
+      "description": "Rebalance re-tuned once spreads were calibrated",
+      "outcome": "adopted",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_breadth_universe",
+      "n_trials": 12,
+      "description": "Universe size 100/200/400/800 with realistic spreads",
+      "outcome": "rejected",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_liquidity_deciles",
+      "n_trials": 10,
+      "description": "Reversal IC across ADV deciles on S&P 1500",
+      "outcome": "rejected",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_fundamental_sleeves",
+      "n_trials": 8,
+      "description": "Six static value/quality sleeves + market cap",
+      "outcome": "rejected",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_fundamental_blend",
+      "n_trials": 6,
+      "description": "Static fundamentals at several blend weights",
+      "outcome": "rejected",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_pead_weight",
+      "n_trials": 7,
+      "description": "Earnings-surprise blend weight sweep",
+      "outcome": "adopted 10%",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_transfer_coefficient",
+      "n_trials": 10,
+      "description": "Caps, neutrality and MVO variants to raise TC",
+      "outcome": "rejected",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_intraday_horizons",
+      "n_trials": 5,
+      "description": "Hourly reversal IC at 1/2/3/6/13-hour lookbacks",
+      "outcome": "deferred",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p1_final_grid",
+      "n_trials": 9,
+      "description": "Walk-forward grid: pead_weight x rebalance_every",
+      "outcome": "adopted",
+      "recorded": "2026-09-13",
+      "superseded_by": "walkforward_grid"
+    },
+    {
+      "key": "p2_direction_a_gate",
+      "n_trials": 6,
+      "description": "Six event-driven candidates through the A-gate (insider x4, revenue SUE, announcement reversal)",
+      "outcome": "rejected: all six",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_insider_activity_probe",
+      "n_trials": 1,
+      "description": "Filing-activity-without-direction probe while diagnosing the negative insider IC",
+      "outcome": "rejected: no mechanism",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_revenue_vs_earnings",
+      "n_trials": 3,
+      "description": "Revenue surprise as swap for / addition to earnings surprise",
+      "outcome": "rejected: rho=0.46, redundant",
+      "recorded": "2026-09-13",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_direction_b_stage1",
+      "n_trials": 2,
+      "description": "Passive-execution feasibility map: (fill ratio x adverse selection) at 5%% and 10%% of book per bar",
+      "outcome": "rejected: commission per dollar exceeds max spread capture",
+      "recorded": "2026-09-14",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_direction_c_diagnostic",
+      "n_trials": 2,
+      "description": "IC by dispersion and by market-vol quartile",
+      "outcome": "structure found in dispersion only",
+      "recorded": "2026-09-14",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_direction_c_specs",
+      "n_trials": 4,
+      "description": "Three pre-registered regime specs + unconditional control",
+      "outcome": "rejected",
+      "recorded": "2026-09-14",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_direction_c_control",
+      "n_trials": 4,
+      "description": "Constant-multiplier and wider-band controls against the regime overlay",
+      "outcome": "regime adds nothing; band is the real lever",
+      "recorded": "2026-09-14",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_band_interior",
+      "n_trials": 8,
+      "description": "No-trade band 0.000-0.030: interior-optimum check",
+      "outcome": "adopted 0.006 default, 0.003/0.006/0.010 in grid",
+      "recorded": "2026-09-14",
+      "superseded_by": ""
+    },
+    {
+      "key": "p2_final_grid",
+      "n_trials": 27,
+      "description": "Walk-forward grid: pead_weight x rebalance_every x no_trade_band",
+      "outcome": "adopted",
+      "recorded": "2026-09-14",
+      "superseded_by": "walkforward_grid"
+    },
+    {
+      "key": "walkforward_grid",
+      "n_trials": 135,
+      "description": "Headline walk-forward grid: k [1, 2, 3, 5, 10] x pead_weight [0.0, 0.1, 0.2] x rebalance_every [5, 10, 15] x no_trade_band [0.003, 0.006, 0.01]",
+      "outcome": "headline",
+      "recorded": "2026-10-07",
+      "superseded_by": ""
+    },
+    {
+      "key": "ablation_reversal_only",
+      "n_trials": 45,
+      "description": "Reversal-only sleeve through the headline harness: k x rebalance x band, for the progression table",
+      "outcome": "reporting only; nothing selected",
+      "recorded": "2026-10-07",
+      "superseded_by": ""
+    }
+  ]
+}

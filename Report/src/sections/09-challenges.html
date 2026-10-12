@@ -1,0 +1,145 @@
+<section id="challenges">
+  <h2><span class="sec-no">09</span> Challenges and how they were resolved</h2>
+  <div class="col">
+    <p>
+      These are the problems that actually cost time, in the order they were hit. Several
+      were silent — no error, just quietly wrong numbers — and the diagnostics that caught
+      them turned out to be more valuable than the fixes.
+    </p>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Silent data corruption</span>
+    <h3>The price cache never hit, then poisoned itself</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>Gross Sharpe fell from 0.64 to 0.16 with no modelling change to explain it. Considerable time went into blaming the covariance estimator.</dd>
+      <dt>Cause</dt>
+      <dd>Two compounding bugs. The cache filename came from Python's <span class="mono">hash()</span> on strings, which is <b>randomized per process</b> — so the key differed every run, the cache never hit, and the full panel was re-downloaded each time (14 duplicate files, 620 MB). That eventually triggered rate limiting, and a throttled response comes back <b>structurally complete and almost entirely empty</b>. It was written to cache, and the reuse check matched on column <em>names</em>, so the empty panel was then served to every later run.</dd>
+      <dt>Fix</dt>
+      <dd>A stable <span class="mono">sha1</span> key; coverage measured on non-null rows rather than column presence; and a refusal to cache any download covering under 80% of requested tickers. Both bugs now have regression tests.</dd>
+      <dt>Lesson</dt>
+      <dd>When a metric moves and no code change explains it, check the <b>data</b> first — shape, density, ticker count — before bisecting logic. The diagnostic that found it was one line: the fraction of non-null prices in the panel.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Look-ahead bias</span>
+    <h3>A causality test caught a leak introduced by an optimization</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>A test asserting that truncating the price panel leaves every earlier weight unchanged began failing.</dd>
+      <dt>Cause</dt>
+      <dd>An attempt to estimate the covariance matrix over "every name ever in the universe" — a set only knowable at the <em>end</em> of the backtest. The shrinkage intensity therefore depended on future membership.</dd>
+      <dt>Fix</dt>
+      <dd>Estimate over the names tradable on each refresh day, which is both causal and better calibrated. Names joining mid-period wait for the next refresh rather than borrowing an invented estimate.</dd>
+      <dt>Lesson</dt>
+      <dd>The causality test is load-bearing for the whole validation harness: the walk-forward runs each configuration once and slices it per fold, which is only valid because the pipeline is causal. If that test breaks, every out-of-sample number silently becomes in-sample.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Hindsight in the defaults</span>
+    <h3>Out-of-sample numbers that were quietly in-sample</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>Out-of-sample Sharpe of 0.19 looked reasonable while a fixed-defaults comparison scored 0.34 — the defaults beating per-fold selection by a suspicious margin.</dd>
+      <dt>Cause</dt>
+      <dd>The holding period had been chosen by looking at full-sample results and then <em>pinned in the config</em>. Every fold inherited that hindsight. Separately, the "fixed defaults" comparison column was not reading the defaults at all: with a non-empty sweep grid there was no entry named <span class="mono">base</span>, so the code silently fell back to the first grid cell, which happened to be the worst configuration.</dd>
+      <dt>Fix</dt>
+      <dd>Every selectable parameter moved into the walk-forward grid, so each fold re-chooses it from training data. The comparison column now always evaluates the true base configuration. Honest out-of-sample Sharpe dropped to <b>0.05</b> — a far more useful number than the 0.19 it replaced.</dd>
+      <dt>Lesson</dt>
+      <dd>Any parameter chosen by looking at results belongs in the validation grid, not the config file. Pinning it is how an out-of-sample number stops being out-of-sample without anyone noticing.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Hindsight, second time</span>
+    <h3>The same mistake survived the fix, and the trial count drifted</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>A review of the finished project found the documentation saying the reversal lookback <span class="mono">k</span> was re-selected per fold, while the walk-forward grid did not contain it. Separately, the trial count was quoted as 327 while the ledger on disk summed to 299.</dd>
+      <dt>Cause</dt>
+      <dd><span class="mono">k = 2</span> had been chosen from a full-sample IC sweep and stayed pinned in the config through both phases, so every fold inherited it. The count was inflated by double-counting: the headline grid was in the ledger <em>and</em> added again by the run, and the defaults — already a grid cell — were run and counted a second time under the label <span class="mono">base</span>.</dd>
+      <dt>Fix</dt>
+      <dd><span class="mono">k</span> joined the grid at the specification's pre-registered values {1, 2, 3, 5, 10}, not a range centred on the number already picked, taking it to 135 cells. The run cache now counts distinct configurations, the ledger marks earlier grids that the new one contains as superseded, and the embargo covers the longest holding period anywhere in the grid rather than the default's. The out-of-sample result held: folds chose <span class="mono">k = 2</span> on their own in 11 of 13.</dd>
+      <dt>Lesson</dt>
+      <dd>A fix described in prose is not a fix verified in code. The README and this write-up are now checked by a test against the numbers the last run wrote, and the trial ledger lives in version control rather than in a git-ignored output folder.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Cost modelling</span>
+    <h3>Spread estimators that do not work at this liquidity</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>With per-name spreads estimated from daily bars, the strategy was unprofitable at every universe size tested.</dd>
+      <dt>Cause</dt>
+      <dd>Two standard estimators were tried — Corwin–Schultz (2012) and Abdi–Ranaldo (2017) — and both fail badly here. Against mega-caps whose true half-spreads are common knowledge (roughly 0.3–0.5 bps), they returned 0.00 and 4.91 bps for Apple, 4.73 and 19.90 for Microsoft. Both infer the spread from the geometry of the daily range, and when the spread is 0.3 bps against 150 bps of daily volatility there is nothing to recover — they measure volatility.</dd>
+      <dt>Fix</dt>
+      <dd>A calibrated function of dollar volume, <span class="mono">56 × ADV<sub>$m</sub><sup>−0.735</sup></span>, anchored to published spread levels and honest about being an assumption. It puts this universe at 0.44 bps median — revealing that the flat 2 bps originally assumed was about <b>4.5× too expensive</b>, not too cheap.</dd>
+      <dt>Lesson</dt>
+      <dd>A principled estimator applied outside its regime is worse than a transparent assumption. The bar-based estimators were designed for markets where the spread is a material fraction of daily movement; modern US mega-caps are the opposite case. The cost-sensitivity sweep now carries the residual uncertainty.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Constraint interaction</span>
+    <h3>The volatility target cannot be reached, and that is arithmetic</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>Ex-ante volatility settles near 3.3% against a 10% target, no matter how the signal is configured.</dd>
+      <dt>Cause</dt>
+      <dd>A dollar-neutral book of <i>N</i> names capped at <i>w</i> each can carry at most about <span class="mono">w · σ<sub>idio</sub> · √N</span> of volatility. At a 1.5% cap and 100 names that ceiling is roughly 3.5%. The two settings are mutually inconsistent; the cap binds first and always will.</dd>
+      <dt>Fix</dt>
+      <dd>Stated explicitly in the generated report rather than left implicit in a diagnostics table. Sharpe is scale-invariant so the ratio is unaffected, but realized <em>return</em> is proportionally smaller and the fixed per-order commission minimum weighs more heavily on the smaller book.</dd>
+      <dt>Lesson</dt>
+      <dd>Two limits set independently will often contradict each other. A diagnostic that reports which constraint is actually binding is worth more than either limit on its own.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Counterintuitive result</span>
+    <h3>Loosening constraints made everything worse</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>The transfer coefficient sits at 0.63, implying more than a third of the ideal alpha is lost to portfolio construction. Raising it seemed like free performance.</dd>
+      <dt>Cause</dt>
+      <dd>Nothing was broken. Raising the transfer coefficient from 0.63 to 0.84 — looser position caps, dropping sector neutrality, mean-variance weights — <em>lowered</em> net Sharpe from 0.78 to 0.39, and gross Sharpe fell too, so it was not merely the extra turnover.</dd>
+      <dt>Fix</dt>
+      <dd>Left alone, with the finding documented. The constraints act as <b>regularization</b>: the "ideal" weights are built from a noisy alpha estimate, and caps stop the book concentrating wherever the noise happens to point. This is the Jagannathan–Ma (2003) result that imposing the wrong constraints helps.</dd>
+      <dt>Lesson</dt>
+      <dd>The Fundamental Law writes <span class="mono">IR = TC · IC · √BR</span>, which reads as though the transfer coefficient is a multiplier to maximize. That holds only when alpha is estimated without error. With a noisy forecast, the constraint that lowers TC also lowers the variance of what gets implemented, and the net effect can be — and here is — positive.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Negative result</span>
+    <h3>Independence without breadth buys nothing</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>Six value and quality sleeves built on point-in-time SEC data proved beautifully independent of the price sleeves — correlations of 0.00 to 0.03 — and none of them improved the blend at any weight tested.</dd>
+      <dt>Cause</dt>
+      <dd>Every one has an autocorrelation between 0.997 and 0.9995. Filings arrive four times a year and the ratio then sits still, so the signal delivers a handful of independent bets annually. Since <span class="mono">IR = IC·√BR</span>, the contribution is capped near zero regardless of how good the IC is: earnings yield has genuinely significant forecasting power and a negative standalone Sharpe.</dd>
+      <dt>Fix</dt>
+      <dd>Reframed the search from <em>independence</em> to <em>independence with an event clock</em>. An earnings surprise is not a level — it arrives, decays, and fiscal calendars are staggered across names, so the cross-section keeps turning over. That one sleeve does work, and carries 10% of the blend.</dd>
+      <dt>Lesson</dt>
+      <dd>Two signals built from the <b>same filings</b>, one useless and one useful, and the entire difference is breadth. This was the clearest demonstration in the project that the Fundamental Law earns its place as a measuring instrument.</dd>
+    </dl>
+  </div>
+
+  <div class="challenge">
+    <span class="tag">Scope</span>
+    <h3>Three data sources tried before one worked</h3>
+    <dl>
+      <dt>Symptom</dt>
+      <dd>Fundamental signals need a decade of history with filing dates. The obvious sources do not provide it.</dd>
+      <dt>Cause</dt>
+      <dd>Interactive Brokers refuses fundamental data without a paid Reuters subscription (error 10358), though it serves historical bars without complaint. yfinance returns only five to seven quarters — nowhere near enough.</dd>
+      <dt>Fix</dt>
+      <dd>The SEC's XBRL API: free, official, back to 2009, no key required, and every fact carries its filing date. 138,678 facts across 503 tickers, with assets and equity covering all 503.</dd>
+      <dt>Lesson</dt>
+      <dd>The free source turned out to be strictly better than the paid one for this purpose, because filing dates make point-in-time discipline exact rather than approximate.</dd>
+    </dl>
+  </div>
+</section>

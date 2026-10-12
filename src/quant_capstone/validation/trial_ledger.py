@@ -15,6 +15,17 @@ still consumed a look at the data, and pretending otherwise is the error this
 module exists to prevent. It includes exploratory sweeps run outside the final
 script. It does not include re-running an identical configuration, which is why
 entries carry a key and are deduplicated on it.
+
+**Counting each configuration once.** The walk-forward grid is counted by the run
+itself (its run cache knows exactly how many cells it evaluated), so the CLI
+deflates against ``total_excluding(WALKFORWARD_KEY) + grid size`` and then records
+the grid under ``WALKFORWARD_KEY``. An earlier grid whose cells are all contained
+in the current one is marked ``superseded_by`` it rather than deleted: the record
+of what was run survives, but its configurations are not counted a second time.
+
+The ledger lives in ``results/``, which is version-controlled. Kept under the
+git-ignored ``output/`` it would vanish with a clean checkout -- and an honest
+trial count that cannot be audited is not much better than a remembered one.
 """
 
 from __future__ import annotations
@@ -24,7 +35,10 @@ from dataclasses import asdict, dataclass, field
 from datetime import date
 from pathlib import Path
 
-DEFAULT_PATH = Path("output/trial_ledger.json")
+DEFAULT_PATH = Path("results/trial_ledger.json")
+
+WALKFORWARD_KEY = "walkforward_grid"
+"""Ledger key for the grid the headline walk-forward selects over."""
 
 
 @dataclass
@@ -37,6 +51,9 @@ class TrialEntry:
     """What came of it -- 'adopted', 'rejected', 'exploratory'. Kept because a
     ledger of bare numbers is unauditable six weeks later."""
     recorded: str = field(default_factory=lambda: date.today().isoformat())
+    superseded_by: str = ""
+    """Key of a later entry whose configurations include all of this one's. A
+    superseded entry stays on record but no longer adds to the total."""
 
 
 class TrialLedger:
@@ -57,9 +74,25 @@ class TrialLedger:
         self.save()
         return self
 
+    def supersede(self, keys: list[str] | tuple[str, ...], by: str) -> "TrialLedger":
+        """Mark earlier sweeps as contained in ``by`` so they are not double-counted."""
+        for key in keys:
+            if key not in self.entries:
+                raise KeyError(f"no ledger entry {key!r}")
+            self.entries[key].superseded_by = by
+        self.save()
+        return self
+
     @property
     def total(self) -> int:
-        return sum(e.n_trials for e in self.entries.values())
+        return self.total_excluding()
+
+    def total_excluding(self, *keys: str) -> int:
+        """Configurations counted, leaving out ``keys`` and superseded entries."""
+        return sum(
+            e.n_trials for e in self.entries.values()
+            if e.key not in keys and not e.superseded_by
+        )
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)

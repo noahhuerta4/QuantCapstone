@@ -1,0 +1,94 @@
+<section id="validation">
+  <h2><span class="sec-no">08</span> Validation</h2>
+  <div class="col">
+    <p>
+      A backtest is a claim about the future made from the past, and the ways it lies are
+      well catalogued. Five controls run against this one, and the headline number quoted
+      throughout is the walk-forward result — every tunable parameter is re-selected on each
+      fold's training window, so nothing is chosen with hindsight.
+    </p>
+  </div>
+
+  <figure>
+    <img src="__IMG_walk_forward__" alt="Paired bar chart of training and test Sharpe across thirteen walk-forward folds, with train and test bars at broadly similar heights.">
+    <figcaption>
+      <b>Walk-forward folds.</b> Thirteen consecutive six-month out-of-sample windows, each
+      preceded by its own training period, with the holding period <em>embargoed</em> off the
+      end of training so a position opened in training cannot still be open in the test
+      window. Eleven of thirteen are positive. The mean gap between training and test Sharpe
+      is <b>+0.17</b> — the overfitting premium, and the price of a 135-cell selection grid.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_bootstrap_sharpe__" alt="Histogram of 2000 block-bootstrap Sharpe draws centred near 0.91, with the 95% interval from 0.23 to 1.60 marked and almost no mass below zero.">
+    <figcaption>
+      <b>Block-bootstrap distribution.</b> Resampling in 21-day blocks preserves volatility
+      clustering that single-day resampling would destroy. The 95% interval is
+      <b>[0.23, 1.60]</b> and 0.45% of draws fall below zero. The width is the honest
+      statement: the point estimate is far more precise than the evidence behind it.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="__IMG_cost_sensitivity__" alt="Line chart of net Sharpe against a multiplier applied to all costs, falling from 1.11 at zero cost through 0.94 at the baseline and crossing zero near 6.4 times.">
+    <figcaption>
+      <b>Cost sensitivity.</b> Every cost component scaled together. The edge survives to
+      <b>6.4×</b> the modelled cost — about 408 bps/yr against the 64 bps actually charged.
+      This margin matters more than the base case, because the cost model is calibrated
+      rather than measured from real fills.
+    </figcaption>
+  </figure>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Control</th><th class="n">Value</th><th>What it tests</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">Walk-forward OOS Sharpe</td><td class="n">0.912</td>
+            <td class="def">Performance with every parameter chosen from past data only</td></tr>
+        <tr><td class="sym">Fixed-default OOS Sharpe</td><td class="n">0.951</td>
+            <td class="def">Same windows, defaults fixed. Higher, but the defaults were chosen with full-sample hindsight — an optimistic reference, not an estimate</td></tr>
+        <tr><td class="sym">Train minus test</td><td class="n">+0.175</td>
+            <td class="def">Size of the overfitting premium, in Sharpe units</td></tr>
+        <tr><td class="sym">Folds positive</td><td class="n">11 of 13</td>
+            <td class="def">Whether the result is sustained or one lucky period</td></tr>
+        <tr><td class="sym">Probabilistic Sharpe</td><td class="n">0.991</td>
+            <td class="def">Probability the true Sharpe exceeds zero, correcting for skew and fat tails</td></tr>
+        <tr><td class="sym">Deflated Sharpe (443 trials)</td><td class="n">0.671</td>
+            <td class="def">The same, after discounting for every configuration examined</td></tr>
+        <tr><td class="sym">Min. track record length</td><td class="n">802 days</td>
+            <td class="def">History needed to call this Sharpe significantly positive; we have 1,638</td></tr>
+        <tr><td class="sym">PBO</td><td class="n">0.244</td>
+            <td class="def">Probability that picking on in-sample rank is worse than a coin flip</td></tr>
+        <tr><td class="sym">Bootstrap 95% CI</td><td class="n">[0.23, 1.60]</td>
+            <td class="def">Sampling uncertainty around the out-of-sample estimate</td></tr>
+        <tr><td class="sym">Cost break-even</td><td class="n">6.43×</td>
+            <td class="def">How wrong the cost model can be before the edge disappears</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="finding">
+    <p>
+      <strong>Every configuration examined is counted.</strong> The Deflated Sharpe Ratio
+      discounts a result for the number of things tried, and it only works if the count is
+      honest. All 443 configurations touched across the project — including exploratory
+      sweeps and every rejected candidate — are fed in, because a parameter chosen by looking
+      at results is a trial whether or not it ran inside the reported script. The count lives
+      in a tracked ledger on disk rather than in anyone's memory: a remembered trial count
+      only ever drifts downward, in exactly the direction that flatters the result.
+    </p>
+  </div>
+
+  <h3>Engine verification</h3>
+  <div class="col">
+    <p>
+      Two checks run against the backtester itself, independent of any strategy result. With
+      no-trade bands disabled the engine fully rebalances each day, so its gross return must
+      equal a one-line vectorized expression that shares no code with it; they agree to
+      <span class="mono">1×10⁻¹⁷</span>. And shifting the weights a day in either direction
+      must move the result violently — a backtest that scores the same whether it trades on
+      yesterday's, today's or tomorrow's signal is not using the timing it claims.
+    </p>
+  </div>
+</section>

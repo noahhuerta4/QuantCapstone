@@ -1,0 +1,69 @@
+<section id="pipeline">
+  <h2><span class="sec-no">02</span> The pipeline, stage by stage</h2>
+  <div class="col">
+    <p>
+      These four stages run in order, and each is independently testable. The sequence
+      matters: the signal knows nothing about risk, the risk model knows nothing about
+      cost, and the execution layer is the only place where money actually changes hands.
+    </p>
+  </div>
+
+  <div class="stages">
+    <div class="stage">
+      <div class="stage-no">1</div>
+      <div>
+        <h3>Signal construction</h3>
+        <p>
+          Each sleeve is computed from data through the day's close, masked to the tradable
+          universe, clipped at ±3 median-absolute-deviations to tame outliers, then
+          standardized cross-sectionally to mean zero and unit dispersion. Standardizing
+          <em>before</em> blending is what makes the blend meaningful — raw momentum is of
+          order 0.3 and raw two-day reversal of order 0.01, so combining the raw numbers
+          would hand the entire book to whichever sleeve happens to have the larger units.
+        </p>
+        <span class="io">in: prices, volume, SEC filings → out: date × ticker score matrix</span>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-no">2</div>
+      <div>
+        <h3>Risk model and position sizing</h3>
+        <p>
+          A Ledoit–Wolf shrunk covariance matrix is estimated over the tradable names on a
+          252-day window, refreshed monthly. Positions are sized inversely to volatility
+          with direction and magnitude from the score, then scaled so the portfolio's
+          ex-ante annualized volatility hits its target.
+        </p>
+        <span class="io">in: scores, returns → out: unconstrained target weights</span>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-no">3</div>
+      <div>
+        <h3>Neutralization and constraints</h3>
+        <p>
+          Dollar, beta and sector neutrality are imposed as a single orthogonal projection
+          rather than one after another — demeaning to get dollar neutrality would destroy
+          beta neutrality and vice versa, so they must be solved together. Position caps
+          and a liquidity limit are then applied, and because clipping breaks neutrality
+          while re-projecting breaks the caps, the two alternate to a fixed point before a
+          final uniform down-scale makes every limit hold exactly.
+        </p>
+        <span class="io">in: target weights → out: constrained, neutral weights</span>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-no">4</div>
+      <div>
+        <h3>Execution and cost accounting</h3>
+        <p>
+          Weights formed at the day-<i>t</i> close are traded at the <i>t</i>+1 open and held
+          to the <i>t</i>+2 open. Every trade pays commission, regulatory fees and slippage;
+          every short pays borrow each day it is open. Trades below a no-trade band or below
+          the size that clears the per-order commission minimum are skipped entirely.
+        </p>
+        <span class="io">in: weights, prices → out: daily P&amp;L, trade log, cost breakdown</span>
+      </div>
+    </div>
+  </div>
+</section>

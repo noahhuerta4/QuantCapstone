@@ -88,22 +88,29 @@ def plateau_score(values: np.ndarray | pd.DataFrame, tolerance: float = 0.25) ->
 
 
 DEFAULT_GRID: dict[str, list[Any]] = {
+    "signal__k": [1, 2, 3, 5, 10],
     "signal__pead_weight": [0.0, 0.10, 0.20],
     "execution__rebalance_every": [5, 10, 15],
     "execution__no_trade_band": [0.003, 0.006, 0.010],
 }
-"""A deliberately small default grid. Every extra cell is another trial the
-Deflated Sharpe Ratio has to discount, so sweeping widely is not free.
+"""Every parameter that was chosen by looking at results, re-selected per fold.
 
-The two axes here are chosen because they *interact*, and neither is meaningful
-alone: ``k`` sets how fast the signal decays and ``rebalance_every`` sets how
-long a position is held, so the right holding period depends on which k you
-picked. A fast k=1 signal held for ten days is stale noise; a slow k=5 signal
-rebalanced daily pays for turnover it does not need.
+The rule this grid enforces: a value picked with full-sample hindsight and then
+pinned in the config is inherited by every walk-forward fold, which quietly
+turns the "out-of-sample" number back into an in-sample one. So each of these
+was tuned at some point in the project, and each is therefore re-chosen from
+training data alone in every fold:
 
-Both must be in the walk-forward grid rather than fixed in the config, otherwise
-they get chosen once with full-sample hindsight and every fold inherits that
-choice -- which quietly turns the 'out-of-sample' number back into an in-sample
-one. ``no_trade_band`` is deliberately *not* swept: net Sharpe is flat across
-0.000-0.008 at any (k, rebalance) pair we measured, so sweeping it would spend
-trials on a dimension with no signal in it."""
+* ``k`` -- the reversal lookback, adopted as 2 from a full-sample IC sweep.
+  Its values are the spec's pre-registered set (S4), not a range centred on the
+  number that sweep picked, so the grid does not smuggle the hindsight back in.
+* ``pead_weight`` -- the earnings-surprise share of the blend.
+* ``rebalance_every`` -- the holding period, which interacts with ``k``: a fast
+  k=1 signal held for fifteen days is stale noise, a slow k=10 signal re-traded
+  every five pays for turnover it does not need.
+* ``no_trade_band`` -- re-tuned in Phase 2; 0.010 was the full-sample peak.
+
+The cost is breadth of search: every cell is another trial the Deflated Sharpe
+Ratio discounts, and the selection itself can fit noise. Whether it did is read
+off the ``OOS_net_default`` column, which runs the fixed defaults through the
+same windows."""

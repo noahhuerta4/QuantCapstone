@@ -1,0 +1,49 @@
+<section id="repro">
+  <h2><span class="sec-no">13</span> Reproducing this</h2>
+  <div class="col">
+    <p>
+      The project is a Python package with 262 tests covering the signal, the neutralization
+      algebra, the cost accounting and the point-in-time discipline. A synthetic data
+      generator with deliberately planted effects lets the entire suite run offline and
+      deterministically, and doubles as ground truth: if the pipeline cannot recover a known
+      signal there, the bug is ours rather than the market's.
+    </p>
+    <p>
+      Every number in this document regenerates from the repository. The headline comes from
+      <span class="mono">quant-capstone run</span>; every side study — liquidity deciles,
+      sleeve surveys, the transfer-coefficient variants, the Phase 2 directions, the intraday
+      diagnostic — is a module in <span class="mono">quant_capstone/studies</span> that pins
+      the configuration it was originally run under. Their tables are committed under
+      <span class="mono">results/studies</span>, and <span class="mono">--check</span>
+      regenerates them all and diffs the result against what is committed. The cached market
+      data is pinned too: <span class="mono">results/data_manifest.json</span> records the hash
+      of every input file, so a re-download that moves the numbers is caught before anyone
+      starts debugging the model.
+    </p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">uv sync</td><td class="def">Create the environment and install dependencies</td></tr>
+        <tr><td class="sym">uv run pytest</td><td class="def">262 tests, about 20 seconds, no network needed</td></tr>
+        <tr><td class="sym">uv run quant-capstone run --source synthetic</td><td class="def">Full pipeline offline against planted effects</td></tr>
+        <tr><td class="sym">uv run quant-capstone run</td><td class="def">The headline study on real data; downloads and caches on first use</td></tr>
+        <tr><td class="sym">uv run quant-capstone study all</td><td class="def">Regenerate every side study and every figure in this document</td></tr>
+        <tr><td class="sym">uv run quant-capstone study --check</td><td class="def">Regenerate the study tables and diff them against the committed ones</td></tr>
+        <tr><td class="sym">uv run quant-capstone book</td><td class="def">Assemble this document from <span class="mono">Report/src</span></td></tr>
+        <tr><td class="sym">uv run quant-capstone crosscheck</td><td class="def">Verify the engine against independent calculations</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>
+      Built with <code>numpy</code>, <code>pandas</code>, <code>scikit-learn</code> and
+      <code>statsmodels</code>. Price data from yfinance; fundamentals from the SEC XBRL API;
+      hourly bars from Interactive Brokers via <code>ibapi</code>. All figures generated from
+      the final configuration by <code>quant-capstone study figures</code>.
+    </p>
+  </footer>
+</section>

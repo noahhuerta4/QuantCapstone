@@ -88,6 +88,40 @@ than a footnote.{ci}{dsr}
 """
 
 
+def _selection_note(study: Study) -> str:
+    """Say plainly whether per-fold selection beat the fixed defaults, and what that means.
+
+    When the defaults win, the tempting reading is "so use the defaults". That
+    reading is wrong: the defaults were themselves picked by looking at
+    full-sample results, so their column carries exactly the hindsight the
+    walk-forward exists to remove. It is an optimistic reference, not a rival
+    estimate, and the headline stays the selected number.
+    """
+    perf = study.performance.loc["sharpe"]
+    selected, default = float(perf["OOS_net_selected"]), float(perf["OOS_net_default"])
+    folds = study.walk_forward.folds
+    if folds.empty or not (np.isfinite(selected) and np.isfinite(default)):
+        return ""
+    wins = int((folds["test_sharpe"] > folds["test_sharpe_default"]).sum())
+    tally = f"selection beat the defaults in {wins} of {len(folds)} folds"
+    if default >= selected:
+        return (
+            f"**The fixed defaults beat per-fold selection out of sample: {default:.2f} against "
+            f"{selected:.2f}** ({tally}). This is not evidence that the defaults are better. "
+            "Several of them were chosen by looking at full-sample results, so the default column "
+            "carries the very hindsight the walk-forward removes; it is an optimistic reference "
+            "rather than an honest estimate. What the gap does measure is the price of searching: "
+            "picking the best grid cell on each training window adds nothing out of sample, so at "
+            "the margin the selection is fitting noise. The headline is the selected number "
+            "because it is the only one that could actually have been traded."
+        )
+    return (
+        f"Per-fold selection beat the fixed defaults out of sample, {selected:.2f} against "
+        f"{default:.2f} ({tally}), so re-choosing parameters on each training window carries "
+        "information forward rather than fitting noise."
+    )
+
+
 def _trade_band_note(activity: pd.Series) -> str:
     """Check the S8 band on both readings of 'trades per day'.
 
@@ -222,6 +256,8 @@ def build_report(study: Study) -> str:
         "two says whether per-fold parameter selection added anything or just fitted noise.",
         "",
         table(study.performance, "metric"),
+        "",
+        _selection_note(study),
         "",
         "## Where the return goes",
         "",
