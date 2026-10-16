@@ -208,7 +208,7 @@ def bootstrap_plot(
         ax.axvline(bound, color=DARK_RED, linewidth=1.2, linestyle="--",
                    label="95% interval" if k == 0 else None)
     ax.legend()
-    finish(ax, "Block-bootstrap Sharpe distribution", "Draws")
+    finish(ax, "Block-resampled Sharpe distribution", "Resampled histories")
     ax.set_xlabel("Annualized Sharpe ratio")
     return _save(fig, outdir, name)
 

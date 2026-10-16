@@ -1,6 +1,6 @@
 PWD /Users/noah.a.huerta/Library/CloudStorage/OneDrive-PNNL/Documents/CodeProjects/QuantCapstone/Writeup
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt
-INPUT /Users/noah.a.huerta/Library/CloudStorage/OneDrive-PNNL/Documents/CodeProjects/QuantCapstone/Writeup/Quant_Capstone.tex
+INPUT Quant_Capstone.tex
 OUTPUT Quant_Capstone.log
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/article.cls
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/article.cls

@@ -271,27 +271,32 @@ Three parameters are re-selected inside each training window---the earnings-slee
 \label{fig:walkforward}
 \end{figure}
 
-The final walk-forward out-of-sample Sharpe ratio is \textcolor{red}{1.058}. A fixed-default portfolio evaluated on the same windows produces 0.879\textcolor{red}{; a paired block bootstrap puts the probability that the selected series is not better than the defaults at 25\%, so the improvement is suggestive rather than established. Twelve} of thirteen folds are profitable. \textcolor{red}{The fixed defaults were themselves chosen by examining full-sample results, so 0.879 is not a legitimately out-of-sample quantity. Each fold's choice behind 1.058 uses training data only, but the selection rule itself was chosen by comparing out-of-sample results, which is why the deflation below charges for every configuration in that comparison.}
+The final walk-forward out-of-sample Sharpe ratio is 1.058. \textcolor{red}{Each fold's choice behind it uses training data only, but the selection rule itself was chosen by comparing out-of-sample results, which is why the deflation below charges for every configuration in that comparison.}
+
+\textcolor{red}{To judge whether re-selecting parameters adds anything, the selected series is compared with a benchmark: the fixed default configuration (10\% earnings weight, ten-day rebalance, 0.6\% no-trade band) held constant through every fold and evaluated on the same test windows, where it earns a Sharpe ratio of 0.879. Three properties make it the appropriate benchmark. First, it is the alternative that re-selection must beat: the strategy as it runs when its parameters are simply left alone, and the configuration behind the full-sample results of Section~\ref{sec:results}. Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Second, the comparison is controlled. Both series use the same signals, costs, and test days, and the default is itself one of the 175 grid cells, so every selection rule could have chosen it; the only difference between the two series is which cell each fold picks. Third, it is a demanding benchmark. Its parameters were chosen by examining full-sample results, so 0.879 carries hindsight that no fold's selection had, and it is not a legitimate out-of-sample estimate in its own right. A rule that uses only training data and still outperforms it has overcome that advantage; a rule that falls short has not shown the defaults to be better, only that its own search added nothing. Whether the difference between 1.058 and 0.879 exceeds what chance alone would produce is tested in Section~\ref{sec:sampling}.}
 
 \subsection{Multiple testing and sampling uncertainty}
+\label{sec:sampling}
 
 All research configurations examined are counted, including rejected experiments. The trial ledger contains 327 configurations; the final \textcolor{red}{parameter-selection study evaluates 331 more (the 175-cell grid, which contains the 27 cells of the earlier coarse grid, and 156 points proposed by the Bayesian optimizer of Section~\ref{sec:selection}; the optimizer's remaining point is its starting configuration, the fixed default, which is already a grid cell), so the deflation is charged for 658} trials in total. The resulting Deflated Sharpe Ratio is \textcolor{red}{0.627}, explicitly discounting the out-of-sample Sharpe for selection bias and non-normality following \citet{bailey2014}. The estimated probability of backtest overfitting is \textcolor{red}{0.262}, computed by combinatorially symmetric cross-validation \citep{bailey2017} over the \textcolor{red}{175 walk-forward-grid configurations}; it measures overfitting within that final grid, not across the full research history. The probabilistic Sharpe measure is \textcolor{red}{0.997}.
 
-Sampling uncertainty is evaluated using a 21-day block bootstrap, which preserves short-run dependence and volatility clustering better than independent daily resampling. The 95\% bootstrap interval for the out-of-sample Sharpe is \textcolor{red}{$[0.41,1.71]$}, with only \textcolor{red}{0.05\%} of bootstrap draws below zero. That frequency and the probabilistic Sharpe measure of \textcolor{red}{0.997} both estimate the probability that true skill is positive, but they are not the same statistic---the first is a resampling frequency, the second a parametric adjustment for skewness and kurtosis---and the modest gap between them reflects that difference rather than an inconsistency. The interval is intentionally reported alongside the point estimate because ten years of daily data do not imply ten years of independent evidence.
+Sampling uncertainty is measured by \textcolor{red}{block resampling. A resampled history is built from the 1,638 out-of-sample daily returns by repeatedly picking a day at random and taking the 21 consecutive days that start there (wrapping from the last day back to the first when needed), then joining these blocks end to end until the history has 1,638 days. Drawing 21-day blocks rather than single days keeps the short-run dependence and volatility clustering of daily returns intact. This is repeated 2,000 times, and the Sharpe ratio of each resampled history is computed. The 2.5th and 97.5th percentiles of those 2,000 Sharpe ratios form the 95\% interval for the out-of-sample Sharpe,} \textcolor{red}{$[0.41,1.71]$}, \textcolor{red}{and} only \textcolor{red}{0.05\% of resampled histories have a Sharpe ratio at or below zero}. That frequency and the probabilistic Sharpe measure of \textcolor{red}{0.997} both estimate the probability that true skill is positive, but they are not the same statistic---the first is a resampling frequency, the second a parametric adjustment for skewness and kurtosis---and the modest gap between them reflects that difference rather than an inconsistency. The interval is intentionally reported alongside the point estimate because ten years of daily data do not imply ten years of independent evidence.
+
+\textcolor{red}{The same procedure tests whether the selected series outperforms the fixed-default benchmark. In each of 2,000 resampled histories, the daily returns of both strategies are rebuilt from the same randomly drawn blocks, so a difficult market stretch enters both series at once and only the difference between the strategies varies from one history to the next. The reported quantity is the fraction of resampled histories in which the selected series' Sharpe ratio is not higher than the benchmark's. For the headline rule this fraction is 25\%: in one resampled history in four, re-selection does no better than leaving the parameters fixed. The improvement from 0.879 to 1.058 is therefore suggestive rather than established. The last column of Table~\ref{tab:selection} reports the same fraction for every selection rule.}
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{0.49\textwidth}
   \centering
   \IfFileExists{bootstrap_sharpe_selected.png}{\includegraphics[width=\textwidth]{bootstrap_sharpe_selected.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: bootstrap\_sharpe\_selected.png}}}
-  \caption{Block-bootstrap distribution of Sharpe. Point estimate \textcolor{red}{1.06} (solid line); 95\% interval \textcolor{red}{$[0.41,1.71]$} (dashed lines).}
+  \caption{\textcolor{red}{Sharpe ratios of 2,000 block-resampled histories.} Point estimate \textcolor{red}{1.06} (solid line); 95\% interval \textcolor{red}{$[0.41,1.71]$} (dashed lines).}
 \end{subfigure}\hfill
 \begin{subfigure}{0.49\textwidth}
   \centering
   \IfFileExists{cost_sensitivity.png}{\includegraphics[width=\textwidth]{cost_sensitivity.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: cost\_sensitivity.png}}}
   \caption{Net Sharpe \textcolor{red}{of the fixed default configuration over the full sample} under a global multiplier on every modeled cost, with the baseline (1$\times$) and break-even (6.1$\times$) marked.}
 \end{subfigure}
-\caption{Uncertainty and cost-stress tests. The bootstrap quantifies sampling dispersion, while the cost sweep shows a break-even multiple of approximately 6.07 times the base-case cost model.}
+\caption{Uncertainty and cost-stress tests. \textcolor{red}{Block resampling} quantifies sampling dispersion, while the cost sweep shows a break-even multiple of approximately 6.07 times the base-case cost model.}
 \label{fig:validation}
 \end{figure}
 
@@ -309,13 +314,13 @@ The backtesting engine is also checked independently of strategy performance. Wi
 Diagnostic & Result & Interpretation \\
 \midrule
 Walk-forward OOS Sharpe & \textcolor{red}{1.058} & Parameters selected from prior data only \\
-Fixed-default OOS Sharpe & 0.879 & Same windows without per-fold reselection \\
+Fixed-default OOS Sharpe & 0.879 & \textcolor{red}{Benchmark: default parameters held fixed on the same windows; chosen with hindsight} \\
 Train minus test Sharpe & \textcolor{red}{$-0.307$} & Estimated overfitting premium \\
 Positive folds & \textcolor{red}{12/13} & Result not concentrated in one period \\
 Probabilistic Sharpe & \textcolor{red}{0.997} & Probability true Sharpe exceeds zero under stated adjustment \\
 Deflated Sharpe & \textcolor{red}{0.627} & Adjusted for \textcolor{red}{658 trials (327 ledger + 331 selection study)} and non-normality \\
 PBO & \textcolor{red}{0.262} & Probability of backtest overfitting within the \textcolor{red}{175-configuration} final grid \\
-Bootstrap 95\% CI & \textcolor{red}{[0.41, 1.71]} & Sampling uncertainty in OOS Sharpe \\
+\textcolor{red}{Block-resampled 95\% interval} & \textcolor{red}{[0.41, 1.71]} & Sampling uncertainty in OOS Sharpe \\
 Minimum track record & \textcolor{red}{601 days} & Reported threshold versus 1,638 OOS days available \\
 Cost break-even & 6.07$\times$ & Full-sample multiple of modeled cost at which net Sharpe reaches zero, interpolated between the 5$\times$ and 8$\times$ sweep points \\
 \bottomrule
@@ -466,14 +471,14 @@ The walk-forward rule of Section~\ref{sec:validation} is the outcome of comparin
 \begin{table}[H]
 \centering
 \color{red}
-\caption{\textcolor{red}{Out-of-sample results of per-fold parameter selection. The last column is the probability, from a paired 21-day block bootstrap, that a method's out-of-sample Sharpe is not higher than the fixed default's.}}
+\caption{\textcolor{red}{Out-of-sample results of per-fold parameter selection. The last column is the fraction of 2,000 block-resampled histories (Section~\ref{sec:sampling}) in which a method's out-of-sample Sharpe is not higher than the fixed default's.}}
 \label{tab:selection}
 \small
 \begin{tabular}{lrrrrr}
 \toprule
 Method & Configs & OOS Sharpe & Train $-$ test & Folds $>0$ & P(not better) \\
 \midrule
-Fixed default & 1 & 0.879 & 0.040 & 10/13 & --- \\
+Fixed default (benchmark) & 1 & 0.879 & 0.040 & 10/13 & --- \\
 Coarse grid, best & 27 & 0.822 & 0.125 & 10/13 & 0.94 \\
 Coarse grid, neighborhood & 27 & 0.396 & $-0.122$ & 9/13 & 0.86 \\
 Fine grid, best & 175 & 0.708 & 0.307 & 9/13 & 0.98 \\
@@ -486,7 +491,7 @@ Bayesian optimization, neighborhood & 157 & 0.573 & 0.439 & 10/13 & 0.77 \\
 \end{table}
 
 \textcolor{red}{%
-Searching harder for the best training Sharpe makes out-of-sample results worse. As the search space grows from 27 cells to 175 cells to the continuous optimizer, out-of-sample Sharpe falls from 0.822 to 0.708 to 0.457, while the train-minus-test gap widens from 0.13 to 0.76. The optimizer reached training Sharpes of 1.3 to 1.8, largely by pushing the volume-shock share of the blend to its upper bound, and none of that carried out of sample. Neighborhood averaging counteracts this, recovering 0.907 on the fine grid and lifting the optimizer from 0.457 to 0.573. On the coarse grid it backfires: with three values per axis, a cell on the edge of the grid averages only with its inner neighbors, so it can outscore the center by never including the poor values beyond it, and the rule repeatedly chose cells whose own training Sharpe was weak. Restricting selection to cells with a complete neighborhood removes that effect and gives the headline 1.058. The restriction was introduced after the first comparison exposed the edge effect, which is why every configuration in the comparison is charged to the Deflated Sharpe trial count; even so, the paired bootstrap leaves a 25\% probability that it does not improve on the fixed defaults.}
+Searching harder for the best training Sharpe makes out-of-sample results worse. As the search space grows from 27 cells to 175 cells to the continuous optimizer, out-of-sample Sharpe falls from 0.822 to 0.708 to 0.457, while the train-minus-test gap widens from 0.13 to 0.76. The optimizer reached training Sharpes of 1.3 to 1.8, largely by pushing the volume-shock share of the blend to its upper bound, and none of that carried out of sample. Neighborhood averaging counteracts this, recovering 0.907 on the fine grid and lifting the optimizer from 0.457 to 0.573. On the coarse grid it backfires: with three values per axis, a cell on the edge of the grid averages only with its inner neighbors, so it can outscore the center by never including the poor values beyond it, and the rule repeatedly chose cells whose own training Sharpe was weak. Restricting selection to cells with a complete neighborhood removes that effect and gives the headline 1.058. The restriction was introduced after the first comparison exposed the edge effect, which is why every configuration in the comparison is charged to the Deflated Sharpe trial count; even so, it does no better than the fixed defaults in 25\% of block-resampled histories.}
 
 \section{Limitations}
 \label{sec:limitations}
@@ -502,7 +507,7 @@ The backtest includes more realism than a simple signal study, but several limit
 
   \item \textbf{Sector classifications are not historical.} Current GICS labels are applied backward through time, so sector-neutrality constraints are not perfectly point-in-time.
 
-  \item \textbf{Ten years remains one market sample.} The sample spans several distinct regimes, but it is not long enough to eliminate uncertainty about structural change. The broad bootstrap interval demonstrates that uncertainty directly.
+  \item \textbf{Ten years remains one market sample.} The sample spans several distinct regimes, but it is not long enough to eliminate uncertainty about structural change. The broad \textcolor{red}{block-resampled} interval demonstrates that uncertainty directly.
 
   \item \textbf{Research search remains a source of optimism.} The trial ledger, Deflated Sharpe Ratio, PBO, and walk-forward design reduce but cannot eliminate the consequences of iterative human research decisions.
 \end{enumerate}
@@ -512,7 +517,7 @@ These limitations are important when interpreting the \textcolor{red}{1.06} out-
 \section{Reproducibility}
 \label{sec:reproducibility}
 
-The full study---baseline backtest, Fundamental-Law diagnostic, walk-forward, sensitivity grid, Deflated Sharpe, PBO, bootstrap, cost sweep, and capacity sweep---runs from a single command, \texttt{uv run quant-capstone run}, which writes a results report and figures. All defaults live in one configuration module, every sweep is recorded in the trial ledger, and the test suite covers signal construction, neutralization, cost accounting, and causality. The engine cross-checks of Section~\ref{sec:validation} are available as \texttt{uv run quant-capstone crosscheck}.
+The full study---baseline backtest, Fundamental-Law diagnostic, walk-forward, sensitivity grid, Deflated Sharpe, PBO, \textcolor{red}{block resampling}, cost sweep, and capacity sweep---runs from a single command, \texttt{uv run quant-capstone run}, which writes a results report and figures. All defaults live in one configuration module, every sweep is recorded in the trial ledger, and the test suite covers signal construction, neutralization, cost accounting, and causality. The engine cross-checks of Section~\ref{sec:validation} are available as \texttt{uv run quant-capstone crosscheck}.
 
 Exact numerical reproduction additionally requires the same data snapshot. Prices, the S\&P 500 constituent list, and SEC filings are downloaded at run time and cached locally; a later download picks up a different current constituent list and revised price adjustments, so headline statistics shift even though the code is unchanged. The figures in this report come from a single cached snapshot, and archiving that snapshot alongside the code is the remaining step needed for exact replication.
 
@@ -520,7 +525,7 @@ Exact numerical reproduction additionally requires the same data snapshot. Price
 
 This project develops a market-neutral U.S. equity strategy that combines short-horizon reversal, overnight reversal, and an event-driven earnings signal within a realistic portfolio and execution framework. The final result is economically modest but statistically nontrivial: full-sample net Sharpe is 0.887, walk-forward out-of-sample Sharpe is \textcolor{red}{1.058}, and the maximum drawdown is approximately 4.9\%. These returns survive a full modeled cost budget of roughly 64 basis points per year and remain positive under substantial cost inflation.
 
-The most important lessons are methodological. First, combining genuinely different signals raises composite forecasting skill more reliably than refining a single predictor. Second, effective breadth---after correcting for cross-sectional dependence and signal persistence---is the binding resource. Third, portfolio constraints can improve rather than degrade realized performance by regularizing noisy forecasts. Fourth, realistic transaction costs change which research directions are worth pursuing: intraday breadth is attractive statistically but uneconomic under the tested fee structure. Finally, strong validation infrastructure matters as much as signal design. Causality checks, an embargoed walk-forward procedure, an explicit trial ledger, block-bootstrap uncertainty, and engine cross-checks all prevented plausible but incorrect conclusions from surviving into the final result.
+The most important lessons are methodological. First, combining genuinely different signals raises composite forecasting skill more reliably than refining a single predictor. Second, effective breadth---after correcting for cross-sectional dependence and signal persistence---is the binding resource. Third, portfolio constraints can improve rather than degrade realized performance by regularizing noisy forecasts. Fourth, realistic transaction costs change which research directions are worth pursuing: intraday breadth is attractive statistically but uneconomic under the tested fee structure. Finally, strong validation infrastructure matters as much as signal design. Causality checks, an embargoed walk-forward procedure, an explicit trial ledger, \textcolor{red}{block-resampled uncertainty intervals}, and engine cross-checks all prevented plausible but incorrect conclusions from surviving into the final result.
 
 The strategy should therefore be viewed as a disciplined empirical demonstration of quantitative research practice rather than a claim of immediately deployable alpha. The next substantive improvement is not another parameter sweep; it is better data. A point-in-time, delisting-inclusive universe and quote-level execution data would directly address the two largest remaining sources of optimism and allow the economic result to be evaluated on a materially stronger foundation.
 
