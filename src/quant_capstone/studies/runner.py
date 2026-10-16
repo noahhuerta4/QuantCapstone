@@ -23,7 +23,7 @@ STUDIES_DIR = Path("results/studies")
 ORDER = (
     "turnover", "liquidity", "sleeves", "blends", "retune", "breadth",
     "fundamentals", "transfer", "pead", "intraday", "sleeve_survey",
-    "events", "passive", "regime", "band", "leverage", "progression", "figures",
+    "events", "passive", "regime", "band", "leverage", "progression", "bayes", "figures",
 )
 
 
