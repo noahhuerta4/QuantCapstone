@@ -40,6 +40,7 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import ConstantKernel, Matern, WhiteKernel
 from scipy.stats import norm
 
+from .. import validation as v
 from ..data import load_dataset
 from ..reporting.metrics import sharpe
 from ..risk.pipeline import build_portfolio
@@ -71,6 +72,11 @@ NEIGHBOURS = 9
 """Neighbourhood size for the optimizer, the point itself included."""
 FAILED = -1.0
 """Score for a configuration with no defined Sharpe (it never trades)."""
+HEADLINE = "fine neighbourhood interior"
+"""The rule the write-up reports. Chosen after comparing all eight here, which is
+why the diagnostics charge every configuration this study evaluated as a trial."""
+PRIOR_TRIALS = 327
+"""Configurations in the trial ledger before this study, as stated in the write-up."""
 
 
 def _key(p: dict) -> tuple:
@@ -294,4 +300,31 @@ def run() -> dict[str, pd.DataFrame]:
         lambda m: 1 if m == "fixed default" else trials[m.split()[0]])
 
     points = pd.DataFrame([{**_params(k), "added_in_fold": added[k]} for k in bayes_points])
-    return {"bayes_summary": summary, "bayes_selections": selections, "bayes_points": points}
+
+    # Full diagnostics for the headline rule. Every distinct configuration this
+    # study evaluated is a trial, on top of the ledger's prior count.
+    headline = stitched[HEADLINE]
+    searched = list(dict.fromkeys(coarse + fine + bayes_points))
+    trial_sharpes = pd.Series({str(k): _daily_sharpe(evaluate(k)) for k in searched})
+    vc = base.validation
+    dsr = v.deflated_sharpe(headline, PRIOR_TRIALS + len(searched), trial_sharpes)
+    pbo = v.probability_of_backtest_overfitting(
+        pd.DataFrame({str(k): evaluate(k) for k in fine}), vc.pbo_splits)
+    boot = v.block_bootstrap_sharpe(headline, vc.bootstrap_samples, vc.bootstrap_block, seed=vc.seed)
+    sel = selections[selections.method == HEADLINE]
+    diagnostics = pd.concat([
+        pd.Series({"oos_net_sharpe": sharpe(headline), "folds_positive": int((sel.test_sharpe > 0).sum()),
+                   "mean_train_minus_test": float((sel.train_sharpe - sel.test_sharpe).mean()),
+                   "prior_trials": PRIOR_TRIALS, "configs_this_study": len(searched)}),
+        dsr.add_prefix("dsr_"), pbo.add_prefix("pbo_"), boot.add_prefix("boot_"),
+    ]).rename("value").to_frame()
+    diagnostics.index.name = "statistic"
+    oos_returns = pd.DataFrame({m: stitched[m] for m in methods})
+    oos_returns.index.name = "date"
+    return {"bayes_summary": summary, "bayes_selections": selections, "bayes_points": points,
+            "bayes_headline": diagnostics, "bayes_oos_returns": oos_returns}
+
+
+def _daily_sharpe(series: pd.Series) -> float:
+    sd = series.std(ddof=1)
+    return float(series.mean() / sd) if sd else np.nan
