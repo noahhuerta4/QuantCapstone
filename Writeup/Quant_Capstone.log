@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.1) (preloaded format=pdflatex 2026.1.9)  16 OCT 2026 15:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.1) (preloaded format=pdflatex 2026.1.9)  16 OCT 2026 16:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -778,7 +778,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 
 [3]
-<sleeve_correlations.png, id=147, 1299.05325pt x 1027.31805pt>
+<sleeve_correlations.png, id=151, 1299.05325pt x 1027.31805pt>
 File: sleeve_correlations.png Graphic file (type png)
 <use sleeve_correlations.png>
 Package pdftex.def Info: sleeve_correlations.png  used on input line 143.
@@ -804,7 +804,7 @@ File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 
 [7]
-<walk_forward_folds_selected.png, id=194, 658.3797pt x 254.02905pt>
+<walk_forward_folds_selected.png, id=198, 658.3797pt x 254.02905pt>
 File: walk_forward_folds_selected.png Graphic file (type png)
 <use walk_forward_folds_selected.png>
 Package pdftex.def Info: walk_forward_folds_selected.png  used on input line 26
@@ -813,80 +813,76 @@ Package pdftex.def Info: walk_forward_folds_selected.png  used on input line 26
 
 
 [8]
-
-[9 <./walk_forward_folds_selected.png>]
-<bootstrap_sharpe_selected.png, id=216, 485.29305pt x 239.57504pt>
+<bootstrap_sharpe_selected.png, id=208, 485.29305pt x 239.57504pt>
 File: bootstrap_sharpe_selected.png Graphic file (type png)
 <use bootstrap_sharpe_selected.png>
-Package pdftex.def Info: bootstrap_sharpe_selected.png  used on input line 291.
+Package pdftex.def Info: bootstrap_sharpe_selected.png  used on input line 285.
 
-(pdftex.def)             Requested size: 230.18253pt x 113.63481pt.
-<cost_sensitivity.png, id=217, 485.29305pt x 254.02905pt>
-File: cost_sensitivity.png Graphic file (type png)
-<use cost_sensitivity.png>
-Package pdftex.def Info: cost_sensitivity.png  used on input line 296.
-(pdftex.def)             Requested size: 230.18253pt x 120.49062pt.
-
-
-[10 <./bootstrap_sharpe_selected.png> <./cost_sensitivity.png>]
+(pdftex.def)             Requested size: 291.2458pt x 143.78268pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 312.
+(Font)              <10> on input line 286.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 312.
+(Font)              <7> on input line 286.
 
+
+[9 <./walk_forward_folds_selected.png>]
+Underfull \hbox (badness 3058) in paragraph at lines 310--311
+\T1/lmr/m/n/10 (+20) expected by chance from 658 configurations
+ []
+
+
+
+[10 <./bootstrap_sharpe_selected.png>]
 
 [11]
-<equity_drawdown.png, id=240, 658.74104pt x 427.47705pt>
+<equity_drawdown.png, id=238, 658.74104pt x 427.47705pt>
 File: equity_drawdown.png Graphic file (type png)
 <use equity_drawdown.png>
-Package pdftex.def Info: equity_drawdown.png  used on input line 366.
+Package pdftex.def Info: equity_drawdown.png  used on input line 353.
 (pdftex.def)             Requested size: 413.3867pt x 268.2618pt.
-
-
-[12]
-<rolling_sharpe.png, id=246, 658.74104pt x 254.02905pt>
+<rolling_sharpe.png, id=240, 658.74104pt x 254.02905pt>
 File: rolling_sharpe.png Graphic file (type png)
 <use rolling_sharpe.png>
-Package pdftex.def Info: rolling_sharpe.png  used on input line 375.
+Package pdftex.def Info: rolling_sharpe.png  used on input line 362.
 (pdftex.def)             Requested size: 403.9896pt x 155.79085pt.
 
 
-[13 <./equity_drawdown.png>]
-<effective_breadth.png, id=260, 499.74706pt x 268.48305pt>
+[12 <./equity_drawdown.png>]
+<effective_breadth.png, id=253, 499.74706pt x 268.48305pt>
 File: effective_breadth.png Graphic file (type png)
 <use effective_breadth.png>
-Package pdftex.def Info: effective_breadth.png  used on input line 415.
+Package pdftex.def Info: effective_breadth.png  used on input line 402.
 (pdftex.def)             Requested size: 338.22418pt x 181.71393pt.
 
 
-[14 <./rolling_sharpe.png>]
+[13 <./rolling_sharpe.png>]
 
-[15 <./effective_breadth.png>]
-<liquidity_deciles.png, id=286, 557.56305pt x 355.20705pt>
+[14 <./effective_breadth.png>]
+<liquidity_deciles.png, id=280, 557.56305pt x 355.20705pt>
 File: liquidity_deciles.png Graphic file (type png)
 <use liquidity_deciles.png>
-Package pdftex.def Info: liquidity_deciles.png  used on input line 442.
+Package pdftex.def Info: liquidity_deciles.png  used on input line 429.
 (pdftex.def)             Requested size: 366.40834pt x 233.4401pt.
 
 
-[16 <./liquidity_deciles.png>]
-<pead_weight_sweep.png, id=294, 499.74706pt x 254.02905pt>
+[15 <./liquidity_deciles.png>]
+<pead_weight_sweep.png, id=288, 499.74706pt x 254.02905pt>
 File: pead_weight_sweep.png Graphic file (type png)
 <use pead_weight_sweep.png>
-Package pdftex.def Info: pead_weight_sweep.png  used on input line 461.
+Package pdftex.def Info: pead_weight_sweep.png  used on input line 448.
 (pdftex.def)             Requested size: 338.22418pt x 171.93121pt.
 
 
-[17]
-Overfull \hbox (6.6062pt too wide) in paragraph at lines 477--491
+[16]
+Overfull \hbox (6.6062pt too wide) in paragraph at lines 464--478
  [][] 
  []
 
 
 
-[18 <./pead_weight_sweep.png>]
+[17 <./pead_weight_sweep.png>]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 5
-20.
+07.
 
 (/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/lat
 ex/lm/t1lmtt.fd
@@ -898,6 +894,8 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 
 
+[18]
+
 [19]
 
 [20]
@@ -908,53 +906,49 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `Quant_Capstone.out' has not changed.
-(rerunfilecheck)             Checksum: 448FF44C84397B2FB4CAB1DA210D5C60;4471.
+(rerunfilecheck)             Checksum: 8BF77FF9E979C4AD789A02E9EED5710D;4682.
  ) 
 Here is how much of TeX's memory you used:
- 19974 strings out of 469811
- 388130 string characters out of 5467411
- 798801 words of memory out of 5000000
- 48031 multiletter control sequences out of 15000+600000
- 719193 words of font info for 228 fonts, out of 8000000 for 9000
+ 19954 strings out of 469811
+ 387686 string characters out of 5467411
+ 799073 words of memory out of 5000000
+ 48017 multiletter control sequences out of 15000+600000
+ 715823 words of font info for 223 fonts, out of 8000000 for 9000
  0 hyphenation exceptions out of 8191
- 75i,11n,80p,1588b,1162s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,11n,80p,1362b,1170s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts
 /enc/dvips/lm/lm-ec.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTe
-X/texmfs/install/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/noah.a.huerta/Library
-/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathit.enc}{/U
-sers/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/
-dvips/lm/lm-rm.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/tex
-mfs/install/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/noah.a.huerta/Library/Applica
-tion Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathex.enc}</Users/noa
+X/texmfs/install/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/noah.a.huerta/Library/Ap
+plication Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathsy.enc}{/User
+s/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvi
+ps/lm/lm-mathit.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/te
+xmfs/install/fonts/enc/dvips/lm/lm-mathex.enc}{/Users/noah.a.huerta/Library/App
+lication Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-rm.enc}</Users/noa
 h.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public
 /lm/lmbx10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/
 install/fonts/type1/public/lm/lmbx12.pfb></Users/noah.a.huerta/Library/Applicat
-ion Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx9.pfb></Users/noah.
-a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/l
-m/lmex10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/in
-stall/fonts/type1/public/lm/lmmi10.pfb></Users/noah.a.huerta/Library/Applicatio
-n Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi6.pfb></Users/noah.a.
+ion Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmex10.pfb></Users/noah
+.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/
+lm/lmmi10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/i
+nstall/fonts/type1/public/lm/lmmi6.pfb></Users/noah.a.huerta/Library/Applicatio
+n Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi8.pfb></Users/noah.a.
 huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/
-lmmi8.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/insta
-ll/fonts/type1/public/lm/lmmi9.pfb></Users/noah.a.huerta/Library/Application Su
-pport/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr10.pfb></Users/noah.a.huer
-ta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr1
-2.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/f
-onts/type1/public/lm/lmr8.pfb></Users/noah.a.huerta/Library/Application Support
-/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr9.pfb></Users/noah.a.huerta/Lib
-rary/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmri10.pfb
-></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/
-type1/public/lm/lmsy10.pfb></Users/noah.a.huerta/Library/Application Support/Mi
-KTeX/texmfs/install/fonts/type1/public/lm/lmsy6.pfb></Users/noah.a.huerta/Libra
-ry/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy8.pfb></
-Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/typ
-e1/public/lm/lmsy9.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX
-/texmfs/install/fonts/type1/public/lm/lmtt10.pfb></Users/noah.a.huerta/Library/
-Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/m
-sbm10.pfb>
-Output written on Quant_Capstone.pdf (21 pages, 1413731 bytes).
+lmr10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/insta
+ll/fonts/type1/public/lm/lmr12.pfb></Users/noah.a.huerta/Library/Application Su
+pport/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr8.pfb></Users/noah.a.huert
+a/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr9.
+pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fon
+ts/type1/public/lm/lmri10.pfb></Users/noah.a.huerta/Library/Application Support
+/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy10.pfb></Users/noah.a.huerta/L
+ibrary/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy6.pf
+b></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts
+/type1/public/lm/lmsy8.pfb></Users/noah.a.huerta/Library/Application Support/Mi
+KTeX/texmfs/install/fonts/type1/public/lm/lmtt10.pfb></Users/noah.a.huerta/Libr
+ary/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbo
+ls/msbm10.pfb>
+Output written on Quant_Capstone.pdf (21 pages, 1339217 bytes).
 PDF statistics:
- 449 PDF objects out of 1000 (max. 8388607)
- 93 named destinations out of 1000 (max. 500000)
- 49902 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 441 PDF objects out of 1000 (max. 8388607)
+ 96 named destinations out of 1000 (max. 500000)
+ 47857 words of extra memory for PDF output out of 51595 (max. 10000000)
 

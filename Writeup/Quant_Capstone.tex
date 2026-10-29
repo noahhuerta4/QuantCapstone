@@ -105,7 +105,7 @@ The first sleeve reverses a two-day stock return, with greater weight placed on 
 cross-sectional median before standardization.
 \subsection{Overnight reversal}
 
-The second sleeve sums recent overnight price gaps over a five-day lookback and takes the opposite side. The overnight session is relatively thin and order-driven, so some price pressure may reverse during regular trading; \citet{lps2019} document systematically opposite predictability in the overnight and intraday components of returns. Importantly, the overnight signal is not simply a repackaging of an overarching reversal sleeve: its measured correlation with the volume-shock reversal signal is only \textcolor{red}{0.29}.
+The second sleeve sums recent overnight price gaps over a five-day lookback and takes the opposite side. The overnight session is relatively thin and order-driven, so some price pressure may reverse during regular trading; \citet{lps2019} document systematically opposite predictability in the overnight and intraday components of returns. Importantly, the overnight signal is not simply a repackaging of an overarching reversal sleeve: its measured correlation with the volume-shock reversal signal is only 0.29.
 
 \subsection{Earnings surprise}
 
@@ -136,7 +136,7 @@ Throughout this report, the correlation between two sleeves means their average 
 \end{equation}
 where $\mathcal{U}_{ab,t}$ is the set of names scored by both sleeves, $a$ and $b$, on day $t$. It is measured across names rather than through time because the portfolio is built from each day's ranking: what matters is whether two sleeves favor the same securities on the same day, not whether their scores or standalone returns co-move over time.
 
-Two sleeves are called weakly correlated when combining them still captures most of the diversification gain available from independent forecasts; Section~\ref{sec:diagnostics} quantifies that gain. The two reversal sleeves, at \textcolor{red}{0.29}, meet this standard, and the earnings sleeve is essentially uncorrelated with both. Variants within the same family, by contrast, correlate at 0.94--0.97 (Figure~\ref{fig:corr}) and add almost nothing when combined.
+Two sleeves are called weakly correlated when combining them still captures most of the diversification gain available from independent forecasts; Section~\ref{sec:diagnostics} quantifies that gain. The two reversal sleeves, at 0.29, meet this standard, and the earnings sleeve is essentially uncorrelated with both. Variants within the same family, by contrast, correlate at 0.94--0.97 (Figure~\ref{fig:corr}) and add almost nothing when combined.
 
 \begin{figure}[H]
 \centering
@@ -262,7 +262,7 @@ The primary objective of the validation framework is to prevent research choices
 
 The headline validation result uses thirteen consecutive six-month (126-day) out-of-sample folds. Each test window is preceded by an expanding training window that starts at the beginning of the sample with an initial length of 756 days. The longest selectable holding period, fifteen days, is embargoed from the end of the training sample so positions initiated in training cannot overlap test-period outcomes.
 
-Three parameters are re-selected inside each training window---the earnings-sleeve weight, the rebalance interval, and the no-trade band---giving 175 candidate configurations per fold: five earnings weights from 0 to 20\%, five rebalance intervals from 5 to 15 days, and seven bands from 0.2 to 1.2\% of NAV. Rather than taking the single configuration with the best training Sharpe, each fold selects the one whose neighborhood---the configuration and its adjacent grid cells---has the highest mean training Sharpe, considering only configurations whose neighborhood is complete. Averaging over neighbors favors broad regions of good performance over isolated peaks. This rule was the best of eight selection procedures compared in Section~\ref{sec:selection}, and every configuration evaluated in that comparison is charged to the trial count. The reversal lookback, the universe size, and the sleeve set are held fixed across all folds. Because each of those three was chosen by inspecting full-sample diagnostics, they are counted in the trial ledger but are not themselves validated out of sample, and the reported out-of-sample Sharpe is conditional on the parametric choices. This is to avoid any lookahead bias which could present inflated performance estimates.
+Three parameters are re-selected inside each training window---the earnings-sleeve weight, the rebalance interval, and the no-trade band---giving 175 candidate configurations per fold. Specifically for each sleeve, there are five earnings weights from 0 to 20\%, five rebalance intervals from 5 to 15 days, and seven bands from 0.2 to 1.2\% of NAV. Rather than taking the single configuration with the best training Sharpe, each fold selects the one whose neighborhood has the highest mean training Sharpe. Where a neighborhood is the central point of testing and its adjacent grid cells, and we only consider configurations whose neighborhood is complete. Averaging over neighbors favors broad regions of good performance over isolated peaks. This rule was the best of eight selection procedures compared in Section~\ref{sec:selection}, and every configuration evaluated in that comparison is charged to the trial count. The reversal lookback, the universe size, and the sleeve set are held fixed across all folds. Because each of those three was chosen by inspecting full-sample diagnostics, they are counted in the trial ledger but are not themselves validated out of sample, and the reported out-of-sample Sharpe is conditional on the parametric choices. This is to avoid any lookahead bias which could present inflated performance estimates.
 
 \begin{figure}[H]
 \centering
@@ -271,34 +271,25 @@ Three parameters are re-selected inside each training window---the earnings-slee
 \label{fig:walkforward}
 \end{figure}
 
-The final walk-forward out-of-sample Sharpe ratio is 1.058. \textcolor{red}{Each fold's choice behind it uses training data only, but the selection rule itself was chosen by comparing out-of-sample results, which is why the deflation below charges for every configuration in that comparison.}
+The final walk-forward out-of-sample Sharpe ratio is 1.058. Each fold's choice behind it uses training data only, but the selection rule itself was chosen by comparing out-of-sample results, which is why the multiple-testing adjustment in Section~\ref{sec:sampling} counts every configuration in that comparison.
 
-\textcolor{red}{To judge whether re-selecting parameters adds anything, the selected series is compared with a benchmark: the fixed default configuration (10\% earnings weight, ten-day rebalance, 0.6\% no-trade band) held constant through every fold and evaluated on the same test windows, where it earns a Sharpe ratio of 0.879. Three properties make it the appropriate benchmark. First, it is the alternative that re-selection must beat: the strategy as it runs when its parameters are simply left alone, and the configuration behind the full-sample results of Section~\ref{sec:results}. Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Second, the comparison is controlled. Both series use the same signals, costs, and test days, and the default is itself one of the 175 grid cells, so every selection rule could have chosen it; the only difference between the two series is which cell each fold picks. Third, it is a demanding benchmark. Its parameters were chosen by examining full-sample results, so 0.879 carries hindsight that no fold's selection had, and it is not a legitimate out-of-sample estimate in its own right. A rule that uses only training data and still outperforms it has overcome that advantage; a rule that falls short has not shown the defaults to be better, only that its own search added nothing. Whether the difference between 1.058 and 0.879 exceeds what chance alone would produce is tested in Section~\ref{sec:sampling}.}
+To judge whether re-selecting parameters adds anything, the selected series is compared with a benchmark: the fixed default configuration (10\% earnings weight, ten-day rebalance, 0.6\% no-trade band) held constant through every fold and evaluated on the same test windows, where it earns a Sharpe ratio of 0.879. Three properties make it the appropriate benchmark. First, it is an alternative that re-selection must beat: the strategy as it runs when its parameters are simply left alone, and the configuration behind the full-sample results of Section~\ref{sec:results}. Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Second, the comparison is controlled. Both series use the same signals, costs, and test days, and the default is itself one of the 175 grid cells, so every selection rule could have chosen it; the only difference between the two series is which cell each fold picks. Third, it is a demanding benchmark. Its parameters were chosen by examining full-sample results, so 0.879 carries hindsight that no reselection fold had. A rule that uses only training data and still outperforms it has overcome that advantage.
 
-\subsection{Multiple testing and sampling uncertainty}
+\subsection{Uncertainty in the out-of-sample Sharpe ratio}
 \label{sec:sampling}
 
-All research configurations examined are counted, including rejected experiments. The trial ledger contains 327 configurations; the final \textcolor{red}{parameter-selection study evaluates 331 more (the 175-cell grid, which contains the 27 cells of the earlier coarse grid, and 156 points proposed by the Bayesian optimizer of Section~\ref{sec:selection}; the optimizer's remaining point is its starting configuration, the fixed default, which is already a grid cell), so the deflation is charged for 658} trials in total. The resulting Deflated Sharpe Ratio is \textcolor{red}{0.627}, explicitly discounting the out-of-sample Sharpe for selection bias and non-normality following \citet{bailey2014}. The estimated probability of backtest overfitting is \textcolor{red}{0.262}, computed by combinatorially symmetric cross-validation \citep{bailey2017} over the \textcolor{red}{175 walk-forward-grid configurations}; it measures overfitting within that final grid, not across the full research history. The probabilistic Sharpe measure is \textcolor{red}{0.997}.
-
-Sampling uncertainty is measured by \textcolor{red}{block resampling. A resampled history is built from the 1,638 out-of-sample daily returns by repeatedly picking a day at random and taking the 21 consecutive days that start there (wrapping from the last day back to the first when needed), then joining these blocks end to end until the history has 1,638 days. Drawing 21-day blocks rather than single days keeps the short-run dependence and volatility clustering of daily returns intact. This is repeated 2,000 times, and the Sharpe ratio of each resampled history is computed. The 2.5th and 97.5th percentiles of those 2,000 Sharpe ratios form the 95\% interval for the out-of-sample Sharpe,} \textcolor{red}{$[0.41,1.71]$}, \textcolor{red}{and} only \textcolor{red}{0.05\% of resampled histories have a Sharpe ratio at or below zero}. That frequency and the probabilistic Sharpe measure of \textcolor{red}{0.997} both estimate the probability that true skill is positive, but they are not the same statistic---the first is a resampling frequency, the second a parametric adjustment for skewness and kurtosis---and the modest gap between them reflects that difference rather than an inconsistency. The interval is intentionally reported alongside the point estimate because ten years of daily data do not imply ten years of independent evidence.
-
-\textcolor{red}{The same procedure tests whether the selected series outperforms the fixed-default benchmark. In each of 2,000 resampled histories, the daily returns of both strategies are rebuilt from the same randomly drawn blocks, so a difficult market stretch enters both series at once and only the difference between the strategies varies from one history to the next. The reported quantity is the fraction of resampled histories in which the selected series' Sharpe ratio is not higher than the benchmark's. For the headline rule this fraction is 25\%: in one resampled history in four, re-selection does no better than leaving the parameters fixed. The improvement from 0.879 to 1.058 is therefore suggestive rather than established. The last column of Table~\ref{tab:selection} reports the same fraction for every selection rule.}
+\textcolor{red}{Thirteen folds and 1,638 trading days are a limited sample, so the 1.058 is an estimate rather than a precise measurement. Its precision is measured by block resampling, which builds alternative versions of the out-of-sample period from the strategy's actual daily returns. Each alternative history is assembled by repeatedly picking a random day in the out-of-sample period and copying the 21 trading days that start there (wrapping from the last day back to the first when needed), until the history is 1,638 days long. Copying 21-day blocks rather than single days keeps calm and volatile stretches together, as they occur in practice. Figure~\ref{fig:resampled} shows the Sharpe ratios of 2,000 such histories. The middle 95\% lie between 0.41 and 1.71, and only one of the 2,000 is at or below zero. The out-of-sample Sharpe ratio is therefore clearly positive, but ten years of data cannot pin it down more tightly than about $\pm0.65$.}
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}{0.49\textwidth}
-  \centering
-  \IfFileExists{bootstrap_sharpe_selected.png}{\includegraphics[width=\textwidth]{bootstrap_sharpe_selected.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: bootstrap\_sharpe\_selected.png}}}
-  \caption{\textcolor{red}{Sharpe ratios of 2,000 block-resampled histories.} Point estimate \textcolor{red}{1.06} (solid line); 95\% interval \textcolor{red}{$[0.41,1.71]$} (dashed lines).}
-\end{subfigure}\hfill
-\begin{subfigure}{0.49\textwidth}
-  \centering
-  \IfFileExists{cost_sensitivity.png}{\includegraphics[width=\textwidth]{cost_sensitivity.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: cost\_sensitivity.png}}}
-  \caption{Net Sharpe \textcolor{red}{of the fixed default configuration over the full sample} under a global multiplier on every modeled cost, with the baseline (1$\times$) and break-even (6.1$\times$) marked.}
-\end{subfigure}
-\caption{Uncertainty and cost-stress tests. \textcolor{red}{Block resampling} quantifies sampling dispersion, while the cost sweep shows a break-even multiple of approximately 6.07 times the base-case cost model.}
-\label{fig:validation}
+\IfFileExists{bootstrap_sharpe_selected.png}{\includegraphics[width=0.62\textwidth]{bootstrap_sharpe_selected.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: bootstrap\_sharpe\_selected.png}}}
+\caption{\textcolor{red}{Out-of-sample Sharpe ratios of 2,000 block-resampled histories, each assembled from randomly drawn 21-day blocks of the selected configuration's 1,638 daily out-of-sample returns. The solid line marks the observed Sharpe ratio of 1.06; the dashed lines mark the 95\% interval, $[0.41,1.71]$.}}
+\label{fig:resampled}
 \end{figure}
+
+\textcolor{red}{The same resampling tests whether re-selection beats the 0.879 benchmark. In each of the 2,000 histories both strategies' returns are rebuilt from the same blocks, so they face identical market conditions, and the selected configuration does no better than the benchmark in 25\% of them. The improvement over fixed parameters is therefore suggestive rather than established; Table~\ref{tab:selection} reports the same comparison for every selection rule.}
+
+\textcolor{red}{Finally, 658 configurations were examined in reaching this result: 327 during signal research, including rejected experiments, and 331 in the parameter-selection study of Section~\ref{sec:selection}. The more configurations are tried, the easier it is to find a high Sharpe ratio by luck. The deflated Sharpe ratio of \citet{bailey2014} accounts for this: the best of 658 worthless configurations would be expected to reach a Sharpe ratio of about 0.93 by chance, and the probability that the strategy's true Sharpe ratio exceeds that level is 0.63. Appendix~\ref{app:diagnostics} gives the calculation and further diagnostics.}
 
 \subsection{Engine-level verification}
 
@@ -315,13 +306,9 @@ Diagnostic & Result & Interpretation \\
 \midrule
 Walk-forward OOS Sharpe & \textcolor{red}{1.058} & Parameters selected from prior data only \\
 Fixed-default OOS Sharpe & 0.879 & \textcolor{red}{Benchmark: default parameters held fixed on the same windows; chosen with hindsight} \\
-Train minus test Sharpe & \textcolor{red}{$-0.307$} & Estimated overfitting premium \\
 Positive folds & \textcolor{red}{12/13} & Result not concentrated in one period \\
-Probabilistic Sharpe & \textcolor{red}{0.997} & Probability true Sharpe exceeds zero under stated adjustment \\
-Deflated Sharpe & \textcolor{red}{0.627} & Adjusted for \textcolor{red}{658 trials (327 ledger + 331 selection study)} and non-normality \\
-PBO & \textcolor{red}{0.262} & Probability of backtest overfitting within the \textcolor{red}{175-configuration} final grid \\
+Deflated Sharpe & \textcolor{red}{0.627} & \textcolor{red}{Probability true Sharpe exceeds 0.93, the best expected by chance from 658 configurations (Appendix~\ref{app:diagnostics})} \\
 \textcolor{red}{Block-resampled 95\% interval} & \textcolor{red}{[0.41, 1.71]} & Sampling uncertainty in OOS Sharpe \\
-Minimum track record & \textcolor{red}{601 days} & Reported threshold versus 1,638 OOS days available \\
 Cost break-even & 6.07$\times$ & Full-sample multiple of modeled cost at which net Sharpe reaches zero, interpolated between the 5$\times$ and 8$\times$ sweep points \\
 \bottomrule
 \end{tabular}
@@ -528,6 +515,27 @@ This project develops a market-neutral U.S. equity strategy that combines short-
 The most important lessons are methodological. First, combining genuinely different signals raises composite forecasting skill more reliably than refining a single predictor. Second, effective breadth---after correcting for cross-sectional dependence and signal persistence---is the binding resource. Third, portfolio constraints can improve rather than degrade realized performance by regularizing noisy forecasts. Fourth, realistic transaction costs change which research directions are worth pursuing: intraday breadth is attractive statistically but uneconomic under the tested fee structure. Finally, strong validation infrastructure matters as much as signal design. Causality checks, an embargoed walk-forward procedure, an explicit trial ledger, \textcolor{red}{block-resampled uncertainty intervals}, and engine cross-checks all prevented plausible but incorrect conclusions from surviving into the final result.
 
 The strategy should therefore be viewed as a disciplined empirical demonstration of quantitative research practice rather than a claim of immediately deployable alpha. The next substantive improvement is not another parameter sweep; it is better data. A point-in-time, delisting-inclusive universe and quote-level execution data would directly address the two largest remaining sources of optimism and allow the economic result to be evaluated on a materially stronger foundation.
+
+\appendix
+
+\section{Multiple-testing diagnostics}
+\label{app:diagnostics}
+
+\textcolor{red}{The deflated Sharpe ratio (DSR) of \citet{bailey2014} is computed in two steps. First, it estimates the Sharpe ratio that the best of $N$ worthless configurations would be expected to reach by chance,
+\begin{equation}
+ \widehat{SR}_0=\sqrt{V}\left[(1-\gamma)\,\Phi^{-1}\!\left(1-\frac{1}{N}\right)+\gamma\,\Phi^{-1}\!\left(1-\frac{1}{Ne}\right)\right],
+ \label{eq:sr0}
+\end{equation}
+where $N$ is the number of configurations tried, $V$ is the variance of their daily Sharpe ratios, $\gamma\approx0.5772$ is the Euler--Mascheroni constant, and $\Phi^{-1}$ is the inverse of the standard normal distribution function. Second, it estimates the probability that the strategy's true Sharpe ratio exceeds that threshold, allowing for the skewness and fat tails of daily returns,
+\begin{equation}
+ \mathrm{DSR}=\Phi\!\left(\frac{\bigl(\widehat{SR}-\widehat{SR}_0\bigr)\sqrt{T-1}}{\sqrt{1-\hat{s}\,\widehat{SR}+\tfrac{\hat{k}-1}{4}\,\widehat{SR}^{2}}}\right),
+ \label{eq:dsr}
+\end{equation}
+where $\widehat{SR}$ is the strategy's observed daily Sharpe ratio, $T$ is the number of daily returns, and $\hat{s}$ and $\hat{k}$ are their skewness and kurtosis ($\hat{k}=3$ for normal returns). The DSR is a probability between 0 and 1, not a Sharpe ratio.}
+
+\textcolor{red}{For the headline series, $N=658$ and $T=1{,}638$, and $\widehat{SR}_0$ corresponds to an annualized Sharpe ratio of 0.93. The DSR is 0.627: the strategy is more likely than not to exceed the best result luck would produce from a search of this size, but short of the 0.95 that would establish it with confidence. Because $\widehat{SR}_0$ grows with $N$, the DSR is held down chiefly by the size of the search. Setting $\widehat{SR}_0=0$ in \eqref{eq:dsr} gives the probabilistic Sharpe ratio, the probability that the true Sharpe ratio exceeds zero, which is 0.997. At the observed Sharpe ratio, skewness, and kurtosis, 601 daily returns would suffice for that probability to reach 0.95; the out-of-sample period supplies 1,638.}
+
+\textcolor{red}{The probability of backtest overfitting (PBO) of \citet{bailey2017} is estimated by combinatorially symmetric cross-validation over the 175 configurations of the parameter-selection grid: each configuration's daily return history is split into 14 blocks, every way of dividing the blocks into equal training and testing halves is formed (3,432 divisions), and the PBO is the fraction of divisions in which the configuration that is best in the training half ranks below the median in the testing half. It is 0.262. It measures overfitting within that grid, not across the full research history.}
 
 \begin{thebibliography}{99}
 

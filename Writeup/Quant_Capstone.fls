@@ -262,13 +262,6 @@ INPUT ./bootstrap_sharpe_selected.png
 INPUT ./bootstrap_sharpe_selected.png
 INPUT ./bootstrap_sharpe_selected.png
 INPUT ./bootstrap_sharpe_selected.png
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/lm/ec-lmbx9.tfm
-INPUT ./cost_sensitivity.png
-INPUT ./cost_sensitivity.png
-INPUT ./cost_sensitivity.png
-INPUT ./cost_sensitivity.png
-INPUT ./cost_sensitivity.png
-INPUT ./cost_sensitivity.png
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/lm/rm-lmr10.tfm
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/lm/rm-lmr7.tfm
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/lm/lmmi10.tfm
@@ -320,17 +313,15 @@ INPUT Quant_Capstone.aux
 INPUT ./Quant_Capstone.out
 INPUT ./Quant_Capstone.out
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-ec.enc
+INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-ts1.enc
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathsy.enc
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathit.enc
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-rm.enc
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-ts1.enc
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathex.enc
+INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-rm.enc
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx12.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx12.pfb
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx9.pfb
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx9.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmex10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmex10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi10.pfb
@@ -339,8 +330,6 @@ INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fon
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi6.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi8.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi8.pfb
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi9.pfb
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi9.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr12.pfb
@@ -357,8 +346,6 @@ INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fon
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy6.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy8.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy8.pfb
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy9.pfb
-INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy9.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmtt10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmtt10.pfb
 INPUT /Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb
