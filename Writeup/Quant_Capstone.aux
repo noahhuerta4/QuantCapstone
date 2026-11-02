@@ -15,11 +15,11 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Overnight reversal}{3}{subsection.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Earnings surprise}{3}{subsection.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Cross-sectional normalization and blending}{4}{subsection.3.4}\protected@file@percent }
-\newlabel{eq:sleevecorr}{{3}{4}{Cross-sectional normalization and blending}{equation.3}{}}
+\newlabel{eq:sleevecorr}{{3}{4}{Cross-sectional normalization and blending}{equation.3.3}{}}
 \citation{ledoitwolf2004}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Correlation structure of candidate alpha sleeves (navy negative, dark red positive). The blocks on the diagonal are variants within a family and are highly redundant; the near-zero correlations between blocks represent genuine diversification, and the selected sleeves are comparatively weakly correlated.}}{5}{figure.caption.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Correlation structure of candidate signal sleeves (navy negative, dark red positive). The blocks on the diagonal are variants within a family and are highly redundant; the near-zero correlations between blocks represent genuine diversification, and the selected sleeves are comparatively weakly correlated.}}{5}{figure.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:corr}{{1}{5}{Correlation structure of candidate alpha sleeves (navy negative, dark red positive). The blocks on the diagonal are variants within a family and are highly redundant; the near-zero correlations between blocks represent genuine diversification, and the selected sleeves are comparatively weakly correlated}{figure.caption.1}{}}
+\newlabel{fig:corr}{{1}{5}{Correlation structure of candidate signal sleeves (navy negative, dark red positive). The blocks on the diagonal are variants within a family and are highly redundant; the near-zero correlations between blocks represent genuine diversification, and the selected sleeves are comparatively weakly correlated}{figure.caption.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Portfolio Construction and Risk Controls}{5}{section.4}\protected@file@percent }
 \newlabel{sec:portfolio}{{4}{5}{Portfolio Construction and Risk Controls}{section.4}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Key strategy parameters.}}{7}{table.caption.2}\protected@file@percent }
@@ -31,75 +31,71 @@
 \@writefile{toc}{\contentsline {section}{\numberline {6}Backtest and Validation Protocol}{8}{section.6}\protected@file@percent }
 \newlabel{sec:validation}{{6}{8}{Backtest and Validation Protocol}{section.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Walk-forward evaluation}{8}{subsection.6.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Training (in-sample, navy) and test (out-of-sample, red) Sharpe ratios across the thirteen walk-forward folds; only the test bars are out-of-sample evidence. Twelve of thirteen test periods are positive. Test Sharpe exceeds training Sharpe by 0.31 on average, because the neighborhood rule deliberately forgoes the highest training score.}}{9}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:walkforward}{{2}{9}{Training (in-sample, navy) and test (out-of-sample, red) Sharpe ratios across the thirteen walk-forward folds; only the test bars are out-of-sample evidence. Twelve of thirteen test periods are positive. Test Sharpe exceeds training Sharpe by 0.31 on average, because the neighborhood rule deliberately forgoes the highest training score}{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Uncertainty in the out-of-sample Sharpe ratio}{9}{subsection.6.2}\protected@file@percent }
-\newlabel{sec:sampling}{{6.2}{9}{Uncertainty in the out-of-sample Sharpe ratio}{subsection.6.2}{}}
-\citation{bailey2014}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textcolor {red}{Out-of-sample Sharpe ratios of 2,000 block-resampled histories, each assembled from randomly drawn 21-day blocks of the selected configuration's 1,638 daily out-of-sample returns. The solid line marks the observed Sharpe ratio of 1.06; the dashed lines mark the 95\% interval, $[0.41,1.71]$.}}}{10}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:resampled}{{3}{10}{\textcolor {red}{Out-of-sample Sharpe ratios of 2,000 block-resampled histories, each assembled from randomly drawn 21-day blocks of the selected configuration's 1,638 daily out-of-sample returns. The solid line marks the observed Sharpe ratio of 1.06; the dashed lines mark the 95\% interval, $[0.41,1.71]$.}}{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Engine-level verification}{10}{subsection.6.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Primary validation diagnostics.}}{11}{table.caption.6}\protected@file@percent }
-\newlabel{tab:validation}{{3}{11}{Primary validation diagnostics}{table.caption.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Results}{11}{section.7}\protected@file@percent }
-\newlabel{sec:results}{{7}{11}{Results}{section.7}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Full-sample portfolio performance, 2015--2024.}}{11}{table.caption.7}\protected@file@percent }
-\newlabel{tab:performance}{{4}{11}{Full-sample portfolio performance, 2015--2024}{table.caption.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Net equity curve and drawdown \textcolor {red}{of the fixed default configuration over the full sample} for a \$1 million capital run. This capacity illustration ends at approximately \$1.37 million after ten years, and the worst peak-to-trough decline is 4.9\%. The drawdown panel emphasizes the long recovery periods hidden by the cumulative equity curve.}}{12}{figure.caption.8}\protected@file@percent }
-\newlabel{fig:equity}{{4}{12}{Net equity curve and drawdown \textcolor {red}{of the fixed default configuration over the full sample} for a \$1 million capital run. This capacity illustration ends at approximately \$1.37 million after ten years, and the worst peak-to-trough decline is 4.9\%. The drawdown panel emphasizes the long recovery periods hidden by the cumulative equity curve}{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Training (in-sample, navy) and test (out-of-sample, red) Sharpe ratios across the thirteen walk-forward folds; only the test bars are out-of-sample evidence. Twelve of thirteen test periods are positive. Test Sharpe exceeds training Sharpe by 0.43 on average, because the neighborhood rule deliberately forgoes the highest training score.}}{9}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:walkforward}{{2}{9}{Training (in-sample, navy) and test (out-of-sample, red) Sharpe ratios across the thirteen walk-forward folds; only the test bars are out-of-sample evidence. Twelve of thirteen test periods are positive. Test Sharpe exceeds training Sharpe by 0.43 on average, because the neighborhood rule deliberately forgoes the highest training score}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Results}{9}{section.7}\protected@file@percent }
+\newlabel{sec:results}{{7}{9}{Results}{section.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Walk-forward out-of-sample performance, January 2018 to July 2024.}}{10}{table.caption.5}\protected@file@percent }
+\newlabel{tab:performance}{{3}{10}{Walk-forward out-of-sample performance, January 2018 to July 2024}{table.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Walk-forward out-of-sample equity curve and net drawdown for a \$1M capital run. Capital grows to approximately \$1.38 million over the six and a half years of test windows, and the worst peak-to-trough decline is 5.3\%. The drawdown panel emphasizes the long recovery periods hidden by the cumulative equity curve.}}{10}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:equity}{{3}{10}{Walk-forward out-of-sample equity curve and net drawdown for a \$1M capital run. Capital grows to approximately \$1.38 million over the six and a half years of test windows, and the worst peak-to-trough decline is 5.3\%. The drawdown panel emphasizes the long recovery periods hidden by the cumulative equity curve}{figure.caption.6}{}}
 \citation{grinold1989,grinoldkahn2000}
 \citation{clarke2002}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Rolling 126-trading-day net Sharpe \textcolor {red}{of the fixed default configuration over the full sample}, with negative stretches shaded. About 87\% of windows are positive and the mean rolling Sharpe is 0.95, but the strategy experiences sustained weak regimes.}}{13}{figure.caption.9}\protected@file@percent }
-\newlabel{fig:rolling}{{5}{13}{Rolling 126-trading-day net Sharpe \textcolor {red}{of the fixed default configuration over the full sample}, with negative stretches shaded. About 87\% of windows are positive and the mean rolling Sharpe is 0.95, but the strategy experiences sustained weak regimes}{figure.caption.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Diagnostic Decomposition}{13}{section.8}\protected@file@percent }
-\newlabel{sec:diagnostics}{{8}{13}{Diagnostic Decomposition}{section.8}{}}
-\newlabel{eq:fundlaw}{{8}{13}{Diagnostic Decomposition}{equation.8}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Fundamental-Law diagnostics.}}{13}{table.caption.10}\protected@file@percent }
-\newlabel{tab:fundlaw}{{5}{13}{Fundamental-Law diagnostics}{table.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Rolling 126-trading-day net Sharpe of the walk-forward out-of-sample series, with negative stretches shaded.}}{11}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:rolling}{{4}{11}{Rolling 126-trading-day net Sharpe of the walk-forward out-of-sample series, with negative stretches shaded}{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Diagnostics}{11}{section.8}\protected@file@percent }
+\newlabel{sec:diagnostics}{{8}{11}{Diagnostics}{section.8}{}}
+\newlabel{eq:fundlaw}{{8}{11}{Diagnostics}{equation.8.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Fundamental-Law diagnostics for the walk-forward out-of-sample series}}{11}{table.caption.8}\protected@file@percent }
+\newlabel{tab:fundlaw}{{4}{11}{Fundamental-Law diagnostics for the walk-forward out-of-sample series}{table.caption.8}{}}
 \citation{jagannathanma2003}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Reduction from naive breadth to effective breadth after accounting for cross-sectional dependence and signal persistence. The effective count is about 19 times smaller than the naive count of names times days.}}{14}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:breadth}{{6}{14}{Reduction from naive breadth to effective breadth after accounting for cross-sectional dependence and signal persistence. The effective count is about 19 times smaller than the naive count of names times days}{figure.caption.11}{}}
-\newlabel{eq:blendic}{{9}{14}{Diagnostic Decomposition}{equation.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Robustness, Extensions, and Negative Results}{15}{section.9}\protected@file@percent }
-\newlabel{sec:robustness}{{9}{15}{Robustness, Extensions, and Negative Results}{section.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Liquidity spectrum}{15}{subsection.9.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Reversal information coefficient (top) and estimated half-spread (bottom) by dollar-volume decile in the broader liquidity study, where decile 1 is the least liquid; the dashed line marks the mean IC across deciles. Signal strength is essentially flat while trading costs rise materially in less-liquid names. Spreads are estimated from daily bars, so their ordering across deciles is reliable but their absolute levels are not.}}{15}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:liquidity}{{7}{15}{Reversal information coefficient (top) and estimated half-spread (bottom) by dollar-volume decile in the broader liquidity study, where decile 1 is the least liquid; the dashed line marks the mean IC across deciles. Signal strength is essentially flat while trading costs rise materially in less-liquid names. Spreads are estimated from daily bars, so their ordering across deciles is reliable but their absolute levels are not}{figure.caption.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Fundamental and insider extensions}{16}{subsection.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Intraday reversal and passive execution}{16}{subsection.9.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Reduction from naive breadth to effective breadth after accounting for cross-sectional dependence and signal persistence. The effective count is about \textcolor {red}{22} times smaller than the naive count of names times days.}}{13}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:breadth}{{5}{13}{Reduction from naive breadth to effective breadth after accounting for cross-sectional dependence and signal persistence. The effective count is about \textcolor {red}{22} times smaller than the naive count of names times days}{figure.caption.9}{}}
+\newlabel{eq:blendic}{{11}{14}{Diagnostics}{equation.8.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Robustness, Extensions, and Negative Results}{14}{section.9}\protected@file@percent }
+\newlabel{sec:robustness}{{9}{14}{Robustness, Extensions, and Negative Results}{section.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Liquidity spectrum}{14}{subsection.9.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Reversal information coefficient (top) and estimated half-spread (bottom) by dollar-volume decile in the broader liquidity study, where decile 1 is the least liquid; the dashed line marks the mean IC across deciles. Signal strength is essentially flat while trading costs rise materially in less-liquid names. Spreads are estimated from daily bars, so their ordering across deciles is reliable but their absolute levels are not.}}{15}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:liquidity}{{6}{15}{Reversal information coefficient (top) and estimated half-spread (bottom) by dollar-volume decile in the broader liquidity study, where decile 1 is the least liquid; the dashed line marks the mean IC across deciles. Signal strength is essentially flat while trading costs rise materially in less-liquid names. Spreads are estimated from daily bars, so their ordering across deciles is reliable but their absolute levels are not}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Fundamental and insider extensions}{15}{subsection.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Intraday reversal and passive execution}{15}{subsection.9.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.4}Regime conditioning and the no-trade band}{16}{subsection.9.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Sensitivity of net Sharpe to the earnings-sleeve weight. The dashed gray line marks net Sharpe without the sleeve. The chosen 10\% allocation is the best cell of the sweep, with lower net Sharpe on either side, so the weight is re-selected within each walk-forward training window rather than fixed in advance.}}{17}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:peadweight}{{8}{17}{Sensitivity of net Sharpe to the earnings-sleeve weight. The dashed gray line marks net Sharpe without the sleeve. The chosen 10\% allocation is the best cell of the sweep, with lower net Sharpe on either side, so the weight is re-selected within each walk-forward training window rather than fixed in advance}{figure.caption.13}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.5}Per-fold parameter selection}{17}{subsection.9.5}\protected@file@percent }
-\newlabel{sec:selection}{{9.5}{17}{Per-fold parameter selection}{subsection.9.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces \textcolor {red}{Out-of-sample results of per-fold parameter selection. The last column is the fraction of 2,000 block-resampled histories (Section~\ref {sec:sampling}) in which a method's out-of-sample Sharpe is not higher than the fixed default's.}}}{17}{table.caption.14}\protected@file@percent }
-\newlabel{tab:selection}{{6}{17}{\textcolor {red}{Out-of-sample results of per-fold parameter selection. The last column is the fraction of 2,000 block-resampled histories (Section~\ref {sec:sampling}) in which a method's out-of-sample Sharpe is not higher than the fixed default's.}}{table.caption.14}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Limitations}{18}{section.10}\protected@file@percent }
-\newlabel{sec:limitations}{{10}{18}{Limitations}{section.10}{}}
-\citation{bailey2014}
-\@writefile{toc}{\contentsline {section}{\numberline {11}Reproducibility}{19}{section.11}\protected@file@percent }
-\newlabel{sec:reproducibility}{{11}{19}{Reproducibility}{section.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {12}Conclusion}{19}{section.12}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Sensitivity of net Sharpe to the earnings-sleeve weight. The dashed gray line marks net Sharpe without the sleeve. The chosen 10\% allocation is the best cell of the sweep, with lower net Sharpe on either side, so the weight is re-selected within each walk-forward training window rather than fixed in advance.}}{16}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:peadweight}{{7}{16}{Sensitivity of net Sharpe to the earnings-sleeve weight. The dashed gray line marks net Sharpe without the sleeve. The chosen 10\% allocation is the best cell of the sweep, with lower net Sharpe on either side, so the weight is re-selected within each walk-forward training window rather than fixed in advance}{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.5}Per-fold parameter selection}{16}{subsection.9.5}\protected@file@percent }
+\newlabel{sec:selection}{{9.5}{16}{Per-fold parameter selection}{subsection.9.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces \textcolor {red}{Out-of-sample results of per-fold parameter selection. The last column is the fraction of 2,000 block-resampled histories (Section~\ref {sec:sampling}) in which a method's out-of-sample Sharpe is not higher than the fixed default's.}}}{17}{table.caption.12}\protected@file@percent }
+\newlabel{tab:selection}{{5}{17}{\textcolor {red}{Out-of-sample results of per-fold parameter selection. The last column is the fraction of 2,000 block-resampled histories (Section~\ref {sec:sampling}) in which a method's out-of-sample Sharpe is not higher than the fixed default's.}}{table.caption.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Limitations}{17}{section.10}\protected@file@percent }
+\newlabel{sec:limitations}{{10}{17}{Limitations}{section.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Reproducibility}{18}{section.11}\protected@file@percent }
+\newlabel{sec:reproducibility}{{11}{18}{Reproducibility}{section.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Conclusion}{18}{section.12}\protected@file@percent }
+\citation{bailey2017}
 \@writefile{toc}{\contentsline {section}{\numberline {A}Multiple-testing diagnostics}{19}{appendix.A}\protected@file@percent }
 \newlabel{app:diagnostics}{{A}{19}{Multiple-testing diagnostics}{appendix.A}{}}
-\newlabel{eq:sr0}{{10}{19}{Multiple-testing diagnostics}{equation.10}{}}
-\citation{bailey2017}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Worked example: one trading day}{19}{appendix.B}\protected@file@percent }
+\newlabel{app:example}{{B}{19}{Worked example: one trading day}{appendix.B}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Raw and standardized signals on 12 February 2021. Returns and raw scores are in percent; ranks are out of 100, with 1 the highest score. A dash indicates no recent earnings filing.}}{20}{table.caption.13}\protected@file@percent }
+\newlabel{tab:ex_signal}{{6}{20}{Raw and standardized signals on 12 February 2021. Returns and raw scores are in percent; ranks are out of 100, with 1 the highest score. A dash indicates no recent earnings filing}{table.caption.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Portfolio weights at each stage of construction, in percent of NAV.}}{20}{table.caption.14}\protected@file@percent }
+\newlabel{tab:ex_weights}{{7}{20}{Portfolio weights at each stage of construction, in percent of NAV}{table.caption.14}{}}
 \bibcite{abdiranaldo2017}{{1}{2017}{{Abdi and Ranaldo}}{{}}}
-\bibcite{bailey2014}{{2}{2014}{{Bailey and L\'opez de Prado}}{{}}}
-\bibcite{bailey2017}{{3}{2017}{{Bailey et al.}}{{}}}
-\bibcite{bernard1989}{{4}{1989}{{Bernard and Thomas}}{{}}}
-\bibcite{bernard1990}{{5}{1990}{{Bernard and Thomas}}{{}}}
-\bibcite{cgw1993}{{6}{1993}{{Campbell et al.}}{{}}}
-\bibcite{clarke2002}{{7}{2002}{{Clarke et al.}}{{}}}
-\bibcite{corwinschultz2012}{{8}{2012}{{Corwin and Schultz}}{{}}}
-\newlabel{eq:dsr}{{11}{20}{Multiple-testing diagnostics}{equation.11}{}}
-\bibcite{grinold1989}{{9}{1989}{{Grinold}}{{}}}
-\bibcite{grinoldkahn2000}{{10}{2000}{{Grinold and Kahn}}{{}}}
-\bibcite{jagannathanma2003}{{11}{2003}{{Jagannathan and Ma}}{{}}}
-\bibcite{jegadeesh1990}{{12}{1990}{{Jegadeesh}}{{}}}
-\bibcite{ledoitwolf2004}{{13}{2004}{{Ledoit and Wolf}}{{}}}
-\bibcite{lehmann1990}{{14}{1990}{{Lehmann}}{{}}}
-\bibcite{lomackinlay1990}{{15}{1990}{{Lo and MacKinlay}}{{}}}
-\bibcite{lps2019}{{16}{2019}{{Lou et al.}}{{}}}
-\bibcite{batesgranger1969}{{17}{1969}{{Bates and Granger}}{{}}}
-\gdef \@abspage@last{21}
+\bibcite{bailey2017}{{2}{2017}{{Bailey et al.}}{{}}}
+\bibcite{bernard1989}{{3}{1989}{{Bernard and Thomas}}{{}}}
+\bibcite{bernard1990}{{4}{1990}{{Bernard and Thomas}}{{}}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Trades at the 16 February 2021 open and the subsequent one-day return. Dollar amounts are in thousands; return ranks are out of 100, with 1 the highest return.}}{21}{table.caption.15}\protected@file@percent }
+\newlabel{tab:ex_trades}{{8}{21}{Trades at the 16 February 2021 open and the subsequent one-day return. Dollar amounts are in thousands; return ranks are out of 100, with 1 the highest return}{table.caption.15}{}}
+\bibcite{cgw1993}{{5}{1993}{{Campbell et al.}}{{}}}
+\bibcite{clarke2002}{{6}{2002}{{Clarke et al.}}{{}}}
+\bibcite{corwinschultz2012}{{7}{2012}{{Corwin and Schultz}}{{}}}
+\bibcite{grinold1989}{{8}{1989}{{Grinold}}{{}}}
+\bibcite{grinoldkahn2000}{{9}{2000}{{Grinold and Kahn}}{{}}}
+\bibcite{jagannathanma2003}{{10}{2003}{{Jagannathan and Ma}}{{}}}
+\bibcite{jegadeesh1990}{{11}{1990}{{Jegadeesh}}{{}}}
+\bibcite{ledoitwolf2004}{{12}{2004}{{Ledoit and Wolf}}{{}}}
+\bibcite{lehmann1990}{{13}{1990}{{Lehmann}}{{}}}
+\bibcite{lomackinlay1990}{{14}{1990}{{Lo and MacKinlay}}{{}}}
+\bibcite{lps2019}{{15}{2019}{{Lou et al.}}{{}}}
+\bibcite{batesgranger1969}{{16}{1969}{{Bates and Granger}}{{}}}
+\gdef \@abspage@last{22}

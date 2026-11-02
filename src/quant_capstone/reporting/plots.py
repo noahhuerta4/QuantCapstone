@@ -40,7 +40,7 @@ def equity_and_drawdown(gross: pd.Series, net: pd.Series, outdir: Path) -> Path:
         2, 1, figsize=(9, 5.6), sharex=True, height_ratios=[2.6, 1], constrained_layout=True
     )
 
-    for series, color, name in ((gross, NAVY, "Gross"), (net, DARK_RED, "Net of costs")):
+    for series, color, name in ((gross, NAVY, "Gross"), (net, DARK_RED, "Net")):
         curve = equity_curve(series)
         ax.plot(curve.index, curve.to_numpy(), color=color, label=name)
     ax.axhline(1.0, color=GRAY, linewidth=0.8, zorder=0)
