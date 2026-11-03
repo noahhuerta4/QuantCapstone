@@ -59,12 +59,12 @@ gross-exposure, and liquidity constraints. Execution occurs at the next market o
 fees, borrow costs, spread costs, and square-root market impact.
 
 The final strategy is evaluated on 2015--2024 U.S. large-cap data using a 13-fold walk-forward procedure and explicit
-accounting for 327 signal configurations explored during research, or 658 including the final parameter-selection study.
+accounting for 443 signal configurations explored during research, or more than 740 including the final parameter-selection study.
 The delivered configuration earns a walk-forward out-of-sample net Sharpe ratio of 1.214 with a maximum drawdown of
-5.33\%. Modeled trading costs total approximately 63.5 basis points of net asset value per year, and the estimated
+5.33\%. For the fixed default configuration over the full sample, modeled trading costs total approximately 63.5 basis points of net asset value per year, and the estimated
 break-even cost multiplier is 6.43. The principal empirical finding is that diversification across weakly correlated
-signals and effective breadth matter more than maximizing standalone signal strength or relaxing portfolio constraints.
-The study also documents negative results, implementation failures, and limitations---especially survivorship bias and
+signals matters more than maximizing standalone signal strength or relaxing portfolio constraints.
+The study also documents limitations---especially survivorship bias and
 calibrated rather than directly observed trading spreads---to distinguish evidence from backtest optimism.
 \end{abstract}
 
@@ -83,29 +83,29 @@ any one of them alone: combining volume-shock and overnight reversal raises gros
 Sharpe from 0.68 to 0.91, while adding the earnings sleeve improves the out-of-sample
 result further.
 
-The report is organized as follows. Section~\ref{sec:data} describes the data and universe. Sections~\ref{sec:signals}--\ref{sec:execution} describe signal construction, portfolio formation, and execution costs. Section~\ref{sec:validation} presents the validation design. Section~\ref{sec:results} reports performance and capacity. Section~\ref{sec:diagnostics} interprets the result through information coefficient, effective breadth, and transfer coefficient. Sections~\ref{sec:robustness} and \ref{sec:limitations} discuss robustness, rejected extensions, and limitations, followed by reproducibility and conclusions.
+The report is organized as follows. Section~\ref{sec:data} describes the data and universe. Sections~\ref{sec:signals}--\ref{sec:execution} describe signal construction, portfolio formation, and execution costs. Section~\ref{sec:validation} presents the validation design. Section~\ref{sec:results} reports performance and capacity. Section~\ref{sec:diagnostics} interprets the result through information coefficient, breadth, and transfer coefficient. The final section concludes.
 
 \section{Data and Tradable Universe}
 \label{sec:data}
 
 The research sample spans 2 January 2015 through 31 December 2024, covering 2,516 trading days. Daily market data are collected for 496 tickers, while the fundamental database contains 138,678 SEC XBRL facts across 503 tickers. The tradable universe is refreshed monthly and consists of the 100 most liquid U.S. large-cap common stocks drawn from current S\&P 500 membership. Liquidity is measured using trailing 63-day average dollar volume (ADV), lagged by one trading day. Securities must trade above \$5 and have at least 252 observations of price history. Because of this history requirement, the first year of the sample is a warm-up: the book takes its first positions on 14 January 2016, after 260 trading days with no holdings. All data was obtained through the yahoo finance python package and Interactive Brokers API for market data and the SEC XBRL database for fundamental data.
 
-Point-in-time treatment of accounting data is especially important. A fiscal-period end date is not the date at which the information was publicly tradable. The implementation therefore uses the SEC filing date as the visibility date. This avoids the error of assigning December-quarter information to December when the corresponding 10-Q or 10-K may not be filed until weeks later. It also handles restatements naturally because a later filing is can't to overwrite what the market knew historically.
+Point-in-time treatment of accounting data is especially important. A fiscal-period end date is not the date at which the information was publicly tradable. The implementation therefore uses the SEC filing date as the visibility date. This avoids the error of assigning December-quarter information to December when the corresponding 10-Q or 10-K may not be filed until weeks later. It also handles restatements naturally because a later filing cannot overwrite what the market knew historically.
 
-One material data limitation remains: historical index membership is not point-in-time. The S\&P 500 constituent list is seeded from a current snapshot, and delisted firms are absent from yfinance. This introduces a survivor bias and is discussed explicitly in Section~\ref{sec:limitations}.
+The main data limitation is survivorship bias. The universe starts from a current S\&P 500 list, so companies that failed or left the index during the sample are missing.
 
 \section{Signal Construction}
 \label{sec:signals}
 
-The strategy combines three economically distinct forecasting sleeves. Short-horizon reversal has long been documented as a form of return predictability \citep{lehmann1990,lomackinlay1990,jegadeesh1990}, while post-earnings-announcement drift (PEAD) shows a delayed implementation of earnings information \citep{bernard1989,bernard1990}. The project does not assume that these effects are naively tradable, each candidate signal must survive the same standardization, execution, and validation framework.
+The strategy combines three economically distinct forecasting sleeves. Short-horizon reversal has long been documented as a form of return predictability \citep{lehmann1990,jegadeesh1990}, while post-earnings-announcement drift (PEAD) shows a delayed price response to earnings information \citep{bernard1989}. The project does not assume that these effects are naively tradable, each candidate signal must survive the same standardization, execution, and validation framework.
 
 \subsection{Volume-shock reversal}
 
-The first sleeve reverses a two-day stock return, with greater weight placed on moves accompanied by unusually high volume. The economic interpretation is that unusually large price movement combined with a volume shock is more likely to contain temporary liquidity demand, following the volume--autocorrelation relationship documented by \citet{cgw1993}: a move on heavy volume more often reflects a liquidity-motivated order and reverts, whereas the same move on light volume more often reflects information and is therefore more stable. The baseline for ``normal'' volume is 63 trading days. For each sleeve and day, the raw signal is winsorized at three median absolute deviations about the
+The first sleeve reverses a two-day stock return, with greater weight placed on moves accompanied by unusually high volume. The economic interpretation is that unusually large price movement combined with a volume shock is more likely to contain temporary liquidity demand, motivated by the volume--autocorrelation relationship documented by \citet{cgw1993}: a move on heavy volume more often reflects a liquidity-motivated order and reverts, whereas the same move on light volume more often reflects information and is therefore more stable. The baseline for ``normal'' volume is 63 trading days. For each sleeve and day, the raw signal is winsorized at three median absolute deviations about the
 cross-sectional median before standardization.
 \subsection{Overnight reversal}
 
-The second sleeve sums recent overnight price gaps over a five-day lookback and takes the opposite side. The overnight session is relatively thin and order-driven, so some price pressure may reverse during regular trading; \citet{lps2019} document systematically opposite predictability in the overnight and intraday components of returns. Importantly, the overnight signal is not simply a repackaging of an overarching reversal sleeve: its measured correlation with the volume-shock reversal signal is only 0.29.
+The second sleeve sums recent overnight price gaps over a five-day lookback and takes the opposite side. The overnight session is relatively thin and order-driven, so some price pressure may reverse during regular trading; \citet{lps2019} document a persistent reversal between the overnight and intraday components of returns, which motivates this sleeve, although they do not test this five-day signal. Importantly, the overnight signal is not simply a repackaging of an overarching reversal sleeve: its measured correlation with the volume-shock reversal signal is only 0.29.
 
 \subsection{Earnings surprise}
 
@@ -127,7 +127,7 @@ Standardizing before combination prevents a signal with mechanically larger unit
 \begin{equation}
  f_{i,t}=0.45z_{i,t}^{\mathrm{VR}}+0.45z_{i,t}^{\mathrm{ON}}+0.10z_{i,t}^{\mathrm{PEAD}},
 \end{equation}
-where VR denotes volume-shock reversal, ON overnight reversal, and PEAD the earnings-surprise sleeve. If the PEAD value is NaN for a given name on a given day, it is excluded from the blend and the remaining weights are renormalized. The blended score is standardized cross-sectionally once more before portfolio construction. The 10\% earnings weight is performed the best in a coarse sweep, but it is a tuned choice rather than a neutral default; for that reason the weight is re-selected inside each walk-forward training window rather than fixed with full-sample hindsight.
+where VR denotes volume-shock reversal, ON overnight reversal, and PEAD the earnings-surprise sleeve. If the PEAD value is NaN for a given name on a given day, it is excluded from the blend and the remaining weights are renormalized. The blended score is standardized cross-sectionally once more before portfolio construction. The 10\% earnings weight performed the best in a coarse sweep, but it is a tuned choice rather than a neutral default; for that reason the weight is re-selected inside each walk-forward training window rather than fixed with full-sample hindsight.
 
 Throughout this report, the correlation between two sleeves means their average cross-sectional score correlation,
 \begin{equation}
@@ -138,7 +138,7 @@ where $\mathcal{U}_{ab,t}$ is the set of names scored by both sleeves, $a$ and $
 
 Two sleeves are called weakly correlated when combining them still captures most of the diversification gain available from independent forecasts; Section~\ref{sec:diagnostics} quantifies that gain. The two reversal sleeves, at 0.29, meet this standard, and the earnings sleeve is essentially uncorrelated with both. Variants within the same family, by contrast, correlate at 0.94--0.97 (Figure~\ref{fig:corr}) and add almost nothing when combined.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \IfFileExists{sleeve_correlations.png}{\includegraphics[width=0.84\textwidth]{sleeve_correlations.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: sleeve\_correlations.png}}}
 \caption{Correlation structure of candidate signal sleeves (navy negative, dark red positive). The blocks on the diagonal are variants within a family and are highly redundant; the near-zero correlations between blocks represent genuine diversification, and the selected sleeves are comparatively weakly correlated.}
@@ -147,14 +147,14 @@ Two sleeves are called weakly correlated when combining them still captures most
 
 Low correlation is common among the candidate sleeves in Figure~\ref{fig:corr}, but it is a necessary condition rather
 than a sufficient one: diversification multiplies forecasting skill but cannot create it, so an uncorrelated sleeve with
-no skill dilutes the blend. Over 327 trial configurations, a candidate was only retained if adding it raised the blend's
+no skill dilutes the blend. Throughout the research process, a candidate was only retained if adding it raised the blend's
 net Sharpe. Volume-shock reversal, the strongest sleeve on its own, forms the base. Overnight reversal is weak in
 isolation, yet adding it raised net Sharpe by more than any other addition in the project, which is precisely the
 benefit of combining weakly correlated forecasts. Three candidate sleeves duplicate a stronger sibling, six show no
 reliable forecasting power, and asset growth predicts with the sign opposite to the published effect, which I declined
 to reverse. Momentum has genuine skill but turns over so slowly that adding it at equal weight lowered net Sharpe.
 Accounting-ratio blends improved net Sharpe in only one of six configurations tested and not consistently across
-weights. The earnings-surprise sleeve was the only other candidate to raise net Sharpe consistently.
+weights. The earnings-surprise sleeve was the only other candidate to raise net Sharpe consistently. Several other similar ideas were also tested and rejected.
 
 \section{Portfolio Construction and Risk Controls}
 \label{sec:portfolio}
@@ -181,9 +181,9 @@ which is the residual from a least-squares regression of $\tilde w_t$ on the col
 
 Neutrality and the position limits pull against each other. Clipping a position to its cap changes the book's net dollar, beta, and sector exposures, so neutrality is lost; projecting again restores neutrality but shifts every other position, which can push some of them over their caps. The algorithm therefore alternates between the two for a fixed eight passes, each of which projects onto the neutral space, rescales to the volatility target, clips each name to the tighter of its per-name and liquidity caps, and scales the book down if gross exposure exceeds $3\times$NAV. After the last pass the book is projected once more, making it exactly neutral, and is then multiplied by a single factor just small enough that no position exceeds its cap; because the factor is uniform, net exposures that are zero remain zero. This final step is not a minor correction. Because the 10\% volatility target pushes every pass back against the caps, the iteration does not settle, and the final factor averages about 0.78, shrinking the book by roughly a fifth on a typical day. It is one reason the delivered ex-ante volatility sits well below the target.
 
-Appendix~\ref{app:example} traces one trading day through every stage of this process, from raw signals to executed trades. The principal portfolio constraints are summarized in Table~\ref{tab:params}.
+The principal portfolio constraints are summarized in Table~\ref{tab:params}.
 
-\begin{table}[H]
+\begin{table}[t]
 \centering
 \caption{Key strategy parameters.}
 \label{tab:params}
@@ -235,9 +235,9 @@ Transaction costs are applied to every trade. The model includes:
   where $Q_{i,t}$ is shares traded, $\mathrm{ADV}_{i,t}$ is here the trailing 63-day average daily volume in shares, and $\sigma_{i,t}$ is the trailing 63-day standard deviation of daily returns, lagged one day.
 \end{itemize}
 
-\begin{table}[H]
+\begin{table}[t]
 \centering
-\caption{Annualized transaction-cost attribution for the delivered configuration.}
+\caption{Annualized transaction-cost attribution for the fixed default configuration over the full sample}.
 \label{tab:costs}
 \begin{tabular}{lrrl}
 \toprule
@@ -253,25 +253,38 @@ Total & 63.52 & 100\% & 2.50 bps per dollar traded \\
 \end{tabular}
 \end{table}
 
+If all modeled costs were 6.43 times higher, the net Sharpe of the fixed default configuration (Section~\ref{sec:validation}) over the full sample would be zero. This 6.43 is the break-even cost multiplier. The half-spread and impact coefficient are calibrated assumptions rather than estimates from quote-level data.
+
 \section{Backtest and Validation Protocol}
 \label{sec:validation}
 
-The primary objective of the validation framework is to prevent research choices from being mislabeled as out-of-sample evidence. Several controls address data timing, parameter selection, non-normal returns, and multiple testing.
+The primary objective of the validation framework is to prevent research choices from being mislabeled as out-of-sample evidence. Several controls address data timing, parameter selection, and multiple testing.
 
 \subsection{Walk-forward evaluation}
 
 The headline validation result uses thirteen consecutive six-month (126-day) out-of-sample folds. Each test window is preceded by an expanding training window that starts at the beginning of the sample with an initial length of 756 days. The longest selectable holding period, fifteen days, is embargoed from the end of the training sample so positions initiated in training cannot overlap test-period outcomes.
 
-Three parameters are re-selected inside each training window---the earnings-sleeve weight, the rebalance interval, and the no-trade band---giving 175 candidate configurations per fold. Specifically for each sleeve, there are five earnings weights from 0 to 20\%, five rebalance intervals from 5 to 15 days, and seven bands from 0.2 to 1.2\% of NAV. Rather than taking the single configuration with the best training Sharpe, each fold selects the one whose neighborhood has the highest mean training Sharpe. Where a neighborhood is the central point of testing and its adjacent grid cells, and we only consider configurations whose neighborhood is complete. Averaging over neighbors favors broad regions of good performance over isolated peaks. This rule was the best of eight selection procedures compared in Section~\ref{sec:selection}, and every configuration evaluated in that comparison is charged to the trial count. The reversal lookback, the universe size, and the sleeve set are held fixed across all folds. Because each of those three was chosen by inspecting full-sample diagnostics, they are counted in the trial ledger but are not themselves validated out of sample, and the reported out-of-sample Sharpe is conditional on the parametric choices. This is to avoid any lookahead bias which could present inflated performance estimates.
+Three parameters are re-selected inside each training window, the earnings-sleeve weight, the rebalance interval, and
+the no-trade band, giving 175 candidate configurations per fold. Specifically, the grid contains five
+earnings weights from 0 to 20\%, five rebalance intervals from 5 to 15 days, and seven no-trade bands from 0.2 to 1.2\%
+of NAV. Rather than taking the single configuration with the best training Sharpe, each fold selects the one whose
+neighborhood has the highest mean training Sharpe. A neighborhood consists of a configuration and its
+adjacent grid cells, and only configurations whose neighborhood is complete are considered. Averaging over neighbors
+favors broad regions of good performance over isolated peaks. This rule was the best of eight selection
+procedures compared on the same thirteen folds, whose out-of-sample net Sharpes ranged from 0.287 to 1.214, and every
+configuration evaluated in that comparison is charged to the trial count. The reversal
+lookback, the universe size, and the sleeve set are held fixed across all folds. Because each of those three was chosen
+by inspecting full-sample diagnostics, they are counted in the trial ledger but are not themselves validated out of
+sample, and the reported out-of-sample Sharpe is conditional on the parametric choices.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \IfFileExists{walk_forward_folds_selected.png}{\includegraphics[width=0.86\textwidth]{walk_forward_folds_selected.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: walk\_forward\_folds\_selected.png}}}
 \caption{Training (in-sample, navy) and test (out-of-sample, red) Sharpe ratios across the thirteen walk-forward folds; only the test bars are out-of-sample evidence. Twelve of thirteen test periods are positive. Test Sharpe exceeds training Sharpe by 0.43 on average, because the neighborhood rule deliberately forgoes the highest training score.}
 \label{fig:walkforward}
 \end{figure}
 
-The final walk-forward out-of-sample net Sharpe ratio is 1.214, measured on the thirteen test windows from 2018 to 2024. Comparing against the fixed default configuration, 10\% earnings weight, ten-day rebalance, 0.6\% no-trade band held constant through every fold and evaluated on the same test windows, the strategy earns a net Sharpe ratio of 0.951. This serves as an alternative that re-selection must beat. Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Both series use the same signals, costs, and test days, and the default is itself one of the 175 grid cells, so every selection rule could have chosen it; the only difference between the two series is which cell each fold picks. Third, it is a demanding benchmark. Its parameters were chosen by examining full-sample results, so 0.951 carries hindsight that no reselection fold had. A rule that uses only training data and still outperforms it has overcome that advantage.
+The final walk-forward out-of-sample net Sharpe ratio is 1.214, measured on the thirteen test windows from 2018 to 2024. Comparing against the fixed default configuration, 10\% earnings weight, ten-day rebalance, 0.6\% no-trade band held constant through every fold and evaluated on the same test windows, the strategy earns a net Sharpe ratio of 0.951. This serves as an alternative that re-selection must beat. Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Both series use the same signals, costs, and test days, and the default is itself one of the 175 grid cells, so every selection rule could have chosen it; the only difference between the two series is which cell each fold picks.
 
 \section{Results}
 \label{sec:results}
@@ -301,7 +314,7 @@ Excess kurtosis & 6.92 & 7.00 \\
 \end{tabular}
 \end{table}
 
-Because the series begins in 2018, three years after the start of the data, the book is fully invested from its first day and no warm-up period dilutes these statistics. The return distribution is positively skewed but strongly leptokurtic, so Gaussian approximations understate the liklihood of extreme events. The positive sign deserves comment because it runs against the usual characterization of a liquidity-providing strategy, which is expected to collect small premia routinely and suffer occasional large losses. No mechanism for the observed sign is established here.
+Because the series begins in 2018, three years after the start of the data, the book is fully invested from its first day and no warm-up period dilutes these statistics. The return distribution is positively skewed but strongly leptokurtic, so Gaussian approximations understate the likelihood of extreme events. The positive sign deserves comment because it runs against the usual characterization of a liquidity-providing strategy, which is expected to collect small premia routinely and suffer occasional large losses. No mechanism for the observed sign is established here.
 
 \begin{figure}[H]
 \centering
@@ -310,7 +323,7 @@ Because the series begins in 2018, three years after the start of the data, the 
 \label{fig:equity}
 \end{figure}
 
- At \$1M, the net Sharpe is approximately 1.229, slightly above the 1.214 value at \$10 million because market impact is smaller. At \$100,000 the Sharpe falls to approximately 1.155 as fixed commissions consume more return. At \$10,000, the strategy is infeasible: the 1.5\% cap limits every position to \$150, below the \$200 minimum-trade rule, so no order is ever placed. Capacity is therefore two-sided: fixed order costs dominate at small NAV while market impact dominates as NAV grows. However, the upper limitation is much weaker. Note the market impact here is estimated because I do not have access to actual level 2 and 3 data.
+ At \$1M, the net Sharpe is approximately 1.229, slightly above the 1.214 value at \$10 million because market impact is smaller. At \$100,000 the Sharpe falls to approximately 1.155 as fixed commissions consume more return. At \$10,000, the strategy is infeasible: the 1.5\% cap limits every position to \$150, below the \$200 minimum-trade rule, so no order is ever placed. Capacity is therefore two-sided: fixed order costs dominate at small NAV while market impact dominates as NAV grows. However, the upper limitation is much weaker.
 
 \begin{figure}[H]
 \centering
@@ -327,7 +340,7 @@ A central contribution of the project is the use of the Fundamental Law of Activ
  \IR = \TC\,\IC\,\sqrt{\BR},
  \label{eq:fundlaw}
 \end{equation}
-where $\IC$ is forecasting skill, $\BR$ is effective breadth, and $\TC$ summarizes how much of the forecast survives portfolio construction and implementation \citep{grinold1989,grinoldkahn2000}. The transfer coefficient in the form used here---the cross-sectional correlation between the unconstrained and the delivered portfolio---follows \citet{clarke2002}.
+where $\IC$ is forecasting skill and $\BR$ is breadth \citep{grinold1989}, and $\TC$ summarizes how much of the forecast survives portfolio construction and implementation \citep{clarke2002}. The transfer coefficient in the form used here is computed on raw weights rather than risk-adjusted weights.
 
 \begin{table}[H]
 \centering
@@ -342,8 +355,7 @@ Information coefficient & 0.0104 & Daily correlation of score and return ranking
 IC hit rate & 51.0\% & Fraction of days with positive IC \\
 Naive breadth & 25,196 & 100 names $\times$ 252 days under independence \\
 Independent directions & 22.2 & Number of independent positions \\
-Signal autocorrelation & 0.654 & Day-to-day correlation of the composite score \\
-Effective breadth & 1,168 & About 22$\times$ below the naive count \\
+Breadth & 5,594 & 22.2 independent directions $\times$ 252 days \\
 Constraint transfer coefficient & 0.630 & Correlation of ideal (pre-constraint) and post-constraint target weights \\
 Cost transfer coefficient & 0.880 & Net Sharpe divided by gross Sharpe (1.214/1.379) \\
 \bottomrule
@@ -368,257 +380,39 @@ Let $C$ be the $N\times N$ correlation matrix of $Z_{\mathrm{res}}$, with eigend
 \begin{equation}
  N_{\mathrm{eff}}=\frac{\left(\sum_k\lambda_k\right)^2}{\sum_k\lambda_k^2}
 \end{equation}
-where \(\rho_{ij}\) is the residual correlation between names $i$ and $j$. For the test period $N_{\mathrm{eff}}=42.1$ of 190 names, or \(~22.2\%\). Because only about 100 of the 190 names are in the universe on any one day, it results in an effective count of 22.2. In otherwords the 100 names on average behave like about 22 unrelated stocks. This is the cross-sectional correction to breadth.\par
+where the entries of $C$ are the residual correlations $\rho_{ij}$ between names $i$ and $j$. For the test period $N_{\mathrm{eff}}=42.1$ of 190 names, or \(\sim 22.2\%\). Because only about 100 of the 190 names are in the universe on any one day, it results in an effective count of 22.2. In other words, the 100 names on average behave like about 22 unrelated stocks. This is the cross-sectional correction to breadth.\par
 
-\textcolor{red}{\textbf{Signal autocorrelation.} This measures how much the composite score changes from one day to the next. On each day, the scores of all names are correlated with the same names' scores from the previous day, and $\rho$ is the average of these daily correlations. The measured $\rho=0.654$ means consecutive days overlap substantially, which is expected because the reversal sleeves are built from returns over the past two and five days. To turn this into a count of independent decisions, the standard adjustment $(1-\rho)/(1+\rho)$ is applied, which gives about 21\%: the 252 trading days in a year carry roughly as much new information as 53 fully independent ones.}
+\textbf{Breadth.} Breadth multiplies the 22.2 independent directions by 252 trading days, which gives 5,594 truly independent bets per year.
 
-\textcolor{red}{\textbf{Effective breadth.} Effective breadth applies both corrections to the naive count: the cross-sectional correction replaces 100 names with 22.2 independent directions, and the time-series correction replaces 252 trading days with about 53 independent rebalancing decisions ($252\times(1-\rho)/(1+\rho)$). Their product, $22.2\times 252\times(1-\rho)/(1+\rho)$, gives the reported 1,168 from the unrounded inputs. It treats the cross-sectional and time-series reductions as separable, so it is an approximation rather than an exact count of independent bets.}
+\textbf{Constraint transfer coefficient.} 
+On every rebalance day the portfolio builder keeps two sets of weights and the constraint transfer coefficent is the cross-sectional correlation between them. The first weights are the ideal weights, which are the risk-weighted composite score scaled to the volatility target before any constraint is applied. The second are the delivered weights after the neutrality, single-name, liquidity, and gross-exposure constraints.
 
-\textcolor{red}{\textbf{Constraint transfer coefficient.} On every rebalance day the portfolio builder keeps two sets of weights: the ideal weights, which are the risk-weighted composite score scaled to the volatility target before any constraint is applied, and the delivered weights after the neutrality, single-name, liquidity, and gross-exposure constraints. The coefficient is the cross-sectional correlation between the two, computed daily and averaged over the sample. A value of 1 would mean the constraints left the shape of the portfolio unchanged.}
+\textbf{Cost transfer coefficient.} Costs reduce returns rather than altering weights, and are measured separately as the ratio of the walk-forward net Sharpe to the gross Sharpe. It is the share of the gross risk-adjusted return that survives the commissions, fees, spread, impact, and borrow costs modeled in Section~\ref{sec:execution}. Multiplying this by the constraint transfer coefficient gives the overall transfer coefficient used to calculate the information ratio in Eq.~\ref{eq:fundlaw}.
 
-\textcolor{red}{\textbf{Cost transfer coefficient.} Costs reduce returns rather than altering weights, so they cannot enter the weight correlation and are measured separately as walk-forward net Sharpe divided by gross Sharpe. It is the share of the gross risk-adjusted return that survives the commissions, fees, spread, impact, and borrow costs modeled in Section~\ref{sec:execution}.}
+Loosening portfolio constraints to improve the constraint transfer coefficient is not necessarily beneficial. In early experiments, changes that increased the coefficient from 0.63 to 0.84 by relaxing position caps, dropping sector neutrality, or moving toward mean--variance weights reduced net Sharpe from roughly 0.78 to 0.39. While this was tested with a preliminary form of the strategy, the effect was clear.
 
-\begin{figure}[H]
-\centering
-\IfFileExists{effective_breadth.png}{\includegraphics[width=0.72\textwidth]{effective_breadth.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: effective\_breadth.png}}}
-\caption{Reduction from naive breadth to effective breadth after accounting for cross-sectional dependence and signal persistence. The effective count is about \textcolor{red}{22} times smaller than the naive count of names times days.}
-\label{fig:breadth}
-\end{figure}
-
-The diagnostic explains several otherwise counterintuitive findings. First, a strong standalone information coefficient is not sufficient if the signal hardly changes. Several value and quality ratios constructed from SEC data have autocorrelations above 0.997 and therefore contribute almost no effective breadth. By contrast, the earnings-surprise signal has an event clock and staggered fiscal timing, making it useful despite only modest standalone skill.
-
-Second, loosening portfolio constraints is not necessarily beneficial. In experiments on the earlier two-sleeve book (before the earnings sleeve was added), changes that increased the constraint transfer coefficient from 0.63 to 0.84 by relaxing position caps, dropping sector neutrality, or moving toward mean--variance weights reduced net Sharpe from roughly 0.78 to 0.39; gross Sharpe also fell. The constraints therefore behave like regularization against a \textcolor{red}{noisy forecast}, consistent with the broader result that apparently ``wrong'' constraints can improve out-of-sample portfolio risk \citep{jagannathanma2003}.
-
-Third, the largest improvement in the research process came from combining weakly correlated forecasts rather than searching for a single dominant predictor. It is worth being explicit about which term in \eqref{eq:fundlaw} this affects, since the two are easily conflated. Breadth as measured here is a property of the \emph{opportunity set}: the number of independent return directions in the cross-section multiplied by the number of independent rebalancing decisions per year. Blending sleeves changes neither. For $S$ standardized forecasts of equal individual skill $c$ and average pairwise correlation $\bar{\rho}$, the equal-weighted composite satisfies
+The largest improvement in the research process came from combining weakly correlated forecasts rather than searching for a single dominant predictor. Breadth as measured here is a property of the number of independent return directions in the cross-section multiplied by the number of trading days per year. For $S$ standardized forecasts with average individual skill $c$ and average pairwise correlation $\bar{\rho}$, the equal-weighted composite satisfies
 \begin{equation}
-\IC_{\text{blend}} = c\,\sqrt{\frac{S}{1 + (S-1)\bar{\rho}}},
+\IC_{\text{blend}} = \frac{c}{\sqrt{\bar{\rho} + \dfrac{1-\bar{\rho}}{S}}},
 \label{eq:blendic}
 \end{equation}
-so diversification across signals raises $\IC$ at fixed $\BR$. Because $\IR$ is linear in $\IC$ and proportional to $\sqrt{\BR}$, a factor of $\sqrt{S}$ obtained from uncorrelated sleeves is numerically indistinguishable from an $S$-fold increase in breadth, which is why the two are often described interchangeably. The distinction matters here because the two levers were available to different degrees: additional sleeves could be constructed, whereas breadth was fixed by the universe and by the persistence of the signal. The rise in gross Sharpe from 0.68 to 0.91 on combining volume-shock and overnight reversal is therefore an $\IC$ effect, and the \textcolor{red}{22-fold} breadth reduction in Table~\ref{tab:fundlaw} is the constraint against which it was spent. Section~\ref{sec:robustness} provides the empirical separation: six sleeves with near-zero correlation to the price signals contributed nothing, because independence in the forecast cannot substitute for breadth in the opportunity set.
+so diversification across signals raises $\IC$ at fixed $\BR$. Because $\IR$ is linear in $\IC$ and proportional to $\sqrt{\BR}$, a factor of $\sqrt{S}$ obtained from uncorrelated sleeves is numerically indistinguishable from an $S$-fold increase in breadth. Additional sleeves could be constructed, whereas breadth was fixed by the universe. The rise in gross Sharpe from 0.68 to 0.91 on combining volume-shock and overnight reversal is therefore an $\IC$ effect, and the reduction from 100 names to 22.2 independent directions in Table~\ref{tab:fundlaw} is the constraint against this method. Conversely, because $c$ is the average skill across forecasts, adding a poorly skilled forecast lowers $c$, and this can outweigh the gain from increasing $S$.
 
-\section{Robustness, Extensions, and Negative Results}
-\label{sec:robustness}
-
-Several substantial research directions were measured and then rejected. Including negative results is important because the reported strategy emerged from a search process whose unsuccessful branches still contribute to multiple-testing risk. \textcolor{red}{Except for the no-trade band sweep and the parameter-selection comparison, the studies in this section were run under the configuration in use when each was conducted rather than the final one, so their figures are indicative rather than directly comparable with the headline statistics.}
-
-\subsection{Liquidity spectrum}
-
-The project tests the idea that reversal should be stronger in less-liquid stocks across \textcolor{red}{1,478} S\&P 1500 names. The measured difference in information coefficient between the least and most liquid deciles is only 0.0001 with a $t$-statistic of 0.02, while estimated spreads rise sharply as liquidity falls. The most liquid decile therefore provides the best signal per basis point of spread paid, and the full strategy's net Sharpe peaks at roughly 100 names before declining at 200, 400, and 800.
-
-\begin{figure}[H]
-\centering
-\IfFileExists{liquidity_deciles.png}{\includegraphics[width=0.78\textwidth]{liquidity_deciles.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: liquidity\_deciles.png}}}
-\caption{Reversal information coefficient (top) and estimated half-spread (bottom) by dollar-volume decile in the broader liquidity study, where decile 1 is the least liquid; the dashed line marks the mean IC across deciles. Signal strength is essentially flat while trading costs rise materially in less-liquid names. Spreads are estimated from daily bars, so their ordering across deciles is reliable but their absolute levels are not.}
-\label{fig:liquidity}
-\end{figure}
-
-\subsection{Fundamental and insider extensions}
-
-Six value and quality sleeves built from point-in-time SEC fundamentals are nearly uncorrelated with the price signals, but they change too slowly to add meaningful breadth. Blended into the book, they improved net Sharpe in only one of six configurations tested, and not consistently across weights, so none was adopted. A second research round evaluates SEC Form 4 insider activity and additional earnings cuts. Insider net buying has a significantly negative measured IC ($-0.0133$, $t=-3.50$), but the sign is not reversed for trading because doing so would amount to sample-driven curve fitting without a supporting mechanism. Revenue surprise produces an information coefficient of 0.0175 ($t=3.05$), the highest of any sleeve measured in the project, and is nonetheless rejected. Its cross-sectional score correlation with the existing earnings sleeve is 0.46, which by \eqref{eq:blendic} retains only about 41\% of the diversification benefit available at zero correlation; the decisive evidence, however, is direct. Substituting it for the earnings sleeve yields a \textcolor{red}{full-sample} net Sharpe of 0.806 and adding it alongside yields 0.791, against 0.864 for the delivered three-sleeve configuration. The rejection therefore rests on measured performance rather than on an undisclosed correlation threshold.
-
-\subsection{Intraday reversal and passive execution}
-
-Hourly reversal is statistically interesting: on 309,573 hourly bars it produces an IC of 0.0095 with a $t$-statistic of 2.9 and nearly zero autocorrelation, implying about 26,059 effective bets per year. The problem is execution. The research estimates that commission plus regulatory fees alone are approximately 0.700 basis points per dollar traded, while the maximum half-spread available to a perfectly passive order is only about 0.440 basis points. Even an unrealistically perfect passive execution process therefore cannot make turnover free. The intraday extension is rejected before a complex fill simulation is built.
-
-\subsection{Regime conditioning and the no-trade band}
-
-Cross-sectional dispersion appears to condition forecast IC monotonically, but scaling exposure with the regime fails a control test: a constant multiplier at the same average portfolio size achieves a Sharpe of 0.907 compared with 0.878 for the regime-varying rule. The improvement initially attributed to timing is instead explained by lower turnover. That finding leads to the true implementation lever---the no-trade band. Re-optimizing the band produces an interior optimum: net Sharpe \textcolor{red}{is 0.845 with no band, rises to 0.938 at the delivered 0.6\% band, peaks at 0.975 at 1.0\%, and falls to 0.857 at 1.3\%}. Bands above the 1.5\% single-name cap mechanically shut down trading, because no position can be opened by a trade larger than the cap. \textcolor{red}{The delivered 0.6\% band is therefore not the full-sample optimum; rather than fixing the band at that optimum with hindsight, it is re-selected per fold in the walk-forward.}
-
-\begin{figure}[H]
-\centering
-\IfFileExists{pead_weight_sweep.png}{\includegraphics[width=0.72\textwidth]{pead_weight_sweep.png}}{\fbox{\parbox[c][2.5cm][c]{0.7\linewidth}{\centering\small Missing figure: pead\_weight\_sweep.png}}}
-\caption{Sensitivity of net Sharpe to the earnings-sleeve weight. The dashed gray line marks net Sharpe without the sleeve. The chosen 10\% allocation is the best cell of the sweep, with lower net Sharpe on either side, so the weight is re-selected within each walk-forward training window rather than fixed in advance.}
-\label{fig:peadweight}
-\end{figure}
-
-\textcolor{red}{%
-\subsection{Per-fold parameter selection}
-\label{sec:selection}
-The walk-forward rule of Section~\ref{sec:validation} is the outcome of comparing eight ways of choosing parameters inside each training window, all evaluated on the same thirteen folds with a fifteen-day embargo. Three search spaces were used: the original 27-cell grid; the 175-cell grid described in Section~\ref{sec:validation}; and Gaussian-process Bayesian optimization over four continuous parameters---the three above plus the volume-shock share of the reversal weight---warm-started across folds, with 157 points evaluated by the final fold. Each space was paired with two selection rules: the configuration with the best training Sharpe, or the one with the best mean training Sharpe over its neighborhood (adjacent cells for the grids, the nine nearest evaluated points for the optimizer). Table~\ref{tab:selection} reports the results.}
-
-\begin{table}[H]
-\centering
-\color{red}
-\caption{\textcolor{red}{Out-of-sample results of per-fold parameter selection. The last column is the fraction of 2,000 block-resampled histories (Section~\ref{sec:sampling}) in which a method's out-of-sample Sharpe is not higher than the fixed default's.}}
-\label{tab:selection}
-\small
-\begin{tabular}{lrrrrr}
-\toprule
-Method & Configs & OOS Sharpe & Train $-$ test & Folds $>0$ & P(not better) \\
-\midrule
-Fixed default (benchmark) & 1 & 0.951 & 0.043 & 10/13 & --- \\
-Coarse grid, best & 27 & 0.901 & 0.172 & 11/13 & 0.82 \\
-Coarse grid, neighborhood & 27 & 0.515 & $-0.267$ & 9/13 & 0.84 \\
-Fine grid, best & 175 & 0.775 & 0.390 & 9/13 & 0.98 \\
-Fine grid, neighborhood & 175 & 1.176 & $-0.373$ & 11/13 & 0.19 \\
-Fine grid, complete neighborhood & 175 & 1.214 & $-0.432$ & 12/13 & 0.15 \\
-Bayesian optimization, best & 157 & 0.366 & 0.889 & 9/13 & 0.93 \\
-Bayesian optimization, neighborhood & 157 & 0.287 & 0.773 & 9/13 & 0.94 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textcolor{red}{%
-Searching harder for the best training Sharpe makes out-of-sample results worse. As the search space grows from 27 cells to 175 cells to the continuous optimizer, out-of-sample Sharpe falls from 0.901 to 0.775 to 0.366, while the train-minus-test gap widens from 0.17 to 0.89. The optimizer reached training Sharpes of 1.0 to 1.7, in the first five folds by pushing the volume-shock share of the blend close to its 0.8 upper bound, and none of that carried out of sample. Neighborhood averaging counteracts this on the fine grid, recovering 1.176, but does not rescue the optimizer, whose out-of-sample Sharpe falls further from 0.366 to 0.287. On the coarse grid it backfires: with three values per axis, a cell on the edge of the grid averages only with its inner neighbors, so it can outscore the center by never including the poor values beyond it, and the rule repeatedly chose cells whose own training Sharpe was weak. Restricting selection to cells with a complete neighborhood removes that effect and gives the headline 1.214. The restriction was introduced after the first comparison exposed the edge effect, which is why every configuration in the comparison is charged to the trial ledger; even so, it does no better than the fixed defaults in 15\% of block-resampled histories.}
-
-\section{Limitations}
-\label{sec:limitations}
-
-The backtest includes more realism than a simple signal study, but several limitations bias the reported performance upward or widen the uncertainty around it.
-
-\begin{enumerate}
-  \item \textbf{Survivorship bias.} Historical trading is simulated using a universe seeded from current S\&P 500 membership, and yfinance does not provide a delisting-inclusive historical constituent panel. Failed or delisted firms are therefore missing. For a reversal strategy, this is especially consequential because some extreme losers do not recover. The result should be interpreted as an upper bound until point-in-time membership and delisting returns are incorporated.
-
-  \item \textbf{Trading costs are modeled rather than observed.} Bid--ask spread and impact parameters are calibrated rather than estimated from quote-level data or live fills. Hard-to-borrow rates are modeled with a uniform 0.5\% annual borrow assumption, which may understate the cost of shorting recent winners. The 6.43$\times$ cost break-even result is therefore more informative than the precision of the 63.52 bps base case.
-
-  \item \textbf{Fill uncertainty is absent.} Intended trades are assumed to execute fully at the modeled next-open price plus slippage. Real orders may be partially filled or experience additional gap and queue risk.
-
-  \item \textbf{Sector classifications are not historical.} Current GICS labels are applied backward through time, so sector-neutrality constraints are not perfectly point-in-time.
-
-  \item \textbf{Ten years remains one market sample.} The sample spans several distinct regimes, but it is not long enough to eliminate uncertainty about structural change. The broad \textcolor{red}{block-resampled} interval demonstrates that uncertainty directly.
-
-  \item \textbf{Research search remains a source of optimism.} The trial ledger, PBO, and walk-forward design reduce but cannot eliminate the consequences of iterative human research decisions.
-\end{enumerate}
-
-These limitations are important when interpreting the \textcolor{red}{1.21} out-of-sample Sharpe. The result is evidence of a potentially persistent cross-sectional effect under the modeled conditions, not evidence that the same Sharpe would be achieved live.
-
-\section{Reproducibility}
-\label{sec:reproducibility}
-
-The full study---baseline backtest, Fundamental-Law diagnostic, walk-forward, sensitivity grid, PBO, \textcolor{red}{block resampling}, cost sweep, and capacity sweep---runs from a single command, \texttt{uv run quant-capstone run}, which writes a results report and figures. All defaults live in one configuration module, every sweep is recorded in the trial ledger, and the test suite covers signal construction, neutralization, cost accounting, and causality. The engine cross-checks of Section~\ref{sec:validation} are available as \texttt{uv run quant-capstone crosscheck}.
-
-Exact numerical reproduction additionally requires the same data snapshot. Prices, the S\&P 500 constituent list, and SEC filings are downloaded at run time and cached locally; a later download picks up a different current constituent list and revised price adjustments, so headline statistics shift even though the code is unchanged. The figures in this report come from a single cached snapshot, and archiving that snapshot alongside the code is the remaining step needed for exact replication.
 
 \section{Conclusion}
 
-This project develops a market-neutral U.S. equity strategy that combines short-horizon reversal, overnight reversal, and an event-driven earnings signal within a realistic portfolio and execution framework. The final result is economically modest but statistically nontrivial: full-sample net Sharpe \textcolor{red}{of the fixed default configuration} is 0.938, walk-forward out-of-sample \textcolor{red}{net} Sharpe is \textcolor{red}{1.214}, and the maximum drawdown is approximately \textcolor{red}{5.3\%}. These returns survive a full modeled cost budget of roughly 64 basis points per year and remain positive under substantial cost inflation.
+This project develops a market-neutral U.S. equity strategy that combines short-horizon reversal, overnight reversal, and an event-driven earnings signal within a realistic portfolio and execution framework. The final result is economically modest but statistically interesting, with the full-sample net Sharpe of the fixed default configuration being 0.938, walk-forward out-of-sample net Sharpe of 1.214, and the maximum drawdown is approximately 5.3\%. The fixed default configuration survives a full modeled cost budget of roughly 64 basis points per year and remains positive under substantial cost inflation.
 
-The most important lessons are methodological. First, combining genuinely different signals raises composite forecasting skill more reliably than refining a single predictor. Second, effective breadth---after correcting for cross-sectional dependence and signal persistence---is the binding resource. Third, portfolio constraints can improve rather than degrade realized performance by regularizing noisy forecasts. Fourth, realistic transaction costs change which research directions are worth pursuing: intraday breadth is attractive statistically but uneconomic under the tested fee structure. Finally, strong validation infrastructure matters as much as signal design. Causality checks, an embargoed walk-forward procedure, an explicit trial ledger, \textcolor{red}{block-resampled uncertainty intervals}, and engine cross-checks all prevented plausible but incorrect conclusions from surviving into the final result.
+The most important lessons are methodological. First, combining genuinely different signals raises composite forecasting skill more reliably than refining a single predictor. Second, breadth is far smaller than the count of names and days suggests, because cross-sectional dependence leaves about 22 independent directions among 100 names. Third, portfolio constraints can improve rather than degrade realized performance by regularizing noisy forecasts. Finally, strong validation infrastructure matters as much as signal design. An embargoed walk-forward procedure and an explicit trial ledger both prevented plausible but incorrect conclusions from surviving into the final result.
 
 The strategy should therefore be viewed as a disciplined empirical demonstration of quantitative research practice rather than a claim of immediately deployable alpha. The next substantive improvement is not another parameter sweep; it is better data. A point-in-time, delisting-inclusive universe and quote-level execution data would directly address the two largest remaining sources of optimism and allow the economic result to be evaluated on a materially stronger foundation.
 
-\appendix
-
-\section{Multiple-testing diagnostics}
-\label{app:diagnostics}
-
-\textcolor{red}{The probability of backtest overfitting (PBO) of \citet{bailey2017} is estimated by combinatorially symmetric cross-validation over the 175 configurations of the parameter-selection grid: each configuration's daily return history is split into 14 blocks, every way of dividing the blocks into equal training and testing halves is formed (3,432 divisions), and the PBO is the fraction of divisions in which the configuration that is best in the training half ranks below the median in the testing half. It is 0.245. It measures overfitting within that grid, not across the full research history.}
-
-\section{Worked example: one trading day}
-\label{app:example}
-
-\textcolor{red}{This appendix follows a single trading day through every stage of the strategy, from raw price and volume data to executed trades, using the code and the parameters actually selected in the walk-forward. The signal is formed at the close on 12 February 2021 and traded at the open on 16 February 2021 (15 February was a market holiday). The day falls in the seventh walk-forward test window, whose selected parameters are an earnings-sleeve weight of 10\%, a 10-day rebalance interval, and a 0.3\% no-trade band. Every cross-sectional operation (winsorization, standardization, neutralization, and ranking) is performed over the full universe of 100 names; Tables~\ref{tab:ex_signal}--\ref{tab:ex_trades} report ten of them, chosen to span the ranking from the highest to the lowest score.}
-
-\textcolor{red}{\textbf{Raw signals.} The volume-shock reversal score is the negative of the two-day return multiplied by the ratio of the past two days' average volume to its 63-day average, capped at five. The overnight reversal score is the negative of the sum of the last five overnight gaps. Names that fell score positively and names that rallied score negatively. LRCX and AMAT each rose about 10\% on above-normal volume and therefore receive strongly negative volume-shock scores.}
-
-\textcolor{red}{\textbf{Standardization and blending.} Each sleeve is winsorized at three median absolute deviations about the day's median and then converted to a cross-sectional $z$-score. The effect of winsorization is visible in the volume-shock column of Table~\ref{tab:ex_signal}: LRCX, PYPL, and AMAT have quite different raw scores but all lie beyond the clipping bound and therefore share the same standardized value of $-1.876$. Only four of the ten names have a recent earnings filing; for the others the earnings weight is dropped and the two reversal weights are renormalized. For GM, the blend is $(0.45\times2.107+0.45\times2.016)/0.90=2.062$. Because averaging two partially correlated sleeves reduces cross-sectional dispersion, the blended scores are standardized once more, which raises GM's final score to $f=2.638$, the highest in the universe on that day. The resulting ordering is the ranking used in the information-coefficient calculation of Section~\ref{sec:diagnostics}.}
-
-\begin{table}[H]
-\centering
-\color{red}
-\caption{Raw and standardized signals on 12 February 2021. Returns and raw scores are in percent; ranks are out of 100, with 1 the highest score. A dash indicates no recent earnings filing.}
-\label{tab:ex_signal}
-\small
-\begin{tabular}{lrrrrrrrrr}
-\toprule
- & 2-day & Volume & VR raw & ON raw & & & & & \\
-Name & return & ratio & (\%) & (\%) & $z^{\mathrm{VR}}$ & $z^{\mathrm{ON}}$ & $z^{\mathrm{PEAD}}$ & Score & Rank \\
-\midrule
-GM   & $-2.33$ & 1.03 & 2.40    & 1.73    & 2.107    & 2.016    & --       & 2.638    & 1 \\
-CCL  & $-1.58$ & 0.52 & 0.82    & 2.18    & 0.955    & 2.352    & --       & 2.114    & 2 \\
-F    & $-2.64$ & 0.64 & 1.69    & 0.61    & 1.590    & 1.186    & --       & 1.774    & 3 \\
-IBM  & $-1.18$ & 0.75 & 0.88    & $-1.26$ & 0.995    & $-0.203$ & --       & 0.499    & 31 \\
-TSLA & 1.40    & 0.53 & $-0.75$ & $-0.07$ & $-0.194$ & 0.683    & 0.208    & 0.300    & 46 \\
-LLY  & 1.84    & 0.70 & $-1.30$ & 0.10    & $-0.592$ & 0.805    & --       & 0.128    & 56 \\
-CVS  & 0.52    & 0.71 & $-0.36$ & $-1.57$ & 0.087    & $-0.439$ & --       & $-0.235$ & 71 \\
-LRCX & 10.08   & 1.72 & $-17.28$& $-3.55$ & $-1.876$ & $-1.906$ & 0.985    & $-2.068$ & 98 \\
-PYPL & 5.36    & 1.93 & $-10.34$& $-6.58$ & $-1.876$ & $-2.426$ & 1.399    & $-2.315$ & 99 \\
-AMAT & 10.22   & 1.43 & $-14.62$& $-4.10$ & $-1.876$ & $-2.314$ & $-0.033$ & $-2.435$ & 100 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textcolor{red}{\textbf{Ideal weights.} Each score is divided by the name's volatility and the whole vector is scaled so that the book's ex-ante volatility is 10\%. Volatility therefore reorders position sizes relative to scores: CCL ranks second by score but, at 118\% annualized volatility, receives a smaller ideal weight (1.57\%) than F (2.69\%), which ranks third.}
-
-\textcolor{red}{\textbf{Constraints.} The ideal vector is then passed through the eight-pass loop described in Section~\ref{sec:portfolio}: project onto the dollar-, beta-, and sector-neutral space, rescale to the 10\% volatility target, clip each name to its cap, and cap gross exposure. Table~\ref{tab:ex_weights} reports the weights after the first projection and rescaling, after the first clip, after all eight passes, and in final form. After the last pass the book is projected once more, at which point the largest position exceeds its cap by 12\%, so the entire book is multiplied by 0.89.}
-
-\begin{table}[H]
-\centering
-\color{red}
-\caption{Portfolio weights at each stage of construction, in percent of NAV.}
-\label{tab:ex_weights}
-\small
-\begin{tabular}{lrrrrrrr}
-\toprule
- & & Annual & & Neutralized & After & After & \\
-Name & Score & vol (\%) & Ideal & and rescaled & first clip & eight passes & Final \\
-\midrule
-GM   & 2.638    & 62.6  & 3.71    & 2.88    & 1.50    & 1.61    & 1.43 \\
-CCL  & 2.114    & 118.1 & 1.57    & 1.68    & 1.50    & 1.51    & 1.35 \\
-F    & 1.774    & 58.1  & 2.69    & 1.48    & 1.48    & 1.62    & 1.45 \\
-IBM  & 0.499    & 42.8  & 1.03    & 1.94    & 1.50    & 1.61    & 1.43 \\
-TSLA & 0.300    & 84.9  & 0.31    & $-0.53$ & $-0.53$ & $-1.43$ & $-1.28$ \\
-LLY  & 0.128    & 45.6  & 0.25    & 0.54    & 0.54    & 1.37    & 1.22 \\
-CVS  & $-0.235$ & 40.7  & $-0.51$ & $-0.24$ & $-0.24$ & $-1.49$ & $-1.33$ \\
-LRCX & $-2.068$ & 63.8  & $-2.85$ & $-1.90$ & $-1.50$ & $-1.45$ & $-1.29$ \\
-PYPL & $-2.315$ & 53.3  & $-3.82$ & $-3.95$ & $-1.50$ & $-1.61$ & $-1.43$ \\
-AMAT & $-2.435$ & 59.8  & $-3.58$ & $-2.58$ & $-1.50$ & $-1.46$ & $-1.30$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textcolor{red}{Two features of Table~\ref{tab:ex_weights} explain why the constraint transfer coefficient in Table~\ref{tab:fundlaw} is only 0.630. First, position sizes converge toward the cap. Because the 1.5\% limit prevents the book from reaching its volatility target, each rescaling step enlarges every position and each clipping step trims the largest ones back, so after eight passes nearly all names sit between 1.2\% and 1.5\% in absolute size. The score still determines the direction of most positions, but it has little influence on their size: LLY, with a score of 0.128, ends with a position almost as large as GM's. Second, neutrality can reverse a position. TSLA has a positive score but finishes short. The three highest-ranked names are all in the Consumer Discretionary sector, and CCL in particular has a beta of 2.34, so the long book accumulates sector and beta exposure that the projection must remove. TSLA, in the same sector with a beta of 1.70, absorbs part of that offset. Across the full universe, 18 of the 100 names finish with the opposite sign to their ideal weight on this day.}
-
-\textcolor{red}{\textbf{Execution.} Targets formed on 12 February are executed at the 16 February open, which is a rebalance day. With NAV at \$12.44 million, a trade is placed only if it changes a position by at least $\max(0.3\%\times\text{NAV},\ \$200)=\$37{,}329$, although exits are always executed. Table~\ref{tab:ex_trades} shows that most of the ten positions reverse direction relative to the previous rebalance, which is typical of a short-horizon reversal book and is the source of its high turnover. F and PYPL are not traded, because their targets differ from their current positions by less than the band. In total, 60 of the 100 names are traded that day, and the resulting positions are held, drifting with prices, until the next rebalance ten trading days later.}
-
-\textcolor{red}{\textbf{Outcome.} The final two columns of Table~\ref{tab:ex_trades} report each name's return from the 16 February open to the 17 February open, the window scored by the information coefficient, and its rank among the 100 names. Across the ten names shown, the correlation between score ranks and return ranks is 0.52; across the full universe it is 0.342. This is an unusually favorable day, since the mean daily value over the walk-forward test period is 0.0104. The day also illustrates the cost of neutrality: TSLA, shorted despite its positive score, fell 4.76\%, while GM, the highest-ranked name, fell 1.62\%.}
-
-\begin{table}[H]
-\centering
-\color{red}
-\caption{Trades at the 16 February 2021 open and the subsequent one-day return. Dollar amounts are in thousands; return ranks are out of 100, with 1 the highest return.}
-\label{tab:ex_trades}
-\small
-\begin{tabular}{lrrrrr}
-\toprule
- & Position & Target & & Return, 16--17 Feb & Return \\
-Name & before (\$k) & (\$k) & Trade (\$k) & open to open (\%) & rank \\
-\midrule
-GM   & $-164.4$ & 178.3    & 342.8    & $-1.62$ & 71 \\
-CCL  & $-91.7$  & 167.6    & 259.3    & 5.29    & 1 \\
-F    & 162.6    & 179.9    & 0.0      & 0.96    & 14 \\
-IBM  & 129.2    & 178.0    & 48.8     & $-0.73$ & 41 \\
-TSLA & 155.9    & $-158.9$ & $-314.8$ & $-4.76$ & 99 \\
-LLY  & $-194.2$ & 152.2    & 346.4    & $-0.47$ & 36 \\
-CVS  & 142.4    & $-164.9$ & $-307.3$ & $-6.67$ & 100 \\
-LRCX & 169.2    & $-160.4$ & $-329.6$ & $-1.07$ & 56 \\
-PYPL & $-199.1$ & $-178.3$ & 0.0      & $-2.86$ & 91 \\
-AMAT & 169.3    & $-161.9$ & $-331.2$ & $-1.73$ & 75 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \begin{thebibliography}{99}
-
-\bibitem[Abdi and Ranaldo(2017)]{abdiranaldo2017}
-Abdi, F. and Ranaldo, A. (2017).
-A simple estimation of bid--ask spreads from daily close, high, and low prices.
-\textit{The Review of Financial Studies}, 30(12), 4437--4480.
-
-\bibitem[Bailey et al.(2017)]{bailey2017}
-Bailey, D. H., Borwein, J. M., L\'opez de Prado, M., and Zhu, Q. J. (2017).
-The probability of backtest overfitting.
-\textit{The Journal of Computational Finance}, 20(4), 39--69.
 
 \bibitem[Bernard and Thomas(1989)]{bernard1989}
 Bernard, V. L. and Thomas, J. K. (1989).
 Post-earnings-announcement drift: Delayed price response or risk premium?
 \textit{Journal of Accounting Research}, 27, 1--36.
-
-\bibitem[Bernard and Thomas(1990)]{bernard1990}
-Bernard, V. L. and Thomas, J. K. (1990).
-Evidence that stock prices do not fully reflect the implications of current earnings for future earnings.
-\textit{Journal of Accounting and Economics}, 13(4), 305--340.
 
 \bibitem[Campbell et al.(1993)]{cgw1993}
 Campbell, J. Y., Grossman, S. J., and Wang, J. (1993).
@@ -630,25 +424,10 @@ Clarke, R., de Silva, H., and Thorley, S. (2002).
 Portfolio constraints and the fundamental law of active management.
 \textit{Financial Analysts Journal}, 58(5), 48--66.
 
-\bibitem[Corwin and Schultz(2012)]{corwinschultz2012}
-Corwin, S. A. and Schultz, P. (2012).
-A simple way to estimate bid--ask spreads from daily high and low prices.
-\textit{The Journal of Finance}, 67(2), 719--760.
-
 \bibitem[Grinold(1989)]{grinold1989}
 Grinold, R. C. (1989).
 The fundamental law of active management.
 \textit{Journal of Portfolio Management}, 15(3), 30--37.
-
-\bibitem[Grinold and Kahn(2000)]{grinoldkahn2000}
-Grinold, R. C. and Kahn, R. N. (2000).
-\textit{Active Portfolio Management: A Quantitative Approach for Providing Superior Returns and Controlling Risk}, 2nd ed.
-McGraw--Hill, New York.
-
-\bibitem[Jagannathan and Ma(2003)]{jagannathanma2003}
-Jagannathan, R. and Ma, T. (2003).
-Risk reduction in large portfolios: Why imposing the wrong constraints helps.
-\textit{The Journal of Finance}, 58(4), 1651--1683.
 
 \bibitem[Jegadeesh(1990)]{jegadeesh1990}
 Jegadeesh, N. (1990).
@@ -665,20 +444,10 @@ Lehmann, B. N. (1990).
 Fads, martingales, and market efficiency.
 \textit{The Quarterly Journal of Economics}, 105(1), 1--28.
 
-\bibitem[Lo and MacKinlay(1990)]{lomackinlay1990}
-Lo, A. W. and MacKinlay, A. C. (1990).
-When are contrarian profits due to stock market overreaction?
-\textit{The Review of Financial Studies}, 3(2), 175--205.
-
 \bibitem[Lou et al.(2019)]{lps2019}
 Lou, D., Polk, C., and Skouras, S. (2019).
 A tug of war: Overnight versus intraday expected returns.
 \textit{Journal of Financial Economics}, 134(1), 192--213.
-
-\bibitem[Bates and Granger(1969)]{batesgranger1969}
-Bates, J. M. and Granger, C. W. J. (1969).
-The combination of forecasts.
-\textit{Operational Research Quarterly}, 20(4), 451--468.
 
 \end{thebibliography}
 
