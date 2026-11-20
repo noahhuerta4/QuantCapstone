@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1794631137.91606 "/Users/noah.a.huerta/Library/CloudStorage/OneDrive-PNNL/Documents/CodeProjects/QuantCapstone/Writeup/Quant_Capstone.tex" "Quant_Capstone.pdf" "Quant_Capstone" 1794631140.42426 0
+["pdflatex"] 1794643143.87583 "/Users/noah.a.huerta/Library/CloudStorage/OneDrive-PNNL/Documents/CodeProjects/QuantCapstone/Writeup/Quant_Capstone.tex" "Quant_Capstone.pdf" "Quant_Capstone" 1794643145.7299 0
   "/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map" 1793919734.6925 188008 ed9be92089256d1198840aa00e21fee3 ""
   "/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1768002049.8911 10135515 9184533ff65c3cba89faa57bf67cc601 ""
   "/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-ec.enc" 1768000830.47705 2375 baa924870cfb487815765f9094cf3728 ""
@@ -146,10 +146,10 @@
   "/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/translations/translations.sty" 1791585970.02738 44247 2188b95d0ee74e31eca4d316263c58a7 ""
   "/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/url/url.sty" 1768000838.99965 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/xcolor/xcolor.sty" 1768000839.06775 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "/Users/noah.a.huerta/Library/CloudStorage/OneDrive-PNNL/Documents/CodeProjects/QuantCapstone/Writeup/Quant_Capstone.tex" 1794631131.24395 46326 97d21fd3176954a098b3b34b9fa4a8d6 ""
-  "Quant_Capstone.aux" 1794631140.15886 7140 8ca7445557aab8cc614a401616c6b4e7 "pdflatex"
-  "Quant_Capstone.out" 1794631140.16139 2310 ca2dc132877ca72c37abd331e51c4666 "pdflatex"
-  "Quant_Capstone.tex" 1794631131.24395 46326 97d21fd3176954a098b3b34b9fa4a8d6 ""
+  "/Users/noah.a.huerta/Library/CloudStorage/OneDrive-PNNL/Documents/CodeProjects/QuantCapstone/Writeup/Quant_Capstone.tex" 1794643138.82836 46108 e4abe7e7516074aa2000e78bca0f8757 ""
+  "Quant_Capstone.aux" 1794643145.51264 7140 1e7c902f0b51fa55e5323393ef958310 "pdflatex"
+  "Quant_Capstone.out" 1794643145.51547 2310 ca2dc132877ca72c37abd331e51c4666 "pdflatex"
+  "Quant_Capstone.tex" 1794643138.82836 46108 e4abe7e7516074aa2000e78bca0f8757 ""
   "equity_drawdown.png" 1794085516.41616 186520 6b7b7c846b31167c321b15ff9e07746d ""
   "rolling_sharpe.png" 1793645024.35908 119012 04e0bea8d11e6d28377fc8a10312c750 ""
   "sleeve_correlations.png" 1793645024.36165 434149 d8a72114356af84fe515df117d9a38dd ""

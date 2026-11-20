@@ -59,10 +59,7 @@ then applies position, gross-exposure, and liquidity constraints. Execution occu
 includes commissions, regulatory fees, borrow costs, spread costs, and square-root market impact.
 
 The final strategy is evaluated on 2015--2024 U.S. large-cap data using a 13-fold walk-forward procedure and explicit
-accounting for 443 signal configurations explored during research, or more than 740 including the final
-parameter-selection study. A fixed baseline configuration, held constant through every fold, earns a walk-forward
-out-of-sample net Sharpe ratio of 0.951 with a maximum drawdown of 5.10\%, and its alpha against the S\&P 500 has a
-$t$-statistic of 2.44. Re-selecting parameters in each fold raises the net Sharpe to 1.214. Because the universe is
+accounting for 443 signal configurations explored during research. With parameters re-selected in each fold using only past data, the strategy earns a walk-forward out-of-sample net Sharpe ratio of 1.214 with a maximum drawdown of 5.33\%, and its alpha against the S\&P 500 has a $t$-statistic of 2.97. A fixed baseline configuration whose parameters were chosen from a full-sample sweep earns 0.951 on the same windows. Because the universe is
 drawn from current S\&P 500 members, all results are subject to survivorship bias. For the fixed baseline configuration
 over the full sample, modeled trading costs total approximately 63.5 basis points of net asset value per year, and the
 estimated break-even cost multiplier is 6.43. The principal empirical finding is that diversification across weakly
@@ -280,21 +277,20 @@ by inspecting full-sample diagnostics, they are counted in the trial ledger, and
 \label{fig:walkforward}
 \end{figure}
 
-\textcolor{red}{The fixed baseline configuration, with a 10\% earnings weight, ten-day rebalance, and 0.6\% no-trade band held constant through every fold, earns a walk-forward out-of-sample net Sharpe ratio of 0.951 on the thirteen test windows from 2018 to 2024. No choice behind it was made using the test windows. Re-selecting parameters with the neighborhood rule raises the net Sharpe to 1.214, but that rule was the best of eight compared on these same test windows, so the choice of rule used test data and 1.214 is a secondary result. The baseline serves as the alternative that re-selection must beat.} Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Both series use the same signals, costs, and test days, and the baseline is itself one of the 175 grid cells, so every selection rule could have chosen it. The only difference between the two series is therefore which cell each fold picks.
+With parameters re-selected in each fold using only past data, the neighborhood rule earns a walk-forward out-of-sample net Sharpe ratio of 1.214 on the thirteen test windows from 2018 to 2024. It was the best of the eight parameter-selection rules, each evaluated out of sample on the same windows, so some selection bias remains, which the deflated Sharpe ratio below accounts for. The simplest of the eight rules is the fixed baseline configuration, with a 10\% earnings weight, ten-day rebalance, and 0.6\% no-trade band held constant through every fold. It earns a net Sharpe ratio of 0.951, and it is the only rule whose parameters were chosen from a full-sample sweep that includes the test years. The baseline serves as the alternative that re-selection must beat. Re-selection adds complexity and hundreds of configurations to the multiple-testing charge, so it is worth keeping only if it outperforms this. Both series use the same signals, costs, and test days, and the baseline is itself one of the 175 grid cells, so every selection rule could have chosen it. The only difference between the two series is therefore which cell each fold picks.
 
-\textcolor{red}{To turn the trial ledger into a multiple-testing correction, the deflated Sharpe ratio (DSR) of \citet{bailey2014} is computed. It is the probability that the true Sharpe ratio exceeds $\mathrm{SR}_0$, the Sharpe ratio expected from the best of $N$ strategies with no skill,}
+To turn the trial ledger into a multiple-testing correction, the deflated Sharpe ratio (DSR) of \citet{bailey2014} is computed. It is the probability that the true Sharpe ratio exceeds $\mathrm{SR}_0$, the Sharpe ratio expected from the best of $N$ strategies with no skill,
 \begin{equation}
-\color{red}
  \mathrm{DSR}=\Phi\!\left(\frac{(\widehat{\mathrm{SR}}-\mathrm{SR}_0)\sqrt{T-1}}{\sqrt{1-\gamma_3\widehat{\mathrm{SR}}+\frac{\gamma_4-1}{4}\widehat{\mathrm{SR}}^{2}}}\right),\qquad
  \mathrm{SR}_0=\sqrt{V}\left[(1-\gamma)\,\Phi^{-1}\!\left(1-\tfrac{1}{N}\right)+\gamma\,\Phi^{-1}\!\left(1-\tfrac{1}{Ne}\right)\right],
  \label{eq:dsr}
 \end{equation}
-\textcolor{red}{where $\widehat{\mathrm{SR}}$ is the daily Sharpe ratio over $T=1{,}638$ test days, $\gamma_3$ and $\gamma_4$ are the skewness and kurtosis of daily returns, $V$ is the variance of daily Sharpe ratios across trials, $\gamma$ is the Euler--Mascheroni constant, and $\Phi$ is the standard normal distribution function. With $N=774$ trials (443 in the research ledger plus 331 in the final parameter-selection study), $\mathrm{SR}_0$ corresponds to an annualized Sharpe ratio of 0.98. The DSR is 0.47 for the fixed baseline and 0.72 for the re-selected series, so neither clears the conventional 0.95 threshold. Many of the trials are close variants of one another, so treating them as independent overstates $N$ and makes this correction conservative. Even so, the evidence should be read as suggestive rather than conclusive.}
+where $\widehat{\mathrm{SR}}$ is the daily Sharpe ratio over $T=1{,}638$ test days, $\gamma_3$ and $\gamma_4$ are the skewness and kurtosis of daily returns, $V$ is the variance of daily Sharpe ratios across trials, $\gamma$ is the Euler--Mascheroni constant, and $\Phi$ is the standard normal distribution function. With $N=451$ trials, consisting of the 443 configurations in the research ledger and the eight parameter-selection rules, $\mathrm{SR}_0$ corresponds to an annualized Sharpe ratio of 0.93. The 175 grid cells searched within each fold are not counted as trials, because they are evaluated only on training data, whereas the choice among the eight rules was made using test results. The DSR is 0.76 for the re-selected series and 0.52 for the fixed baseline, so neither clears the conventional 0.95 threshold. Many of the trials are close variants of one another with similar results, so treating them as independent overstates $N$ and makes this correction conservative.
 
 \section{Results}
 \label{sec:results}
 
-\textcolor{red}{Table~\ref{tab:performance} summarizes the walk-forward out-of-sample performance of both the fixed baseline and the series with parameters re-selected at each fold. The baseline earns a net Sharpe ratio of 0.951 with a 5.10\% maximum drawdown. Unless stated otherwise, the rest of this section describes the re-selected series.} Gross Sharpe is 1.379, and net Sharpe is 1.214 after all modeled trading and financing costs. The net annualized return is 5.02\% at 4.11\% annualized volatility. Maximum drawdown is 5.33\%, but the more informative statistic is duration. The worst drawdown lasts approximately 361 trading days from its prior peak to full recovery. The strategy therefore exhibits a relatively shallow but potentially difficult persistence of underperformance in this window.
+Table~\ref{tab:performance} summarizes the walk-forward out-of-sample performance of the series with parameters re-selected at each fold, alongside the fixed baseline. Unless stated otherwise, the rest of this section describes the re-selected series. Gross Sharpe is 1.379, and net Sharpe is 1.214 after all modeled trading and financing costs. The net annualized return is 5.02\% at 4.11\% annualized volatility. Maximum drawdown is 5.33\%, but the more informative statistic is duration. The worst drawdown lasts approximately 361 trading days from its prior peak to full recovery. The strategy therefore exhibits a relatively shallow but potentially difficult persistence of underperformance in this window.
 
 \begin{table}[t]
 \centering
@@ -302,27 +298,27 @@ by inspecting full-sample diagnostics, they are counted in the trial ledger, and
 \label{tab:performance}
 \begin{tabular}{lrrr}
 \toprule
- & \textcolor{red}{Baseline} & \multicolumn{2}{c}{\textcolor{red}{Re-selected}} \\
-Metric & \textcolor{red}{Net} & Gross & Net \\
+ & Baseline & \multicolumn{2}{c}{Re-selected} \\
+Metric & Net & Gross & Net \\
 \midrule
-Sharpe ratio & \textcolor{red}{0.951} & 1.379 & 1.214 \\
-Annualized return & \textcolor{red}{3.95\%} & 5.74\% & 5.02\% \\
-Annualized volatility & \textcolor{red}{4.16\%} & 4.11\% & 4.11\% \\
-Maximum drawdown & \textcolor{red}{$-5.10$\%} & $-5.02$\% & $-5.33$\% \\
-Drawdown duration & \textcolor{red}{440 days} & 338 days & 361 days \\
-Hit rate & \textcolor{red}{52.1\%} & 53.7\% & 53.4\% \\
-Win/loss ratio & \textcolor{red}{1.088} & 1.099 & 1.084 \\
-95\% historical VaR & \textcolor{red}{0.37\%} & 0.35\% & 0.35\% \\
-95\% CVaR & \textcolor{red}{0.54\%} & 0.53\% & 0.53\% \\
-Skewness & \textcolor{red}{0.474} & 0.534 & 0.527 \\
-Excess kurtosis & \textcolor{red}{5.80} & 6.92 & 7.00 \\
+Sharpe ratio & 0.951 & 1.379 & 1.214 \\
+Annualized return & 3.95\% & 5.74\% & 5.02\% \\
+Annualized volatility & 4.16\% & 4.11\% & 4.11\% \\
+Maximum drawdown & $-5.10$\% & $-5.02$\% & $-5.33$\% \\
+Drawdown duration & 440 days & 338 days & 361 days \\
+Hit rate & 52.1\% & 53.7\% & 53.4\% \\
+Win/loss ratio & 1.088 & 1.099 & 1.084 \\
+95\% historical VaR & 0.37\% & 0.35\% & 0.35\% \\
+95\% CVaR & 0.54\% & 0.53\% & 0.53\% \\
+Skewness & 0.474 & 0.534 & 0.527 \\
+Excess kurtosis & 5.80 & 6.92 & 7.00 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Because the series begins in 2018, three years after the start of the data, the book is fully invested from its first day and no warm-up period dilutes these statistics. The return distribution is positively skewed but strongly leptokurtic, so Gaussian approximations understate the likelihood of extreme events. The positive sign deserves comment because it runs against the usual characterization of a liquidity-providing strategy, which is expected to collect small premia routinely and suffer occasional large losses. No mechanism for the observed sign is established here.
 
-\textcolor{red}{To confirm that the returns are not disguised market exposure, daily net returns are regressed on daily S\&P 500 total returns (SPY), $r_t=\alpha+\beta\,r_{m,t}+\varepsilon_t$, with Newey--West standard errors (five lags). For the fixed baseline, the annualized alpha is 3.83\% with a $t$-statistic of 2.44, the beta is 0.008, and the correlation with the market is 0.04. For the re-selected series, the alpha is 4.77\% ($t=3.24$), the beta is 0.014, and the correlation is 0.07. Neither beta is statistically different from zero, so the returns are essentially unrelated to the market. The alpha $t$-statistics do not account for the multiple testing addressed by the deflated Sharpe ratio in Section~\ref{sec:validation}.}
+To confirm that the returns are not disguised market exposure, daily net returns are regressed on daily S\&P 500 total returns, $r_t=\alpha+\beta\,r_{m,t}+\varepsilon_t$. For the re-selected series, the annualized alpha is 4.77\% with a $t$-statistic of 2.97, the beta is 0.014, and the correlation with the market is 0.07. For the fixed baseline, the alpha is 3.83\% ($t=2.35$), the beta is 0.008, and the correlation is 0.04. Both betas are very small, so a 1\% move in the market corresponds to a move of less than 0.02\% in the strategy, and the returns are essentially unrelated to the market. Unlike the deflated Sharpe ratio in Section~\ref{sec:validation}, these $t$-statistics do not adjust for the number of configurations tested.
 
 \begin{figure}[H]
 \centering
@@ -409,7 +405,7 @@ so diversification across signals raises $\IC$ at fixed $\BR$. Because $\IR$ is 
 
 \section{Conclusion}
 
-This project develops a market-neutral U.S. equity strategy that combines short-horizon reversal, overnight reversal, and an event-driven earnings signal within a realistic portfolio and execution framework. The final result is economically modest but statistically interesting, \textcolor{red}{with a walk-forward out-of-sample net Sharpe of 0.951 for the fixed baseline configuration (1.214 with per-fold re-selection), a maximum drawdown of approximately 5.1\%, and a deflated Sharpe ratio below the conventional significance threshold once all 774 trials are counted.} The fixed baseline configuration survives a full modeled cost budget of roughly 64 basis points per year and remains positive under substantial cost inflation.
+This project develops a market-neutral U.S. equity strategy that combines short-horizon reversal, overnight reversal, and an event-driven earnings signal within a realistic portfolio and execution framework. The final result is economically modest but statistically interesting, with a walk-forward out-of-sample net Sharpe of 1.214 with parameters re-selected from past data (0.951 for the fixed baseline configuration) and a maximum drawdown of approximately 5.3\%. The fixed baseline configuration survives a full modeled cost budget of roughly 64 basis points per year and remains positive under substantial cost inflation.
 
 The most important lessons are methodological. First, combining genuinely different signals raises composite forecasting skill more reliably than refining a single predictor. Second, breadth is far smaller than the count of names and days suggests, because cross-sectional dependence leaves about 22 independent directions among 100 names. Third, portfolio constraints can improve rather than degrade realized performance by regularizing noisy forecasts. Finally, strong validation infrastructure matters as much as signal design. An embargoed walk-forward procedure and an explicit trial ledger both prevented plausible but incorrect conclusions from surviving into the final result.
 
@@ -417,12 +413,10 @@ The strategy should therefore be viewed as a disciplined empirical demonstration
 
 \begin{thebibliography}{99}
 
-{\color{red}
 \bibitem[Bailey and L\'opez de Prado(2014)]{bailey2014}
 Bailey, D. H. and L\'opez de Prado, M. (2014).
 The deflated Sharpe ratio: Correcting for selection bias, backtest overfitting, and non-normality.
 \textit{Journal of Portfolio Management}, 40(5), 94--107.
-}
 
 \bibitem[Bernard and Thomas(1989)]{bernard1989}
 Bernard, V. L. and Thomas, J. K. (1989).

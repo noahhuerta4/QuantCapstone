@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.1) (preloaded format=pdflatex 2026.1.9)  13 NOV 2026 20:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.1) (preloaded format=pdflatex 2026.1.9)  13 NOV 2026 23:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -595,17 +595,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 65.
+(Font)              <10> on input line 62.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 65.
+(Font)              <7> on input line 62.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 65.
+(Font)              <5> on input line 62.
 
 
 [1
 
 {/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 87.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 84.
  (/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -614,7 +614,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 87.
+(Font)              <10.95> on input line 84.
 
 
 [2]
@@ -623,7 +623,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 <sleeve_correlations.png, id=102, 1299.05325pt x 1027.31805pt>
 File: sleeve_correlations.png Graphic file (type png)
 <use sleeve_correlations.png>
-Package pdftex.def Info: sleeve_correlations.png  used on input line 142.
+Package pdftex.def Info: sleeve_correlations.png  used on input line 139.
 (pdftex.def)             Requested size: 394.59248pt x 312.05399pt.
 
 
@@ -631,11 +631,11 @@ Package pdftex.def Info: sleeve_correlations.png  used on input line 142.
 
 [5 <./sleeve_correlations.png>]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 210.
+(Font)              <9> on input line 207.
 
 
 [6]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 224.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 221.
  (/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -644,7 +644,7 @@ File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 <walk_forward_folds_selected.png, id=149, 658.3797pt x 254.02905pt>
 File: walk_forward_folds_selected.png Graphic file (type png)
 <use walk_forward_folds_selected.png>
-Package pdftex.def Info: walk_forward_folds_selected.png  used on input line 278.
+Package pdftex.def Info: walk_forward_folds_selected.png  used on input line 275.
 (pdftex.def)             Requested size: 403.9896pt x 155.87225pt.
 
 
@@ -654,7 +654,7 @@ Package pdftex.def Info: walk_forward_folds_selected.png  used on input line 278
 <equity_drawdown.png, id=170, 698.48955pt x 413.02306pt>
 File: equity_drawdown.png Graphic file (type png)
 <use equity_drawdown.png>
-Package pdftex.def Info: equity_drawdown.png  used on input line 329.
+Package pdftex.def Info: equity_drawdown.png  used on input line 325.
 (pdftex.def)             Requested size: 413.3867pt x 244.44406pt.
 
 
@@ -662,7 +662,7 @@ Package pdftex.def Info: equity_drawdown.png  used on input line 329.
 <rolling_sharpe.png, id=175, 658.74104pt x 254.02905pt>
 File: rolling_sharpe.png Graphic file (type png)
 <use rolling_sharpe.png>
-Package pdftex.def Info: rolling_sharpe.png  used on input line 338.
+Package pdftex.def Info: rolling_sharpe.png  used on input line 334.
 (pdftex.def)             Requested size: 403.9896pt x 155.79085pt.
 
 
@@ -684,14 +684,14 @@ Package rerunfilecheck Info: File `Quant_Capstone.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  19802 strings out of 469811
- 385086 string characters out of 5467411
+ 385088 string characters out of 5467411
  795416 words of memory out of 5000000
  47937 multiletter control sequences out of 15000+600000
  714097 words of font info for 205 fonts, out of 8000000 for 9000
  0 hyphenation exceptions out of 8191
- 75i,11n,80p,1190b,1156s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,11n,80p,1297b,1162s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-ec.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-rm.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/enc/dvips/lm/lm-mathex.enc}</Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmbx12.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmex10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi6.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmmi8.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr12.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr6.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr8.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmr9.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmri10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy6.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmsy8.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/lm/lmtt10.pfb></Users/noah.a.huerta/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Quant_Capstone.pdf (15 pages, 1141522 bytes).
+Output written on Quant_Capstone.pdf (15 pages, 1141461 bytes).
 PDF statistics:
  315 PDF objects out of 1000 (max. 8388607)
  60 named destinations out of 1000 (max. 500000)
